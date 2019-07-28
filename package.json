@@ -1,0 +1,33 @@
+{
+  "name": "generator-springboot",
+  "version": "0.0.1",
+  "description": "A Yeoman generator for generating SpringBoot microservices",
+  "keywords": [
+    "yeoman-generator",
+    "java",
+    "spring",
+    "spring-boot",
+    "microservice"
+  ],
+  "files": [
+    "generators"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sivaprasadreddy/generator-springboot"
+  },
+  "author": "K Siva Prasad Reddy <sivaprasadreddy.k@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sivaprasadreddy/generator-springboot/issues"
+  },
+  "homepage": "https://github.com/sivaprasadreddy/generator-springboot",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "yeoman-generator": "^4.0.1"
+  }
+}
