@@ -1,13 +1,8 @@
 'use strict';
-// Require dependencies
-const Generator = require('yeoman-generator');
-const chalk = require('chalk');
 
-module.exports = class extends Generator {
+const BaseGenerator = require('../base-generator');
 
-    initializing() {
-
-    }
+module.exports = class extends BaseGenerator {
 
     prompting() {
 
@@ -42,11 +37,6 @@ module.exports = class extends Generator {
         } else if(this.appType === 'config-server') {
             this.composeWith(require.resolve('../config-server'));
         }
-    }
-
-    install() {
-        //this.config.set('packageName', this.packageName);
-        //this.config.set('packageFolder', this.packageFolder);
     }
 
 };

@@ -1,13 +1,10 @@
 'use strict';
-// Require dependencies
-const Generator = require('yeoman-generator');
-const chalk = require('chalk');
+const BaseGenerator = require('../base-generator');
 
-module.exports = class extends Generator {
+module.exports = class extends BaseGenerator {
 
     constructor(args, opts) {
         super(args, opts);
-
         this.configOptions = this.options.configOptions || {};
     }
 
@@ -31,6 +28,12 @@ module.exports = class extends Generator {
                 default: 'com.mycompany.myservice'
             },
             {
+                type: 'boolean',
+                name: 'useJpa',
+                message: 'Do you want to use Spring Data Jpa?',
+                default: true
+            },
+            {
                 type: 'list',
                 name: 'buildTool',
                 message: 'Which build tool do you want to use?',
@@ -49,55 +52,14 @@ module.exports = class extends Generator {
         ];
 
         return this.prompt(prompts).then(answers => {
-            this.configOptions.packageName = answers.packageName;
-            this.configOptions.appName = answers.appName;
-            this.configOptions.buildTool = answers.buildTool;
+            Object.assign(this.configOptions, answers);
         });
     }
 
     writing() {
         this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
-        if(this.configOptions.buildTool === 'maven') {
-            this._generateMavenConfig();
-        } else {
-            this._generateGradleConfig();
-        }
+        this.generateBuildToolConfig(this.configOptions);
         this._generateAppCode();
-    }
-
-    _generateMavenConfig() {
-        const mavenConfigDir = 'maven/';
-
-        ['.gitignore','mvnw','mvnw.cmd','pom.xml'].forEach(tmpl => {
-            this.fs.copyTpl(
-                this.templatePath(mavenConfigDir + tmpl),
-                this.destinationPath(tmpl),
-                this.configOptions
-            );
-        });
-
-        this.fs.copy(
-            this.templatePath(mavenConfigDir+'.mvn'),
-            this.destinationPath('.mvn')
-        );
-
-    }
-
-    _generateGradleConfig() {
-        const gradleConfigDir = 'gradle/';
-
-        ['.gitignore','gradlew','gradlew.bat','build.gradle','settings.gradle'].forEach(tmpl => {
-            this.fs.copyTpl(
-                this.templatePath(gradleConfigDir + tmpl),
-                this.destinationPath(tmpl),
-                this.configOptions
-            );
-        });
-
-        this.fs.copy(
-            this.templatePath(gradleConfigDir+'gradle'),
-            this.destinationPath('gradle')
-        );
     }
 
     _generateAppCode() {
