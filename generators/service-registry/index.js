@@ -5,11 +5,12 @@ module.exports = class extends BaseGenerator {
 
     constructor(args, opts) {
         super(args, opts);
+
         this.configOptions = this.options.configOptions || {};
     }
 
     initializing() {
-        console.log('Generating MicroService')
+        console.log('Generating Service Registry');
     }
 
     prompting() {
@@ -19,19 +20,13 @@ module.exports = class extends BaseGenerator {
                 type: 'string',
                 name: 'appName',
                 message: 'What is the application name?',
-                default: 'myservice'
+                default: 'service-registry'
             },
             {
                 type: 'string',
                 name: 'packageName',
                 message: 'What is the default package name?',
-                default: 'com.mycompany.myservice'
-            },
-            {
-                type: 'boolean',
-                name: 'useJpa',
-                message: 'Do you want to use Spring Data Jpa?',
-                default: true
+                default: 'com.mycompany.serviceregistry'
             },
             {
                 type: 'list',
@@ -77,8 +72,8 @@ module.exports = class extends BaseGenerator {
         const mainResRootDir = 'src/main/resources/';
 
         this.fs.copyTpl(
-            this.templatePath('app/'+mainJavaRootDir + 'Application.java'),
-            this.destinationPath(mainJavaRootDir + this.configOptions.packageFolder + '/Application.java'),
+            this.templatePath('app/'+mainJavaRootDir + 'ServiceRegistryApplication.java'),
+            this.destinationPath(mainJavaRootDir + this.configOptions.packageFolder + '/ServiceRegistryApplication.java'),
             this.configOptions
         );
 
@@ -89,14 +84,8 @@ module.exports = class extends BaseGenerator {
         );
 
         this.fs.copyTpl(
-            this.templatePath('app/'+testJavaRootDir + 'ApplicationTests.java'),
-            this.destinationPath(testJavaRootDir+ this.configOptions.packageFolder + '/ApplicationTests.java'),
-            this.configOptions
-        );
-
-        this.fs.copyTpl(
-            this.templatePath('app/'+testJavaRootDir + 'AbstractIntegrationTest.java'),
-            this.destinationPath(testJavaRootDir+ this.configOptions.packageFolder + '/AbstractIntegrationTest.java'),
+            this.templatePath('app/'+testJavaRootDir + 'ServiceRegistryApplicationTests.java'),
+            this.destinationPath(testJavaRootDir+ this.configOptions.packageFolder + '/ServiceRegistryApplicationTests.java'),
             this.configOptions
         );
     }

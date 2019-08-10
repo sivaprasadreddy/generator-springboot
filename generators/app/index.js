@@ -19,6 +19,10 @@ module.exports = class extends BaseGenerator {
                     {
                         value: 'config-server',
                         name: 'Spring Cloud Config Server'
+                    },
+                    {
+                        value: 'service-registry',
+                        name: 'Spring Cloud Eureka Server for Service Registry and Discovery'
                     }
                 ],
                 default: 'microservice'
@@ -36,6 +40,8 @@ module.exports = class extends BaseGenerator {
             this.composeWith(require.resolve('../microservice'));
         } else if(this.appType === 'config-server') {
             this.composeWith(require.resolve('../config-server'));
+        } else if(this.appType === 'service-registry') {
+            this.composeWith(require.resolve('../service-registry'));
         }
     }
 

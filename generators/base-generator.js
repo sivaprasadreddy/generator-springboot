@@ -12,20 +12,20 @@ module.exports = class extends Generator {
 
     generateBuildToolConfig(configOptions) {
         if(configOptions.buildTool === 'maven') {
-            this._generateMavenConfig();
+            this._generateMavenConfig(configOptions);
         } else {
-            this._generateGradleConfig();
+            this._generateGradleConfig(configOptions);
         }
     }
 
-    _generateMavenConfig() {
+    _generateMavenConfig(configOptions) {
         this.copyMavenWrapper();
-        this.generateMavenPOMXml(this.configOptions);
+        this.generateMavenPOMXml(configOptions);
     }
 
-    _generateGradleConfig() {
+    _generateGradleConfig(configOptions) {
         this.copyGradleWapper();
-        this.generateGradleBuildScript(this.configOptions);
+        this.generateGradleBuildScript(configOptions);
     }
 
     copyMavenWrapper() {

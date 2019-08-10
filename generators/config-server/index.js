@@ -54,7 +54,16 @@ module.exports = class extends BaseGenerator {
     writing() {
         this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
         this.generateBuildToolConfig(this.configOptions);
+        this._generateDockerConfig();
         this._generateAppCode();
+    }
+
+    _generateDockerConfig() {
+        this.fs.copyTpl(
+            this.templatePath('app/Dockerfile'),
+            this.destinationPath('Dockerfile'),
+            this.configOptions
+        );
     }
 
     _generateAppCode() {
