@@ -1,5 +1,6 @@
 'use strict';
 const BaseGenerator = require('../base-generator');
+const prompts = require('./prompts');
 
 module.exports = class extends BaseGenerator {
 
@@ -13,81 +14,26 @@ module.exports = class extends BaseGenerator {
         console.log('Generating Config Server');
     }
 
-    prompting() {
-
-        const prompts = [
-            {
-                type: 'string',
-                name: 'appName',
-                message: 'What is the application name?',
-                default: 'config-server'
-            },
-            {
-                type: 'string',
-                name: 'packageName',
-                message: 'What is the default package name?',
-                default: 'com.mycompany.configserver'
-            },
-            {
-                type: 'list',
-                name: 'buildTool',
-                message: 'Which build tool do you want to use?',
-                choices: [
-                    {
-                        value: 'maven',
-                        name: 'Maven'
-                    },
-                    {
-                        value: 'gradle',
-                        name: 'Gradle'
-                    }
-                ],
-                default: 'maven'
-            }
-        ];
-
-        return this.prompt(prompts).then(answers => {
-            Object.assign(this.configOptions, answers);
-        });
+    get prompting() {
+        return prompts.prompting;
     }
 
     writing() {
         this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
         this.generateBuildToolConfig(this.configOptions);
-        this._generateDockerConfig();
+        this.generateDockerConfig(this.configOptions);
         this._generateAppCode();
     }
 
-    _generateDockerConfig() {
-        this.fs.copyTpl(
-            this.templatePath('app/Dockerfile'),
-            this.destinationPath('Dockerfile'),
-            this.configOptions
-        );
-    }
-
     _generateAppCode() {
-        const mainJavaRootDir = 'src/main/java/';
-        const testJavaRootDir = 'src/test/java/';
-        const mainResRootDir = 'src/main/resources/';
+        const mainJavaTemplates = ['ConfigServerApplication.java'];
+        this.generateMainJavaCode(this.configOptions, mainJavaTemplates);
 
-        this.fs.copyTpl(
-            this.templatePath('app/'+mainJavaRootDir + 'ConfigServerApplication.java'),
-            this.destinationPath(mainJavaRootDir + this.configOptions.packageFolder + '/ConfigServerApplication.java'),
-            this.configOptions
-        );
+        const mainResTemplates = ['application.properties'];
+        this.generateMainResCode(this.configOptions, mainResTemplates);
 
-        this.fs.copyTpl(
-            this.templatePath('app/'+mainResRootDir + 'application.properties'),
-            this.destinationPath(mainResRootDir + 'application.properties'),
-            this.configOptions
-        );
-
-        this.fs.copyTpl(
-            this.templatePath('app/'+testJavaRootDir + 'ConfigServerApplicationTests.java'),
-            this.destinationPath(testJavaRootDir+ this.configOptions.packageFolder + '/ConfigServerApplicationTests.java'),
-            this.configOptions
-        );
+        const testJavaTemplates = ['ConfigServerApplicationTests.java'];
+        this.generateTestJavaCode(this.configOptions, testJavaTemplates);
     }
 
 };

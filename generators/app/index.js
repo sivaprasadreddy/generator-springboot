@@ -14,7 +14,7 @@ module.exports = class extends BaseGenerator {
                 choices: [
                     {
                         value: 'microservice',
-                        name: 'Microservie'
+                        name: 'SpringBoot MicroService'
                     },
                     {
                         value: 'config-server',
@@ -36,13 +36,7 @@ module.exports = class extends BaseGenerator {
     }
 
     default() {
-        if(this.appType === 'microservice') {
-            this.composeWith(require.resolve('../microservice'));
-        } else if(this.appType === 'config-server') {
-            this.composeWith(require.resolve('../config-server'));
-        } else if(this.appType === 'service-registry') {
-            this.composeWith(require.resolve('../service-registry'));
-        }
+        this.composeWith(require.resolve('../'+this.appType));
     }
 
 };

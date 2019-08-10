@@ -1,5 +1,6 @@
 'use strict';
 const BaseGenerator = require('../base-generator');
+const prompts = require('./prompts');
 
 module.exports = class extends BaseGenerator {
 
@@ -12,93 +13,28 @@ module.exports = class extends BaseGenerator {
         console.log('Generating MicroService')
     }
 
-    prompting() {
-
-        const prompts = [
-            {
-                type: 'string',
-                name: 'appName',
-                message: 'What is the application name?',
-                default: 'myservice'
-            },
-            {
-                type: 'string',
-                name: 'packageName',
-                message: 'What is the default package name?',
-                default: 'com.mycompany.myservice'
-            },
-            {
-                type: 'boolean',
-                name: 'useJpa',
-                message: 'Do you want to use Spring Data Jpa?',
-                default: true
-            },
-            {
-                type: 'list',
-                name: 'buildTool',
-                message: 'Which build tool do you want to use?',
-                choices: [
-                    {
-                        value: 'maven',
-                        name: 'Maven'
-                    },
-                    {
-                        value: 'gradle',
-                        name: 'Gradle'
-                    }
-                ],
-                default: 'maven'
-            }
-        ];
-
-        return this.prompt(prompts).then(answers => {
-            Object.assign(this.configOptions, answers);
-        });
+    get prompting() {
+        return prompts.prompting;
     }
 
     writing() {
         this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
         this.generateBuildToolConfig(this.configOptions);
-        this._generateDockerConfig();
+        this.generateDockerConfig(this.configOptions);
         this._generateAppCode();
     }
 
-    _generateDockerConfig() {
-        this.fs.copyTpl(
-            this.templatePath('app/Dockerfile'),
-            this.destinationPath('Dockerfile'),
-            this.configOptions
-        );
-    }
-
     _generateAppCode() {
-        const mainJavaRootDir = 'src/main/java/';
-        const testJavaRootDir = 'src/test/java/';
-        const mainResRootDir = 'src/main/resources/';
 
-        this.fs.copyTpl(
-            this.templatePath('app/'+mainJavaRootDir + 'Application.java'),
-            this.destinationPath(mainJavaRootDir + this.configOptions.packageFolder + '/Application.java'),
-            this.configOptions
-        );
+        const mainJavaTemplates = ['Application.java'];
+        this.generateMainJavaCode(this.configOptions, mainJavaTemplates);
 
-        this.fs.copyTpl(
-            this.templatePath('app/'+mainResRootDir + 'application.properties'),
-            this.destinationPath(mainResRootDir + 'application.properties'),
-            this.configOptions
-        );
+        const mainResTemplates = ['application.properties'];
+        this.generateMainResCode(this.configOptions, mainResTemplates);
 
-        this.fs.copyTpl(
-            this.templatePath('app/'+testJavaRootDir + 'ApplicationTests.java'),
-            this.destinationPath(testJavaRootDir+ this.configOptions.packageFolder + '/ApplicationTests.java'),
-            this.configOptions
-        );
+        const testJavaTemplates = ['ApplicationTests.java','AbstractIntegrationTest.java'];
+        this.generateTestJavaCode(this.configOptions, testJavaTemplates);
 
-        this.fs.copyTpl(
-            this.templatePath('app/'+testJavaRootDir + 'AbstractIntegrationTest.java'),
-            this.destinationPath(testJavaRootDir+ this.configOptions.packageFolder + '/AbstractIntegrationTest.java'),
-            this.configOptions
-        );
     }
 
 };
