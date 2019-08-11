@@ -19,20 +19,36 @@ module.exports = class extends BaseGenerator {
 
     writing() {
         this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
+        // console.log(this.configOptions);
         this.generateBuildToolConfig(this.configOptions);
         this.generateDockerConfig(this.configOptions);
+        this.generateJenkinsfile(this.configOptions);
+        this.generateTravisCIfile(this.configOptions);
+        this.generateDbMigrationConfig(this.configOptions);
         this._generateAppCode();
     }
 
     _generateAppCode() {
 
-        const mainJavaTemplates = ['Application.java'];
+        const mainJavaTemplates = [
+            'Application.java',
+            'config/WebMvcConfig.java',
+            'config/SwaggerConfig.java'
+        ];
         this.generateMainJavaCode(this.configOptions, mainJavaTemplates);
 
-        const mainResTemplates = ['application.properties'];
+        const mainResTemplates = [
+            'application.properties',
+            'application-docker.properties',
+            'application-prod.properties',
+            'application-heroku.properties'
+        ];
         this.generateMainResCode(this.configOptions, mainResTemplates);
 
-        const testJavaTemplates = ['ApplicationTests.java','AbstractIntegrationTest.java'];
+        const testJavaTemplates = [
+            'ApplicationTests.java',
+            'AbstractIntegrationTest.java'
+        ];
         this.generateTestJavaCode(this.configOptions, testJavaTemplates);
 
     }

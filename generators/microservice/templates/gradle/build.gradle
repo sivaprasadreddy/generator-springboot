@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'org.springframework.boot' version '2.1.7.RELEASE'
     id 'java'
 }
 
@@ -25,26 +25,66 @@ repositories {
 
 ext {
     set('springCloudVersion', "Greenwich.SR2")
+    set('swaggerVersion', "2.9.2")
+    set('testcontainersVersion', "1.11.3")
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.flywaydb:flyway-core'
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.testcontainers:postgresql:1.11.2'
+    <%_ if (sql === true) { _%>
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.h2database:h2'
+    <%_ } _%>
+    <%_ if (databaseType === 'mysql') { _%>
+    runtimeOnly 'mysql:mysql-connector-java'
+    testImplementation "org.testcontainers:mysql:${testcontainersVersion}"
+    <%_ } _%>
+    <%_ if (databaseType === 'postgresql') { _%>
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+    <%_ } _%>
+    <%_ if (databaseType === 'mariadb') { _%>
+    testImplementation "org.testcontainers:mariadb:${testcontainersVersion}"
+    <%_ } _%>
+    <%_ if (dbMigrationTool  === 'flywaydb') { _%>
+    implementation 'org.flywaydb:flyway-core'
+    <%_ } _%>
+    <%_ if (dbMigrationTool === 'liquibase') { _%>
+    implementation 'org.liquibase:liquibase-core'
+    <%_ } _%>
+    <%_ if (configClient === true) { _%>
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    <%_ } _%>
+    <%_ if (eurekaClient === true) { _%>
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    <%_ } _%>
+    <%_ if (distTracing === true) { _%>
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+    implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
+    <%_ } _%>
+    implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+
+    testImplementation ('org.springframework.boot:spring-boot-starter-test'){
+        exclude group: 'junit', module: 'junit'
+    }
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation "org.junit.jupiter:junit-jupiter-params"
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
 }
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
+}
+
+test {
+    useJUnitPlatform()
 }

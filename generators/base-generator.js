@@ -1,8 +1,5 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-
-const DEFAULT_BUILD_TOOL = 'maven';
 
 module.exports = class extends Generator {
 
@@ -24,6 +21,50 @@ module.exports = class extends Generator {
             this.destinationPath(configOptions.appName+'/'+'Dockerfile'),
             configOptions
         );
+    }
+
+    generateJenkinsfile(configOptions) {
+        this.fs.copyTpl(
+            this.templatePath('app/Jenkinsfile'),
+            this.destinationPath(configOptions.appName+'/'+'Jenkinsfile'),
+            configOptions
+        );
+    }
+
+    generateTravisCIfile(configOptions) {
+        this.fs.copyTpl(
+            this.templatePath('app/.travis.yml'),
+            this.destinationPath(configOptions.appName+'/'+'.travis.yml'),
+            configOptions
+        );
+    }
+
+    generateDbMigrationConfig(configOptions) {
+        if(configOptions.dbMigrationTool === 'flywaydb') {
+            this.fs.copyTpl(
+                this.templatePath('app/src/main/resources/db/migration/flyway/V1__01_init.sql'),
+                this.destinationPath(configOptions.appName+'/src/main/resources/db/migration/h2/V1__01_init.sql'),
+                configOptions
+            );
+            this.fs.copyTpl(
+                this.templatePath('app/src/main/resources/db/migration/flyway/V1__01_init.sql'),
+                this.destinationPath(configOptions.appName+'/src/main/resources/db/migration/'+configOptions.databaseType+'/V1__01_init.sql'),
+                configOptions
+            );
+        }
+
+        if(configOptions.dbMigrationTool === 'liquibase') {
+            this.fs.copyTpl(
+                this.templatePath('app/src/main/resources/db/migration/liquibase/liquibase-changelog.xml'),
+                this.destinationPath(configOptions.appName+'/src/main/resources/db/migration/liquibase-changelog.xml'),
+                configOptions
+            );
+            this.fs.copyTpl(
+                this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/01-init.xml'),
+                this.destinationPath(configOptions.appName+'/src/main/resources/db/migration/changelog/01-init.xml'),
+                configOptions
+            );
+        }
     }
 
     _generateMavenConfig(configOptions) {

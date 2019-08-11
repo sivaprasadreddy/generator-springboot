@@ -22,6 +22,8 @@ module.exports = class extends BaseGenerator {
         this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
         this.generateBuildToolConfig(this.configOptions);
         this.generateDockerConfig(this.configOptions);
+        this.generateJenkinsfile(this.configOptions);
+        this.generateTravisCIfile(this.configOptions);
         this._generateAppCode();
     }
 
