@@ -73,19 +73,24 @@ module.exports = class extends Generator {
     }
 
     _generateGradleConfig(configOptions) {
-        this.copyGradleWapper(configOptions);
+        this.copyGradleWrapper(configOptions);
         this.generateGradleBuildScript(configOptions);
     }
 
     copyMavenWrapper(configOptions) {
         const commonMavenConfigDir = '../../common/files/maven/';
 
-        ['.gitignore','mvnw','mvnw.cmd'].forEach(tmpl => {
+        ['mvnw','mvnw.cmd'].forEach(tmpl => {
             this.fs.copyTpl(
                 this.templatePath(commonMavenConfigDir + tmpl),
                 this.destinationPath(configOptions.appName+'/'+tmpl)
             );
         });
+
+        this.fs.copyTpl(
+            this.templatePath(commonMavenConfigDir + 'gitignore'),
+            this.destinationPath(configOptions.appName+'/.gitignore')
+        );
 
         this.fs.copy(
             this.templatePath(commonMavenConfigDir+'.mvn'),
@@ -103,15 +108,20 @@ module.exports = class extends Generator {
         );
     }
 
-    copyGradleWapper(configOptions) {
+    copyGradleWrapper(configOptions) {
         const commonGradleConfigDir = '../../common/files/gradle/';
 
-        ['.gitignore','gradlew','gradlew.bat'].forEach(tmpl => {
+        ['gradlew','gradlew.bat'].forEach(tmpl => {
             this.fs.copyTpl(
                 this.templatePath(commonGradleConfigDir + tmpl),
                 this.destinationPath(configOptions.appName+'/'+tmpl)
             );
         });
+
+        this.fs.copyTpl(
+            this.templatePath(commonGradleConfigDir + 'gitignore'),
+            this.destinationPath(configOptions.appName+'/.gitignore')
+        );
 
         this.fs.copy(
             this.templatePath(commonGradleConfigDir+'gradle'),
