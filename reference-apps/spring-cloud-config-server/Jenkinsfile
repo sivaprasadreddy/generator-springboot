@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+
+    triggers {
+            pollSCM('* * * * *')
+    }
+
+    environment {
+        APPLICATION_NAME = 'spring-cloud-config-server'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                sh './mvnw clean install'
+            }
+        }
+    }
+}
