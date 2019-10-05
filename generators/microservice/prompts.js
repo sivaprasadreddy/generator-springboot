@@ -112,8 +112,9 @@ function prompting() {
         }
     ];
 
-    this.prompt(prompts).then(props => {
-        Object.assign(this.configOptions, props);
+    this.prompt(prompts).then(answers => {
+        Object.assign(this.configOptions, answers);
+        this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
         if(this.configOptions.sql === false) {
             this.configOptions.databaseType = 'none';
             this.configOptions.dbMigrationTool = 'none';
