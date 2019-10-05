@@ -28,7 +28,7 @@ module.exports = class extends BaseGenerator {
         this.generateDockerConfig(this.configOptions);
         this.generateJenkinsfile(this.configOptions);
         this.generateTravisCIfile(this.configOptions);
-        this.generateDbMigrationConfig(this.configOptions);
+        this._generateDbMigrationConfig(this.configOptions);
         this._generateAppCode();
     }
 
@@ -54,11 +54,32 @@ module.exports = class extends BaseGenerator {
         this.generateMainResCode(this.configOptions, mainResTemplates);
 
         const testJavaTemplates = [
-            'ApplicationTests.java',
-            'AbstractIntegrationTest.java'
+            'common/ExceptionHandling.java',
+            'common/AbstractIntegrationTest.java',
+            'ApplicationTests.java'
         ];
         this.generateTestJavaCode(this.configOptions, testJavaTemplates);
 
+    }
+
+    _generateDbMigrationConfig(configOptions) {
+        if(configOptions.dbMigrationTool === 'flywaydb') {
+            const resTemplates = [
+                {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/h2/V1__01_init.sql'},
+                {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/'+configOptions.databaseType+'/V1__01_init.sql'},
+
+            ];
+            this.generateFiles(this.configOptions, resTemplates, 'app/','src/main/resources/');
+        }
+
+        if(configOptions.dbMigrationTool === 'liquibase') {
+            const resTemplates = [
+                {src: 'db/migration/liquibase/liquibase-changelog.xml', dest: 'db/migration/liquibase-changelog.xml'},
+                {src: 'db/migration/liquibase/changelog/01-init.xml', dest: 'db/migration/changelog/01-init.xml'},
+
+            ];
+            this.generateFiles(this.configOptions, resTemplates, 'app/','src/main/resources/');
+        }
     }
 
 };

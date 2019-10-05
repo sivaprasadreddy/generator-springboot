@@ -20,16 +20,6 @@ However, there are certain JHipster features that does not fit for my preference
 > yo springboot
 ```
 
-## Local Development Setup
-
-```
-> git clone https://github.com/sivaprasadreddy/generator-springboot.git
-> cd generator-springboot
-> npm install 
-> npm link
-> yo springboot
-```
-
 ## Features
 
 1. Microservice
@@ -53,3 +43,40 @@ However, there are certain JHipster features that does not fit for my preference
 3. Service Registry
 
     * Service Registry based on Netflix Eureka
+
+### Generate SpringBoot Microservice
+
+![Microservice Generation](docs/microservice-generation.png)
+
+### Generate REST API with CRUD operations
+You can generate REST API with CRUD operation using the following command:
+
+`myservice> yo springboot:controller Customer --base-path /api/customers`
+
+This will generate:
+* JPA entity
+* Spring Data JPA Repository
+* Service
+* Spring MVC REST Controller with CRUD operations
+* Unit and Integration Tests for REST Controller
+* Flyway or Liquibase migration to create table
+
+![Microservice Generation](docs/crud-generation.png)
+
+### Generate SpringCloud Config Server
+
+![Microservice Generation](docs/configserver-generation.png)
+
+### Generate SpringCloud Service Registry
+
+![Microservice Generation](docs/serviceregistry-generation.png)
+
+## Local Development Setup
+
+```
+> git clone https://github.com/sivaprasadreddy/generator-springboot.git
+> cd generator-springboot
+> npm install 
+> npm link
+> yo springboot
+```

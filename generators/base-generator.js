@@ -1,6 +1,7 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
+const _ = require('lodash');
 const log = console.log;
 
 module.exports = class extends Generator {
@@ -63,34 +64,6 @@ module.exports = class extends Generator {
             this.destinationPath('.travis.yml'),
             configOptions
         );
-    }
-
-    generateDbMigrationConfig(configOptions) {
-        if(configOptions.dbMigrationTool === 'flywaydb') {
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/flyway/V1__01_init.sql'),
-                this.destinationPath('src/main/resources/db/migration/h2/V1__01_init.sql'),
-                configOptions
-            );
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/flyway/V1__01_init.sql'),
-                this.destinationPath('src/main/resources/db/migration/'+configOptions.databaseType+'/V1__01_init.sql'),
-                configOptions
-            );
-        }
-
-        if(configOptions.dbMigrationTool === 'liquibase') {
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/liquibase/liquibase-changelog.xml'),
-                this.destinationPath('src/main/resources/db/migration/liquibase-changelog.xml'),
-                configOptions
-            );
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/01-init.xml'),
-                this.destinationPath('src/main/resources/db/migration/changelog/01-init.xml'),
-                configOptions
-            );
-        }
     }
 
     _generateMavenConfig(configOptions) {
@@ -169,45 +142,38 @@ module.exports = class extends Generator {
 
     generateMainJavaCode(configOptions, templates) {
         const mainJavaRootDir = 'src/main/java/';
-        templates.forEach(tmpl => {
-            this.fs.copyTpl(
-                this.templatePath('app/' + mainJavaRootDir + tmpl),
-                this.destinationPath(mainJavaRootDir + configOptions.packageFolder + '/'+tmpl),
-                configOptions
-            );
-        });
-    }
-
-    generateMainJavaCodeTransformed(configOptions, templates) {
-        const mainJavaRootDir = 'src/main/java/';
-        templates.forEach(tmpl => {
-            this.fs.copyTpl(
-                this.templatePath('app/' + mainJavaRootDir + tmpl.src),
-                this.destinationPath(mainJavaRootDir + configOptions.packageFolder + '/'+tmpl.dest),
-                configOptions
-            );
-        });
+        this._generateCode(configOptions, templates, 'app/', mainJavaRootDir, configOptions.packageFolder);
     }
     
     generateMainResCode(configOptions, templates) {
         const mainResRootDir = 'src/main/resources/';
-        templates.forEach(tmpl => {
-            this.fs.copyTpl(
-                this.templatePath('app/'+mainResRootDir + tmpl),
-                this.destinationPath(mainResRootDir + tmpl),
-                configOptions
-            );
-        });
+        this._generateCode(configOptions, templates, 'app/', mainResRootDir,'');
     }
 
     generateTestJavaCode(configOptions, templates) {
         const testJavaRootDir = 'src/test/java/';
+        this._generateCode(configOptions, templates, 'app/', testJavaRootDir, configOptions.packageFolder);
+    }
+
+    generateFiles(configOptions, templates, srcRoot, baseFolder) {
+        this._generateCode(configOptions, templates, srcRoot, baseFolder, '');
+    }
+
+    _generateCode(configOptions, templates, srcRoot, baseFolder, packageFolder) {
         templates.forEach(tmpl => {
-            this.fs.copyTpl(
-                this.templatePath('app/' + testJavaRootDir + tmpl),
-                this.destinationPath(testJavaRootDir + configOptions.packageFolder + '/'+tmpl),
-                configOptions
-            );
+            if (_.isString(tmpl)) {
+                this.fs.copyTpl(
+                    this.templatePath(srcRoot + baseFolder + tmpl),
+                    this.destinationPath(baseFolder + packageFolder + '/' + tmpl),
+                    configOptions
+                );
+            } else {
+                this.fs.copyTpl(
+                    this.templatePath(srcRoot + baseFolder + tmpl.src),
+                    this.destinationPath(baseFolder + packageFolder + '/' + tmpl.dest),
+                    configOptions
+                );
+            }
         });
     }
 };
