@@ -1,8 +1,10 @@
 package com.mycompany.myservice.service;
 
 import com.mycompany.myservice.entity.User;
+import com.mycompany.myservice.model.ChangePasswordRequest;
 import com.mycompany.myservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAllUsers() {
@@ -34,5 +38,19 @@ public class UserService {
 
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public void changePassword(String email, ChangePasswordRequest changePasswordRequest) {
+        Optional<User> userByEmail = userRepository.findByEmail(email);
+        if(!userByEmail.isPresent()) {
+            throw new RuntimeException("User with email $email not found");
+        }
+        User user = userByEmail.get();
+        if (passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Current password doesn't match");
+        }
     }
 }

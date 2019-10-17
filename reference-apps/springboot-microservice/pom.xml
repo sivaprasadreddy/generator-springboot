@@ -19,6 +19,8 @@
         <spring-cloud.version>Greenwich.SR3</spring-cloud.version>
         <testcontainers.version>1.11.3</testcontainers.version>
         <swagger.version>2.9.2</swagger.version>
+        <jjwt.version>0.10.7</jjwt.version>
+        <problem-spring-web.version>0.25.0</problem-spring-web.version>
     </properties>
 
     <dependencies>
@@ -48,6 +50,38 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem-spring-web-starter</artifactId>
+            <version>${problem-spring-web.version}</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

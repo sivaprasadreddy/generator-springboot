@@ -29,6 +29,9 @@ module.exports = class extends BaseGenerator {
         this.generateJenkinsfile(this.configOptions);
         this.generateTravisCIfile(this.configOptions);
         this._generateDbMigrationConfig(this.configOptions);
+        this._generateDockerComposeFiles(this.configOptions);
+        this._generateELKConfig(this.configOptions);
+        this._generateMonitoringConfig(this.configOptions);
         this._generateAppCode();
     }
 
@@ -69,7 +72,7 @@ module.exports = class extends BaseGenerator {
                 {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/'+configOptions.databaseType+'/V1__01_init.sql'},
 
             ];
-            this.generateFiles(this.configOptions, resTemplates, 'app/','src/main/resources/');
+            this.generateFiles(configOptions, resTemplates, 'app/','src/main/resources/');
         }
 
         if(configOptions.dbMigrationTool === 'liquibase') {
@@ -78,8 +81,36 @@ module.exports = class extends BaseGenerator {
                 {src: 'db/migration/liquibase/changelog/01-init.xml', dest: 'db/migration/changelog/01-init.xml'},
 
             ];
-            this.generateFiles(this.configOptions, resTemplates, 'app/','src/main/resources/');
+            this.generateFiles(configOptions, resTemplates, 'app/','src/main/resources/');
         }
+    }
+
+    _generateDockerComposeFiles(configOptions) {
+        const resTemplates = [
+            'docker-compose.yml',
+        ];
+        this.generateFiles(configOptions, resTemplates, 'app/','docker/');
+    }
+
+    _generateELKConfig(configOptions) {
+        const resTemplates = [
+            'docker/docker-compose-elk.yml',
+            'config/elk/logstash.conf',
+        ];
+        this.generateFiles(configOptions, resTemplates, 'app/','./');
+    }
+
+    _generateMonitoringConfig(configOptions) {
+        const resTemplates = [
+            'docker/docker-compose-monitoring.yml',
+            'config/prometheus/prometheus.yml',
+        ];
+        this.generateFiles(configOptions, resTemplates, 'app/','./');
+
+        this.fs.copy(
+            this.templatePath('app/config/grafana'),
+            this.destinationPath('config/grafana')
+        );
     }
 
 };
