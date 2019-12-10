@@ -77,22 +77,23 @@ function prompting() {
             default: 'flywaydb'
         },
         {
-            type: 'confirm',
-            name: 'configClient',
-            message: 'Do you want to register application as a Config Server client?',
-            default: false
-        },
-        {
-            type: 'confirm',
-            name: 'eurekaClient',
-            message: 'Do you want to register application as a Eureka Server client?',
-            default: false
-        },
-        {
-            type: 'confirm',
-            name: 'distTracing',
-            message: 'Do you want to enable distributed tracing using Sleuth and Zipkin?',
-            default: false
+            type: 'checkbox',
+            name: 'features',
+            message: 'Select the features you want?',
+            choices: [
+                {
+                    value: 'eurekaClient',
+                    name: 'Register application as a Eureka Client'
+                },
+                {
+                    value: 'configClient',
+                    name: 'Register application as a Config Server client'
+                },
+                {
+                    value: 'distTracing',
+                    name: 'Enable distributed tracing using Sleuth and Zipkin'
+                }
+            ]
         },
         {
             type: 'list',
@@ -119,6 +120,10 @@ function prompting() {
             this.configOptions.databaseType = 'none';
             this.configOptions.dbMigrationTool = 'none';
         }
+        const features = this.configOptions.features || [];
+        this.configOptions.distTracing = features.includes('distTracing');
+        this.configOptions.eurekaClient = features.includes('eurekaClient');
+        this.configOptions.configClient = features.includes('configClient');
         done();
     });
 }
