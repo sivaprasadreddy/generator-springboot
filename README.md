@@ -33,7 +33,7 @@ However, there are certain JHipster features that does not fit for my preference
     * Integration with Config Server, Service Registry, Sleuth, Zipkin
     * TestContainers integration
     * JUnit 5 
-    * Docker configuration
+    * Docker configuration for Application, ELK, Prometheus, Grafana
     * Jenkinsfile
 
 2. Spring Cloud Config Server
@@ -51,6 +51,8 @@ However, there are certain JHipster features that does not fit for my preference
 ### Generate REST API with CRUD operations
 You can generate REST API with CRUD operation using the following command:
 
+:high_brightness: You should run the following command from within the generated project folder. 
+
 `myservice> yo springboot:controller Customer --base-path /api/customers`
 
 This will generate:
@@ -60,6 +62,8 @@ This will generate:
 * Spring MVC REST Controller with CRUD operations
 * Unit and Integration Tests for REST Controller
 * Flyway or Liquibase migration to create table
+
+:red_circle: You might need to update the generated flyway or liquibase migration script version number.
 
 ![Microservice Generation](docs/crud-generation.png)
 
@@ -80,3 +84,8 @@ This will generate:
 > npm link
 > yo springboot
 ```
+
+## Changelog
+
+### Version 0.0.5
+* Added support for generating docker-compose yml files for application, ELK, Prometheus, Grafana
