@@ -1,5 +1,6 @@
 'use strict';
 const BaseGenerator = require('../base-generator');
+const constants = require('../constants');
 const prompts = require('./prompts');
 const path = require('path');
 
@@ -20,6 +21,7 @@ module.exports = class extends BaseGenerator {
 
     configuring() {
         this.destinationRoot(path.join(this.destinationRoot(), '/'+this.configOptions.appName));
+        Object.assign(this.configOptions, constants);
         this.config.set(this.configOptions);
     }
 
@@ -28,25 +30,27 @@ module.exports = class extends BaseGenerator {
         this.generateDockerConfig(this.configOptions);
         this.generateJenkinsfile(this.configOptions);
         this.generateTravisCIfile(this.configOptions);
+        this.generateGithubCIfile(this.configOptions);
         this._generateDbMigrationConfig(this.configOptions);
         this._generateDockerComposeFiles(this.configOptions);
         this._generateELKConfig(this.configOptions);
         this._generateMonitoringConfig(this.configOptions);
-        this._generateAppCode();
+        this._generateAppCode(this.configOptions);
     }
 
     end() {
         this.printGenerationSummary(this.configOptions);
     }
 
-    _generateAppCode() {
+    _generateAppCode(configOptions) {
 
         const mainJavaTemplates = [
             'Application.java',
             'config/WebMvcConfig.java',
-            'config/SwaggerConfig.java'
+            'config/SwaggerConfig.java',
+            'utils/Constants.java'
         ];
-        this.generateMainJavaCode(this.configOptions, mainJavaTemplates);
+        this.generateMainJavaCode(configOptions, mainJavaTemplates);
 
         const mainResTemplates = [
             'application.properties',
@@ -54,14 +58,15 @@ module.exports = class extends BaseGenerator {
             'application-prod.properties',
             'application-heroku.properties'
         ];
-        this.generateMainResCode(this.configOptions, mainResTemplates);
+        this.generateMainResCode(configOptions, mainResTemplates);
 
         const testJavaTemplates = [
             'common/ExceptionHandling.java',
+            'common/TestContainersConfig.java',
             'common/AbstractIntegrationTest.java',
             'ApplicationTests.java'
         ];
-        this.generateTestJavaCode(this.configOptions, testJavaTemplates);
+        this.generateTestJavaCode(configOptions, testJavaTemplates);
 
     }
 
@@ -73,6 +78,11 @@ module.exports = class extends BaseGenerator {
 
             ];
             this.generateFiles(configOptions, resTemplates, 'app/','src/main/resources/');
+            const flywayMigrantCounter = {
+                [constants.KEY_FLYWAY_MIGRATION_COUNTER]: 1
+            };
+            Object.assign(this.configOptions, flywayMigrantCounter);
+            this.config.set(this.configOptions);
         }
 
         if(configOptions.dbMigrationTool === 'liquibase') {
@@ -82,6 +92,11 @@ module.exports = class extends BaseGenerator {
 
             ];
             this.generateFiles(configOptions, resTemplates, 'app/','src/main/resources/');
+            const liquibaseMigrantCounter = {
+                [constants.KEY_LIQUIBASE_MIGRATION_COUNTER]: 1
+            };
+            Object.assign(this.configOptions, liquibaseMigrantCounter);
+            this.config.set(this.configOptions);
         }
     }
 

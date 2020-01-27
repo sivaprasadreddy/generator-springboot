@@ -1,13 +1,14 @@
 plugins {
-    id 'org.springframework.boot' version '2.1.9.RELEASE'
+    id 'org.springframework.boot' version '<%= SPRING_BOOT_VERSION %>'
+    id 'io.spring.dependency-management' version '<%= SPRING_DEP_MNGMNT_VERSION %>'
     id 'java'
 }
 
 apply plugin: 'io.spring.dependency-management'
 
 group = '<%= packageName %>'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+version = '<%= DEF_GEN_APP_VERSION %>'
+sourceCompatibility = '<%= JAVA_VERSION %>'
 
 configurations {
     developmentOnly
@@ -24,9 +25,10 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "Greenwich.SR3")
-    set('swaggerVersion', "2.9.2")
-    set('testcontainersVersion', "1.11.3")
+    set('springCloudVersion', "<%= SPRING_CLOUD_VERSION %>")
+    set('swaggerVersion', "<%= SWAGGER_VERSION %>")
+    set('testcontainersVersion', "<%= TESTCONTAINERS_VERSION %>")
+    set('problemSpringWebVersion', "<%= TESTCONTAINERS_VERSION %>")
 }
 
 dependencies {
@@ -36,6 +38,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    implementation "org.zalando:problem-spring-web-starter:${problemSpringWebVersion}"
     <%_ if (sql === true) { _%>
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
@@ -71,7 +74,7 @@ dependencies {
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 
     testImplementation ('org.springframework.boot:spring-boot-starter-test'){
-        exclude group: 'junit', module: 'junit'
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation "org.junit.jupiter:junit-jupiter-params"

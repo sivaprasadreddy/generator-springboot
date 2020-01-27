@@ -1,6 +1,11 @@
 FROM fabric8/java-alpine-openjdk8-jre
 VOLUME /tmp
-ADD target/<%= appName %>-0.0.1-SNAPSHOT.jar app.jar
+<%_ if (buildTool === 'maven') { _%>
+ADD target/<%= appName %>-<%= DEF_GEN_APP_VERSION %>.jar app.jar
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
+ADD build/libs/<%= appName %>-<%= DEF_GEN_APP_VERSION %>.jar app.jar
+<%_ } _%>
 RUN sh -c 'touch /app.jar'
 ENV JAVA_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n"
 ENV SPRING_PROFILES_ACTIVE "native,docker"

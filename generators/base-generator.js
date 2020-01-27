@@ -66,6 +66,15 @@ module.exports = class extends Generator {
         );
     }
 
+    generateGithubCIfile(configOptions) {
+        const ciFile = '.github/workflows/'+configOptions.buildTool+'.yml';
+        this.fs.copyTpl(
+            this.templatePath('app/'+ciFile),
+            this.destinationPath(ciFile),
+            configOptions
+        );
+    }
+
     _generateMavenConfig(configOptions) {
         this.copyMavenWrapper(configOptions);
         this.generateMavenPOMXml(configOptions);
