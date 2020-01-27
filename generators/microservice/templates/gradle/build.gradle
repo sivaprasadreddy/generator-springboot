@@ -28,7 +28,7 @@ ext {
     set('springCloudVersion', "<%= SPRING_CLOUD_VERSION %>")
     set('swaggerVersion', "<%= SWAGGER_VERSION %>")
     set('testcontainersVersion', "<%= TESTCONTAINERS_VERSION %>")
-    set('problemSpringWebVersion', "<%= TESTCONTAINERS_VERSION %>")
+    set('problemSpringWebVersion', "<%= PROBLEM_SPRING_WEB_VERSION %>")
 }
 
 dependencies {

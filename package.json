@@ -14,7 +14,8 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
+    "test:unit": "mocha --timeout 30000 --slow 0 --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -30,5 +31,13 @@
     "chalk": "^2.4.2",
     "lodash": "^4.17.15",
     "yeoman-generator": "^4.0.1"
+  },
+  "devDependencies": {
+    "chai": "4.2.0",
+    "fs-extra": "7.0.1",
+    "mocha": "6.1.4",
+    "sinon": "7.2.5",
+    "yeoman-assert": "3.1.1",
+    "yeoman-test": "1.9.1"
   }
 }
