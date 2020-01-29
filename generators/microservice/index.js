@@ -33,8 +33,6 @@ module.exports = class extends BaseGenerator {
         this.generateGithubCIfile(this.configOptions);
         this._generateDbMigrationConfig(this.configOptions);
         this._generateDockerComposeFiles(this.configOptions);
-        this._generateELKConfig(this.configOptions);
-        this._generateMonitoringConfig(this.configOptions);
         this._generateAppCode(this.configOptions);
     }
 
@@ -81,8 +79,8 @@ module.exports = class extends BaseGenerator {
             const flywayMigrantCounter = {
                 [constants.KEY_FLYWAY_MIGRATION_COUNTER]: 1
             };
-            Object.assign(this.configOptions, flywayMigrantCounter);
-            this.config.set(this.configOptions);
+            Object.assign(configOptions, flywayMigrantCounter);
+            this.config.set(configOptions);
         }
 
         if(configOptions.dbMigrationTool === 'liquibase') {
@@ -95,14 +93,30 @@ module.exports = class extends BaseGenerator {
             const liquibaseMigrantCounter = {
                 [constants.KEY_LIQUIBASE_MIGRATION_COUNTER]: 1
             };
-            Object.assign(this.configOptions, liquibaseMigrantCounter);
-            this.config.set(this.configOptions);
+            Object.assign(configOptions, liquibaseMigrantCounter);
+            this.config.set(configOptions);
         }
     }
 
     _generateDockerComposeFiles(configOptions) {
+        this._generateAppDockerComposeFile(configOptions);
+        this._generateELKConfig(configOptions);
+        this._generateMonitoringConfig(configOptions);
+        if(configOptions.distTracing === true) {
+            this._generateDistTracingDockerComposeFile(configOptions);
+        }
+    }
+
+    _generateAppDockerComposeFile(configOptions) {
         const resTemplates = [
             'docker-compose.yml',
+        ];
+        this.generateFiles(configOptions, resTemplates, 'app/','docker/');
+    }
+
+    _generateDistTracingDockerComposeFile(configOptions) {
+        const resTemplates = [
+            'docker-compose-tracing.yml',
         ];
         this.generateFiles(configOptions, resTemplates, 'app/','docker/');
     }
