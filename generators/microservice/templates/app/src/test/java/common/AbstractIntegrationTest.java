@@ -13,7 +13,7 @@ import static <%= packageName %>.utils.Constants.PROFILE_TEST;
 @ActiveProfiles({PROFILE_TEST, PROFILE_IT})
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureMockMvc
-public abstract class AbstractIntegrationTest extends TestContainersConfig {
+public abstract class AbstractIntegrationTest {
 
     @Autowired
     protected MockMvc mockMvc;

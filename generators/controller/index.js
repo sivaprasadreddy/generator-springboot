@@ -66,39 +66,62 @@ module.exports = class extends BaseGenerator {
     }
 
     _generateDbMigrationConfig(configOptions) {
+
         if(configOptions.dbMigrationTool === 'flywaydb') {
-            const counter = configOptions.FLYWAY_MIGRATION_COUNTER + 1;
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/flyway/V1__new_table.sql'),
-                this.destinationPath('src/main/resources/db/migration/h2/V'+counter+'__create_'+configOptions.tableName+'_table.sql'),
-                configOptions
-            );
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/flyway/V1__new_table.sql'),
-                this.destinationPath('src/main/resources/db/migration/'+configOptions.databaseType+
-                    '/V'+counter+'__create_'+configOptions.tableName+'_table.sql'),
-                configOptions
-            );
-            const liquibaseMigrantCounter = {
-                [constants.KEY_FLYWAY_MIGRATION_COUNTER]: counter
-            };
-            const updatedConfig = Object.assign({}, this.config.getAll(), liquibaseMigrantCounter);
-            this.config.set(updatedConfig);
+            this._generateFlywayMigration(configOptions)
         }
 
         if(configOptions.dbMigrationTool === 'liquibase') {
-            const counter = configOptions.LIQUIBASE_MIGRATION_COUNTER + 1;
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/01-new_table.xml'),
-                this.destinationPath('src/main/resources/db/migration/changelog/0'+counter+'-create_'+configOptions.tableName+'_table.xml'),
-                configOptions
-            );
-            const liquibaseMigrantCounter = {
-                [constants.KEY_LIQUIBASE_MIGRATION_COUNTER]: counter
-            };
-            const updatedConfig = Object.assign({}, this.config.getAll(), liquibaseMigrantCounter);
-            this.config.set(updatedConfig);
+            this._generateLiquibaseMigration(configOptions);
         }
     }
 
+    _generateFlywayMigration(configOptions) {
+        const supportSequences = this._supportDatabaseSequences(configOptions.databaseType);
+        const counter = configOptions[constants.KEY_FLYWAY_MIGRATION_COUNTER] + 1;
+        let vendor = configOptions.databaseType;
+        if(vendor === "mariadb") {
+            vendor = "mysql";
+        }
+        const scriptTemplate = supportSequences ? "V1__new_table_with_seq.sql" : "V1__new_table_no_seq.sql";
+
+        this.fs.copyTpl(
+            this.templatePath('app/src/main/resources/db/migration/flyway/V1__new_table_with_seq.sql'),
+            this.destinationPath('src/main/resources/db/migration/h2/V'+counter+'__create_'+configOptions.tableName+'_table.sql'),
+            configOptions
+        );
+        this.fs.copyTpl(
+            this.templatePath('app/src/main/resources/db/migration/flyway/'+scriptTemplate),
+            this.destinationPath('src/main/resources/db/migration/'+vendor+
+                '/V'+counter+'__create_'+configOptions.tableName+'_table.sql'),
+            configOptions
+        );
+        const flywayMigrantCounter = {
+            [constants.KEY_FLYWAY_MIGRATION_COUNTER]: counter
+        };
+        //const updatedConfig = Object.assign({}, this.config.getAll(), flywayMigrantCounter);
+        this.config.set(flywayMigrantCounter);
+    }
+
+    _generateLiquibaseMigration(configOptions) {
+        const supportSequences = this._supportDatabaseSequences(configOptions.databaseType);
+        const counter = configOptions[constants.KEY_LIQUIBASE_MIGRATION_COUNTER] + 1;
+        const scriptTemplate = supportSequences ? "01-new_table_with_seq.xml" : "01-new_table_no_seq.xml";
+        this.fs.copyTpl(
+            this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/'+scriptTemplate),
+            this.destinationPath('src/main/resources/db/migration/changelog/0'+counter+'-create_'+configOptions.tableName+'_table.xml'),
+            configOptions
+        );
+        const liquibaseMigrantCounter = {
+            [constants.KEY_LIQUIBASE_MIGRATION_COUNTER]: counter
+        };
+        //const updatedConfig = Object.assign({}, this.config.getAll(), liquibaseMigrantCounter);
+        this.config.set(liquibaseMigrantCounter);
+    }
+
+    _supportDatabaseSequences(databaseType) {
+        return  databaseType === 'h2' ||
+            databaseType === 'postgresql'
+            ;
+    }
 };

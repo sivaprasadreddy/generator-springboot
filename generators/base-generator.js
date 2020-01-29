@@ -164,6 +164,11 @@ module.exports = class extends Generator {
         this._generateCode(configOptions, templates, 'app/', testJavaRootDir, configOptions.packageFolder);
     }
 
+    generateTestResCode(configOptions, templates) {
+        const testResRootDir = 'src/test/resources/';
+        this._generateCode(configOptions, templates, 'app/', testResRootDir,'');
+    }
+
     generateFiles(configOptions, templates, srcRoot, baseFolder) {
         this._generateCode(configOptions, templates, srcRoot, baseFolder, '');
     }

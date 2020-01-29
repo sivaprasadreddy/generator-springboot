@@ -7,7 +7,7 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 
 group = '<%= packageName %>'
-version = '<%= DEF_GEN_APP_VERSION %>'
+version = '<%= DEFAULT_APP_VERSION %>'
 sourceCompatibility = '<%= JAVA_VERSION %>'
 
 configurations {

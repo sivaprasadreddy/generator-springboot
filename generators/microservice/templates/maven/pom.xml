@@ -10,7 +10,7 @@
     </parent>
     <groupId><%= packageName %></groupId>
     <artifactId><%= appName %></artifactId>
-    <version><%= DEF_GEN_APP_VERSION %></version>
+    <version><%= DEFAULT_APP_VERSION %></version>
     <name><%= appName %></name>
     <description><%= appName %></description>
 
@@ -18,7 +18,7 @@
         <java.version><%= JAVA_VERSION %></java.version>
         <spring-cloud.version><%= SPRING_CLOUD_VERSION %></spring-cloud.version>
         <problem-spring-web.version><%= PROBLEM_SPRING_WEB_VERSION %></problem-spring-web.version>
-        <testcontainers.version><%= TESTCONTAINERS_VERSION %></testcontainers.version>
+        <springboot-tc-starter.version><%= SPRING_BOOT_TC_STARTER_VERSION %></springboot-tc-starter.version>
         <swagger.version><%= SWAGGER_VERSION %></swagger.version>
     </properties>
 
@@ -69,9 +69,9 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${testcontainers.version}</version>
+            <groupId>com.playtika.testcontainers</groupId>
+            <artifactId>embedded-postgresql</artifactId>
+            <version>${springboot-tc-starter.version}</version>
             <scope>test</scope>
         </dependency>
         <%_ } _%>
@@ -82,9 +82,10 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>mysql</artifactId>
-            <version>${testcontainers.version}</version>
+            <groupId>com.playtika.testcontainers</groupId>
+            <!-- testcontainers-spring-boot doesn't support mysql yet -->
+            <artifactId>embedded-mariadb</artifactId>
+            <version>${springboot-tc-starter.version}</version>
             <scope>test</scope>
         </dependency>
         <%_ } _%>
@@ -95,9 +96,9 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>mariadb</artifactId>
-            <version>${testcontainers.version}</version>
+            <groupId>com.playtika.testcontainers</groupId>
+            <artifactId>embedded-mariadb</artifactId>
+            <version>${springboot-tc-starter.version}</version>
             <scope>test</scope>
         </dependency>
         <%_ } _%>
@@ -160,6 +161,11 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
@@ -174,13 +180,6 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <dependencyManagement>

@@ -10,7 +10,7 @@
     </parent>
     <groupId><%= packageName %></groupId>
     <artifactId><%= appName %></artifactId>
-    <version><%= DEF_GEN_APP_VERSION %></version>
+    <version><%= DEFAULT_APP_VERSION %></version>
     <name><%= appName %></name>
     <description><%= appName %></description>
 

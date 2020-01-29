@@ -1,10 +1,10 @@
 FROM fabric8/java-alpine-openjdk8-jre
 VOLUME /tmp
 <%_ if (buildTool === 'maven') { _%>
-ADD target/<%= appName %>-<%= DEF_GEN_APP_VERSION %>.jar app.jar
+ADD target/<%= appName %>-<%= DEFAULT_APP_VERSION %>.jar app.jar
 <%_ } _%>
 <%_ if (buildTool === 'gradle') { _%>
-ADD build/libs/<%= appName %>-<%= DEF_GEN_APP_VERSION %>.jar app.jar
+ADD build/libs/<%= appName %>-<%= DEFAULT_APP_VERSION %>.jar app.jar
 <%_ } _%>
 RUN sh -c 'touch /app.jar'
 ENV JAVA_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n"

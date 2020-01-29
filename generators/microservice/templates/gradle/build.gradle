@@ -7,7 +7,7 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 
 group = '<%= packageName %>'
-version = '<%= DEF_GEN_APP_VERSION %>'
+version = '<%= DEFAULT_APP_VERSION %>'
 sourceCompatibility = '<%= JAVA_VERSION %>'
 
 configurations {
@@ -27,7 +27,7 @@ repositories {
 ext {
     set('springCloudVersion', "<%= SPRING_CLOUD_VERSION %>")
     set('swaggerVersion', "<%= SWAGGER_VERSION %>")
-    set('testcontainersVersion', "<%= TESTCONTAINERS_VERSION %>")
+    set('springbootTcStarterVersion', "<%= SPRING_BOOT_TC_STARTER_VERSION %>")
     set('problemSpringWebVersion', "<%= PROBLEM_SPRING_WEB_VERSION %>")
 }
 
@@ -45,14 +45,14 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'mysql') { _%>
     runtimeOnly 'mysql:mysql-connector-java'
-    testImplementation "org.testcontainers:mysql:${testcontainersVersion}"
+    testImplementation "com.playtika.testcontainers:embedded-mysql:${springbootTcStarterVersion}"
     <%_ } _%>
     <%_ if (databaseType === 'postgresql') { _%>
     runtimeOnly 'org.postgresql:postgresql'
-    testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+    testImplementation "com.playtika.testcontainers:embedded-postgresql:${springbootTcStarterVersion}"
     <%_ } _%>
     <%_ if (databaseType === 'mariadb') { _%>
-    testImplementation "org.testcontainers:mariadb:${testcontainersVersion}"
+    testImplementation "com.playtika.testcontainers:embedded-mariadb:${springbootTcStarterVersion}"
     <%_ } _%>
     <%_ if (dbMigrationTool  === 'flywaydb') { _%>
     implementation 'org.flywaydb:flyway-core'
@@ -76,10 +76,10 @@ dependencies {
     testImplementation ('org.springframework.boot:spring-boot-starter-test'){
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    testImplementation 'org.springframework.cloud:spring-cloud-starter'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation "org.junit.jupiter:junit-jupiter-params"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
 }
 
 dependencyManagement {

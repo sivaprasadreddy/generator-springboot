@@ -5,4 +5,3 @@ create table <%= tableName %> (
     text varchar(1024) not null,
     primary key (id)
 );
-

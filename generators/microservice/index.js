@@ -60,19 +60,27 @@ module.exports = class extends BaseGenerator {
 
         const testJavaTemplates = [
             'common/ExceptionHandling.java',
-            'common/TestContainersConfig.java',
             'common/AbstractIntegrationTest.java',
             'ApplicationTests.java'
         ];
         this.generateTestJavaCode(configOptions, testJavaTemplates);
 
+        const testResTemplates = [
+            'bootstrap.properties',
+            'bootstrap-integration-test.properties'
+        ];
+        this.generateTestResCode(configOptions, testResTemplates);
     }
 
     _generateDbMigrationConfig(configOptions) {
         if(configOptions.dbMigrationTool === 'flywaydb') {
+            let vendor = configOptions.databaseType;
+            if(vendor === "mariadb") {
+                vendor = "mysql";
+            }
             const resTemplates = [
                 {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/h2/V1__01_init.sql'},
-                {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/'+configOptions.databaseType+'/V1__01_init.sql'},
+                {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/'+ vendor +'/V1__01_init.sql'},
 
             ];
             this.generateFiles(configOptions, resTemplates, 'app/','src/main/resources/');
