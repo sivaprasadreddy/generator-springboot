@@ -66,6 +66,15 @@ module.exports = class extends Generator {
         );
     }
 
+    generateGithubCIfile(configOptions) {
+        const ciFile = '.github/workflows/'+configOptions.buildTool+'.yml';
+        this.fs.copyTpl(
+            this.templatePath('app/'+ciFile),
+            this.destinationPath(ciFile),
+            configOptions
+        );
+    }
+
     _generateMavenConfig(configOptions) {
         this.copyMavenWrapper(configOptions);
         this.generateMavenPOMXml(configOptions);
@@ -153,6 +162,11 @@ module.exports = class extends Generator {
     generateTestJavaCode(configOptions, templates) {
         const testJavaRootDir = 'src/test/java/';
         this._generateCode(configOptions, templates, 'app/', testJavaRootDir, configOptions.packageFolder);
+    }
+
+    generateTestResCode(configOptions, templates) {
+        const testResRootDir = 'src/test/resources/';
+        this._generateCode(configOptions, templates, 'app/', testResRootDir,'');
     }
 
     generateFiles(configOptions, templates, srcRoot, baseFolder) {

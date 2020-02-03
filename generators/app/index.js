@@ -1,42 +1,27 @@
 'use strict';
 
 const BaseGenerator = require('../base-generator');
+const prompts = require('./prompts');
 
 module.exports = class extends BaseGenerator {
 
-    prompting() {
+    constructor(args, opts) {
+        super(args, opts);
+        this.configOptions = this.options.configOptions || {};
+    }
 
-        const prompts = [
-            {
-                type: 'list',
-                name: 'appType',
-                message: 'Which type of application you want to generate?',
-                choices: [
-                    {
-                        value: 'microservice',
-                        name: 'SpringBoot MicroService'
-                    },
-                    {
-                        value: 'config-server',
-                        name: 'Spring Cloud Config Server'
-                    },
-                    {
-                        value: 'service-registry',
-                        name: 'Spring Cloud Eureka Server for Service Registry and Discovery'
-                    }
-                ],
-                default: 'microservice'
-            }
+    initializing() {
+        this.logSuccess('Generating Config Server');
+    }
 
-        ];
-
-        return this.prompt(prompts).then(answers => {
-            this.appType = answers.appType;
-        });
+    get prompting() {
+        return prompts.prompting;
     }
 
     default() {
-        this.composeWith(require.resolve('../'+this.appType));
+        this.composeWith(require.resolve('../'+this.configOptions.appType), {
+            configOptions: this.configOptions
+        });
     }
 
 };

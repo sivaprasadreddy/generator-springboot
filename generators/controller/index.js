@@ -1,5 +1,6 @@
 'use strict';
 const BaseGenerator = require('../base-generator');
+const constants = require('../constants');
 const _ = require('lodash');
 
 module.exports = class extends BaseGenerator {
@@ -44,48 +45,83 @@ module.exports = class extends BaseGenerator {
     }
 
     writing() {
-        this._generateAppCode();
+        this._generateAppCode(this.configOptions);
         this._generateDbMigrationConfig(this.configOptions)
     }
 
-    _generateAppCode() {
+    _generateAppCode(configOptions) {
         const mainJavaTemplates = [
-            {src: 'entity/Entity.java', dest: 'entity/'+this.configOptions.entityName+'.java'},
-            {src: 'repository/Repository.java', dest: 'repository/'+this.configOptions.entityName+'Repository.java'},
-            {src: 'service/Service.java', dest: 'service/'+this.configOptions.entityName+'Service.java'},
-            {src: 'web/controller/Controller.java', dest: 'web/controller/'+this.configOptions.entityName+'Controller.java'},
+            {src: 'entity/Entity.java', dest: 'entity/'+configOptions.entityName+'.java'},
+            {src: 'repository/Repository.java', dest: 'repository/'+configOptions.entityName+'Repository.java'},
+            {src: 'service/Service.java', dest: 'service/'+configOptions.entityName+'Service.java'},
+            {src: 'web/controller/Controller.java', dest: 'web/controller/'+configOptions.entityName+'Controller.java'},
         ];
-        this.generateMainJavaCode(this.configOptions, mainJavaTemplates);
+        this.generateMainJavaCode(configOptions, mainJavaTemplates);
 
         const testJavaTemplates = [
-            {src: 'web/controller/ControllerTest.java', dest: 'web/controller/'+this.configOptions.entityName+'ControllerTest.java'},
-            {src: 'web/controller/ControllerIT.java', dest: 'web/controller/'+this.configOptions.entityName+'ControllerIT.java'},
+            {src: 'web/controller/ControllerTest.java', dest: 'web/controller/'+configOptions.entityName+'ControllerTest.java'},
+            {src: 'web/controller/ControllerIT.java', dest: 'web/controller/'+configOptions.entityName+'ControllerIT.java'},
         ];
-        this.generateTestJavaCode(this.configOptions, testJavaTemplates);
+        this.generateTestJavaCode(configOptions, testJavaTemplates);
     }
 
     _generateDbMigrationConfig(configOptions) {
+
         if(configOptions.dbMigrationTool === 'flywaydb') {
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/flyway/V1__new_table.sql'),
-                this.destinationPath('src/main/resources/db/migration/h2/V1__create_'+configOptions.tableName+'_table.sql'),
-                configOptions
-            );
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/flyway/V1__new_table.sql'),
-                this.destinationPath('src/main/resources/db/migration/'+configOptions.databaseType+
-                    '/V1__create_'+configOptions.tableName+'_table.sql'),
-                configOptions
-            );
+            this._generateFlywayMigration(configOptions)
         }
 
         if(configOptions.dbMigrationTool === 'liquibase') {
-            this.fs.copyTpl(
-                this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/01-new_table.xml'),
-                this.destinationPath('src/main/resources/db/migration/changelog/01-create_'+configOptions.tableName+'_table.xml'),
-                configOptions
-            );
+            this._generateLiquibaseMigration(configOptions);
         }
     }
 
+    _generateFlywayMigration(configOptions) {
+        const supportSequences = this._supportDatabaseSequences(configOptions.databaseType);
+        const counter = configOptions[constants.KEY_FLYWAY_MIGRATION_COUNTER] + 1;
+        let vendor = configOptions.databaseType;
+        if(vendor === "mariadb") {
+            vendor = "mysql";
+        }
+        const scriptTemplate = supportSequences ? "V1__new_table_with_seq.sql" : "V1__new_table_no_seq.sql";
+
+        this.fs.copyTpl(
+            this.templatePath('app/src/main/resources/db/migration/flyway/V1__new_table_with_seq.sql'),
+            this.destinationPath('src/main/resources/db/migration/h2/V'+counter+'__create_'+configOptions.tableName+'_table.sql'),
+            configOptions
+        );
+        this.fs.copyTpl(
+            this.templatePath('app/src/main/resources/db/migration/flyway/'+scriptTemplate),
+            this.destinationPath('src/main/resources/db/migration/'+vendor+
+                '/V'+counter+'__create_'+configOptions.tableName+'_table.sql'),
+            configOptions
+        );
+        const flywayMigrantCounter = {
+            [constants.KEY_FLYWAY_MIGRATION_COUNTER]: counter
+        };
+        //const updatedConfig = Object.assign({}, this.config.getAll(), flywayMigrantCounter);
+        this.config.set(flywayMigrantCounter);
+    }
+
+    _generateLiquibaseMigration(configOptions) {
+        const supportSequences = this._supportDatabaseSequences(configOptions.databaseType);
+        const counter = configOptions[constants.KEY_LIQUIBASE_MIGRATION_COUNTER] + 1;
+        const scriptTemplate = supportSequences ? "01-new_table_with_seq.xml" : "01-new_table_no_seq.xml";
+        this.fs.copyTpl(
+            this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/'+scriptTemplate),
+            this.destinationPath('src/main/resources/db/migration/changelog/0'+counter+'-create_'+configOptions.tableName+'_table.xml'),
+            configOptions
+        );
+        const liquibaseMigrantCounter = {
+            [constants.KEY_LIQUIBASE_MIGRATION_COUNTER]: counter
+        };
+        //const updatedConfig = Object.assign({}, this.config.getAll(), liquibaseMigrantCounter);
+        this.config.set(liquibaseMigrantCounter);
+    }
+
+    _supportDatabaseSequences(databaseType) {
+        return  databaseType === 'h2' ||
+            databaseType === 'postgresql'
+            ;
+    }
 };

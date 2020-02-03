@@ -1,5 +1,6 @@
 'use strict';
 const BaseGenerator = require('../base-generator');
+const constants = require('../constants');
 const prompts = require('./prompts');
 const path = require('path');
 
@@ -21,6 +22,7 @@ module.exports = class extends BaseGenerator {
 
     configuring() {
         this.destinationRoot(path.join(this.destinationRoot(), '/'+this.configOptions.appName));
+        Object.assign(this.configOptions, constants);
         this.config.set(this.configOptions);
     }
 
@@ -29,22 +31,22 @@ module.exports = class extends BaseGenerator {
         this.generateDockerConfig(this.configOptions);
         this.generateJenkinsfile(this.configOptions);
         this.generateTravisCIfile(this.configOptions);
-        this._generateAppCode();
+        this._generateAppCode(this.configOptions);
     }
 
     end() {
         this.printGenerationSummary(this.configOptions);
     }
 
-    _generateAppCode() {
+    _generateAppCode(configOptions) {
         const mainJavaTemplates = ['ConfigServerApplication.java'];
-        this.generateMainJavaCode(this.configOptions, mainJavaTemplates);
+        this.generateMainJavaCode(configOptions, mainJavaTemplates);
 
         const mainResTemplates = ['application.properties'];
-        this.generateMainResCode(this.configOptions, mainResTemplates);
+        this.generateMainResCode(configOptions, mainResTemplates);
 
         const testJavaTemplates = ['ConfigServerApplicationTests.java'];
-        this.generateTestJavaCode(this.configOptions, testJavaTemplates);
+        this.generateTestJavaCode(configOptions, testJavaTemplates);
     }
 
 };
