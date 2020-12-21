@@ -20,7 +20,8 @@
         <testcontainers.version><%= TEST_CONTAINERS_VERSION %></testcontainers.version>
         <problem-spring-web.version><%= PROBLEM_SPRING_WEB_VERSION %></problem-spring-web.version>
         <swagger.version><%= SWAGGER_VERSION %></swagger.version>
-        <jacoco.minimum.coverage>0.40</jacoco.minimum.coverage>
+        <awaitility.version><%= AWAITILITY_VERSION %></awaitility.version>
+        <jacoco.minimum.coverage>0.20</jacoco.minimum.coverage>
         <jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
         <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
@@ -73,6 +74,12 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <%_ if (features.includes('localstack')) { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-aws-messaging</artifactId>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -133,6 +140,12 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${awaitility.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
@@ -155,6 +168,13 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>mariadb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <%_ } _%>
+        <%_ if (features.includes('localstack')) { _%>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>localstack</artifactId>
             <scope>test</scope>
         </dependency>
         <%_ } _%>

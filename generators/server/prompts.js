@@ -75,7 +75,11 @@ function prompting() {
             choices: [
                 {
                     value: 'elk',
-                    name: 'Docker based ELK configuration'
+                    name: 'ELK Docker configuration'
+                },
+                {
+                    value: 'localstack',
+                    name: 'Localstack Docker configuration'
                 }
             ]
         },

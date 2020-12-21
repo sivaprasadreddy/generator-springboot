@@ -25,7 +25,8 @@ A Yeoman generator for generating Microservice with SpringBoot
 
 ### Generate SpringBoot Microservice
 
-![Microservice Generation](docs/server-generation.png)
+![Microservice Generation](docs/server-generation-1.png)
+![Microservice Generation](docs/server-generation-2.png)
 
 ### Generate REST API with CRUD operations
 You can generate REST API with CRUD operation using the following command:
@@ -76,3 +77,7 @@ However, there are certain JHipster features that does not fit for my preference
 * Generate Zipkin docker-compose file when Distributed Tracing is selected
 * Fixed Flyway/Liquibase db migration script generation issue
 * Added tests for sanity check
+
+### Version 0.0.7
+* Removed support for generation of `config-server` and `service-registry`
+* Updated SpringBoot and other libraries version

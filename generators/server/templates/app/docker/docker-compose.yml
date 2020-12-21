@@ -1,15 +1,6 @@
 version: '3.8'
 services:
 
-  <%= appName %>:
-    build: ..
-    ports:
-      - "18080:8080"
-      - "18787:8787"
-    restart: always
-    depends_on:
-      - <%= databaseType %>db
-
 <%_ if (databaseType === 'postgresql') { _%>
   postgresqldb:
     image: postgres:12.3
@@ -42,4 +33,22 @@ services:
       - MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
+<%_ } _%>
+
+<%_ if (features.includes('localstack')) { _%>
+  localstack:
+    image: localstack/localstack:0.11.2
+    ports:
+      - "4572:4572"
+      - "4576:4576"
+      - "4566:4566"
+    environment:
+      - SERVICES=S3,SQS
+      - DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOST_TMP_FOLDER=${TMPDIR}
+    volumes:
+      - "${TMPDIR:-/private}:/private"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - './.localstack:/docker-entrypoint-initaws.d'
 <%_ } _%>

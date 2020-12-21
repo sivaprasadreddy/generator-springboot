@@ -34,6 +34,7 @@ module.exports = class extends BaseGenerator {
         this._generateGithubCIfile(this.configOptions);
         this._generateDbMigrationConfig(this.configOptions);
         this._generateDockerComposeFiles(this.configOptions);
+        this._generateLocalstackConfig(this.configOptions);
         this._generateAppCode(this.configOptions);
     }
 
@@ -203,11 +204,15 @@ module.exports = class extends BaseGenerator {
             'config/logging/LoggingAspect.java',
             'utils/AppConstants.java'
         ];
+        if(configOptions.features.includes("localstack")) {
+            mainJavaTemplates.push('config/AwsConfig.java');
+            mainJavaTemplates.push('config/AwsLocalConfig.java');
+        }
         this.generateMainJavaCode(configOptions, mainJavaTemplates);
 
         const mainResTemplates = [
             'application.properties',
-            'application-docker.properties',
+            'application-local.properties',
             'application-prod.properties',
             'application-heroku.properties'
         ];
@@ -219,7 +224,10 @@ module.exports = class extends BaseGenerator {
             'common/AbstractIntegrationTest.java',
             'common/DBContainerInitializer.java'
         ];
-
+        if(configOptions.features.includes("localstack")) {
+            testJavaTemplates.push('common/LocalStackConfig.java');
+            testJavaTemplates.push('SqsListenerTest.java');
+        }
         this.generateTestJavaCode(configOptions, testJavaTemplates);
 
         const testResTemplates = [
@@ -262,6 +270,15 @@ module.exports = class extends BaseGenerator {
         }
     }
 
+    _generateLocalstackConfig(configOptions) {
+        if(configOptions.features.includes('localstack')) {
+            this.fs.copy(
+                this.templatePath('app/.localstack'),
+                this.destinationPath('./.localstack')
+            );
+        }
+    }
+
     _generateDockerComposeFiles(configOptions) {
         this._generateAppDockerComposeFile(configOptions);
         this._generateMonitoringConfig(configOptions);
@@ -273,6 +290,7 @@ module.exports = class extends BaseGenerator {
     _generateAppDockerComposeFile(configOptions) {
         const resTemplates = [
             'docker-compose.yml',
+            'docker-compose-app.yml',
         ];
         this.generateFiles(configOptions, resTemplates, 'app/','docker/');
     }

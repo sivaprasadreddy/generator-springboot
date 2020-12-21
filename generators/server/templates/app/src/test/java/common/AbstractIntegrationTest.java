@@ -6,6 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (features.includes('localstack')) { _%>
+import org.springframework.context.annotation.Import;
+<%_ } _%>
 import org.springframework.test.context.ContextConfiguration;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static <%= packageName %>.utils.AppConstants.PROFILE_IT;
@@ -14,6 +17,9 @@ import static <%= packageName %>.utils.AppConstants.PROFILE_TEST;
 @ActiveProfiles({PROFILE_TEST, PROFILE_IT})
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ContextConfiguration(initializers = {DBContainerInitializer.class})
+<%_ if (features.includes('localstack')) { _%>
+@Import(LocalStackConfig.class)
+<%_ } _%>
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest {
 

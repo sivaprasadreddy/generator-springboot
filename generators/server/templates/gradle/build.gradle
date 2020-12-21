@@ -42,6 +42,7 @@ ext {
     set('springCloudVersion', "<%= SPRING_CLOUD_VERSION %>")
     set('testcontainersVersion', "<%= TEST_CONTAINERS_VERSION %>")
     set('swaggerVersion', "<%= SWAGGER_VERSION %>")
+    set('awaitilityVersion', "<%= AWAITILITY_VERSION %>")
     set('problemSpringWebVersion', "<%= PROBLEM_SPRING_WEB_VERSION %>")
 }
 
@@ -53,7 +54,9 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-
+    <%_ if (features.includes('localstack')) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-aws-messaging"
+    <%_ } _%>
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
     <%_ if (databaseType === 'mysql') { _%>
@@ -77,6 +80,7 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation "org.projectlombok:lombok"
+    testImplementation "org.awaitility:awaitility:${awaitilityVersion}"
     testImplementation "org.testcontainers:junit-jupiter"
     <%_ if (databaseType === 'mysql') { _%>
     testImplementation "org.testcontainers:mysql"
@@ -86,6 +90,9 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'mariadb') { _%>
     testImplementation "org.testcontainers:mariadb"
+    <%_ } _%>
+    <%_ if (features.includes('localstack')) { _%>
+    testImplementation "org.testcontainers:localstack"
     <%_ } _%>
 }
 
