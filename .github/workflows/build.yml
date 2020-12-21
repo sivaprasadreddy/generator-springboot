@@ -1,0 +1,25 @@
+name: Generator SpringBoot
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  build:
+    name: npm test
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version: [12.x, 14.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.3
+        with:
+          node-version: ${{ matrix.node_version }}
+      - run: npm install
+      - run: npm test
+        env:
+          CI: true

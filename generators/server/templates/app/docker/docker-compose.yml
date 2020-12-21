@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+
+  <%= appName %>:
+    build: ..
+    ports:
+      - "18080:8080"
+      - "18787:8787"
+    restart: always
+    depends_on:
+      - <%= databaseType %>db
+
+<%_ if (databaseType === 'postgresql') { _%>
+  postgresqldb:
+    image: postgres:12.3
+    environment:
+      - POSTGRES_USER=siva
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=appdb
+    ports:
+      - "5432:5432"
+<%_ } _%>
+<%_ if (databaseType === 'mysql') { _%>
+  mysqldb:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE: appdb
+      - MYSQL_USER: siva
+      - MYSQL_PASSWORD: secret
+      - MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+
+  <%_ } _%>
+<%_ if (databaseType === 'mariadb') { _%>
+  mariadb:
+    image: mariadb:10.5.8
+    environment:
+      - MYSQL_DATABASE: appdb
+      - MYSQL_USER: siva
+      - MYSQL_PASSWORD: secret
+      - MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+<%_ } _%>

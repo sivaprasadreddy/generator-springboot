@@ -1,7 +1,6 @@
 'use strict';
 
 const BaseGenerator = require('../base-generator');
-const prompts = require('./prompts');
 
 module.exports = class extends BaseGenerator {
 
@@ -10,16 +9,8 @@ module.exports = class extends BaseGenerator {
         this.configOptions = this.options.configOptions || {};
     }
 
-    initializing() {
-        this.logSuccess('Generating Config Server');
-    }
-
-    get prompting() {
-        return prompts.prompting;
-    }
-
     default() {
-        this.composeWith(require.resolve('../'+this.configOptions.appType), {
+        this.composeWith(require.resolve('../server'), {
             configOptions: this.configOptions
         });
     }
