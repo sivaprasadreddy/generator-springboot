@@ -7,7 +7,7 @@
     <changeSet author="sivalabs" id="createTable-<%= tableName %>">
         <createSequence
                         sequenceName="<%= entityVarName %>_id_seq"
-                        incrementBy="1"
+                        incrementBy="100"
                         startValue="1"
                         />
         <createTable tableName="<%= tableName %>">

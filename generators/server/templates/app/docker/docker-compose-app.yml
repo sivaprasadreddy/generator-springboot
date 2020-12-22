@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+
+  <%= appName %>:
+    build: ..
+    ports:
+      - "18080:8080"
+      - "18787:8787"
+    restart: always
+    depends_on:
+      - <%= databaseType %>db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      <%_ if (databaseType === 'postgresql') { _%>
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://<%= databaseType %>db:5432/appdb
+      <%_ } _%>
+      <%_ if (databaseType === 'mysql') { _%>
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+      SPRING_DATASOURCE_URL: jdbc:mysql://<%= databaseType %>db:3306/appdb
+      <%_ } _%>
+      <%_ if (databaseType === 'mariadb') { _%>
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.mariadb.jdbc.Driver
+      SPRING_DATASOURCE_URL: jdbc:mariadb://<%= databaseType %>db:3306/appdb
+      <%_ } _%>
+      SPRING_DATASOURCE_USERNAME: siva
+      SPRING_DATASOURCE_PASSWORD: secret

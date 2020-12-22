@@ -51,16 +51,16 @@ module.exports = class extends BaseGenerator {
 
     _generateAppCode(configOptions) {
         const mainJavaTemplates = [
-            {src: 'entity/Entity.java', dest: 'entity/'+configOptions.entityName+'.java'},
-            {src: 'repository/Repository.java', dest: 'repository/'+configOptions.entityName+'Repository.java'},
-            {src: 'service/Service.java', dest: 'service/'+configOptions.entityName+'Service.java'},
-            {src: 'web/controller/Controller.java', dest: 'web/controller/'+configOptions.entityName+'Controller.java'},
+            {src: 'entities/Entity.java', dest: 'entities/'+configOptions.entityName+'.java'},
+            {src: 'repositories/Repository.java', dest: 'repositories/'+configOptions.entityName+'Repository.java'},
+            {src: 'services/Service.java', dest: 'service/'+configOptions.entityName+'Service.java'},
+            {src: 'web/controllers/Controller.java', dest: 'web/controllers/'+configOptions.entityName+'Controller.java'},
         ];
         this.generateMainJavaCode(configOptions, mainJavaTemplates);
 
         const testJavaTemplates = [
-            {src: 'web/controller/ControllerTest.java', dest: 'web/controller/'+configOptions.entityName+'ControllerTest.java'},
-            {src: 'web/controller/ControllerIT.java', dest: 'web/controller/'+configOptions.entityName+'ControllerIT.java'},
+            {src: 'web/controllers/ControllerTest.java', dest: 'web/controllers/'+configOptions.entityName+'ControllerTest.java'},
+            {src: 'web/controllers/ControllerIT.java', dest: 'web/controllers/'+configOptions.entityName+'ControllerIT.java'},
         ];
         this.generateTestJavaCode(configOptions, testJavaTemplates);
     }
@@ -120,8 +120,6 @@ module.exports = class extends BaseGenerator {
     }
 
     _supportDatabaseSequences(databaseType) {
-        return  databaseType === 'h2' ||
-            databaseType === 'postgresql'
-            ;
+        return  databaseType === 'h2' || databaseType === 'postgresql';
     }
 };

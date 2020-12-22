@@ -1,19 +1,12 @@
 {
   "generator-springboot": {
-    "appType": "microservice",
     "appName": "myservice",
     "packageName": "com.mycompany.myservice",
-    "sql": true,
+    "packageFolder": "com/mycompany/myservice",
     "databaseType": "postgresql",
     "dbMigrationTool": "liquibase",
-    "features": [],
+    "features": ["elk"],
     "buildTool": "maven",
-    "packageFolder": "com/mycompany/myservice",
-    "distTracing": false,
-    "eurekaClient": false,
-    "configClient": false,
-    "LIQUIBASE_MIGRATION_COUNTER": 1,
-    "KEY_FLYWAY_MIGRATION_COUNTER": "FLYWAY_MIGRATION_COUNTER",
-    "KEY_LIQUIBASE_MIGRATION_COUNTER": "LIQUIBASE_MIGRATION_COUNTER"
+    "liquibaseMigrationCounter": 1
   }
 }
