@@ -176,14 +176,14 @@ module.exports = class extends BaseGenerator {
     _generateGradleBuildScript(configOptions) {
         const gradleConfigDir = 'gradle/';
 
-        ['build.gradle', 'settings.gradle'].forEach(tmpl => {
+        ['build.gradle', 'settings.gradle', 'gradle.properties'].forEach(tmpl => {
             this.fs.copyTpl(
                 this.templatePath(gradleConfigDir + tmpl),
                 this.destinationPath(tmpl),
                 configOptions
             );
         });
-        ['code-quality.gradle', 'tests.gradle','owasp.gradle'].forEach(tmpl => {
+        ['code-quality.gradle', 'owasp.gradle'].forEach(tmpl => {
             this.fs.copyTpl(
                 this.templatePath(gradleConfigDir + tmpl),
                 this.destinationPath('gradle/' + tmpl),

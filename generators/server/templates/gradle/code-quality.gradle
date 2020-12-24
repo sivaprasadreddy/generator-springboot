@@ -4,20 +4,18 @@ apply plugin: 'jacoco'
 apply plugin: "com.github.spotbugs"
 apply plugin: "org.sonarqube"
 
-def jacocoMinCoverageRequired = 0.30
-
 checkstyle {
-    toolVersion "8.32"
+    toolVersion "${checkstyle_plugin_version}"
     maxWarnings = 0
-    configFile = file("${project.rootDir}/build-config/checkstyle/checkstyle.xml")
+    configFile = file("build-config/checkstyle/checkstyle.xml")
     sourceSets = [sourceSets.main]
 }
 
 pmd {
-    toolVersion = "6.23.0"
+    toolVersion = "${pmd_plugin_version}"
     consoleOutput = true
     ruleSets = []
-    ruleSetFiles = files("${project.rootDir}/build-config/pmd/pmd-ruleset.xml")
+    ruleSetFiles = files("build-config/pmd/pmd-ruleset.xml")
     sourceSets = [sourceSets.main]
 }
 
@@ -29,7 +27,7 @@ tasks.matching {task -> task.name.startsWith('spotbugs')}.forEach {
 }
 
 jacoco {
-    toolVersion = "0.8.5"
+    toolVersion = "${jacoco_plugin_version}"
 }
 
 def jacocoExcludes = [
@@ -64,14 +62,13 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = jacocoMinCoverageRequired
+                minimum = new BigDecimal("${jacoco_min_coverage_required}")
             }
             excludes = jacocoExcludes
         }
     }
 }
 
-integrationTest.finalizedBy jacocoTestReport
 check.dependsOn jacocoTestCoverageVerification
 
 file("sonar-project.properties").withReader {

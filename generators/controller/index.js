@@ -53,7 +53,7 @@ module.exports = class extends BaseGenerator {
         const mainJavaTemplates = [
             {src: 'entities/Entity.java', dest: 'entities/'+configOptions.entityName+'.java'},
             {src: 'repositories/Repository.java', dest: 'repositories/'+configOptions.entityName+'Repository.java'},
-            {src: 'services/Service.java', dest: 'service/'+configOptions.entityName+'Service.java'},
+            {src: 'services/Service.java', dest: 'services/'+configOptions.entityName+'Service.java'},
             {src: 'web/controllers/Controller.java', dest: 'web/controllers/'+configOptions.entityName+'Controller.java'},
         ];
         this.generateMainJavaCode(configOptions, mainJavaTemplates);

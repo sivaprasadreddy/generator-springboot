@@ -1,1 +1,12 @@
+pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version "${spring_boot_version}"
+        id 'io.spring.dependency-management' version "${spring_dependency_management_version}"
+        id 'com.gorylenko.gradle-git-properties' version "${git_properties_plugin_version}"
+        id 'org.sonarqube' version "${sonar_plugin_version}"
+        id "com.github.spotbugs" version "${spotbugs_plugin_version}"
+        id "com.github.ben-manes.versions" version "${benmanes_versions_plugin_version}"
+    }
+}
+
 rootProject.name = '<%= appName %>'

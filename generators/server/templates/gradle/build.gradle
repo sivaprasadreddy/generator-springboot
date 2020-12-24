@@ -3,22 +3,21 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.avast.gradle:gradle-docker-compose-plugin:0.13.4"
-        classpath "org.owasp:dependency-check-gradle:6.0.3"
+        classpath "com.avast.gradle:gradle-docker-compose-plugin:${docker_compose_plugin_version}"
+        classpath "org.owasp:dependency-check-gradle:${owasp_plugin_version}"
     }
 }
 plugins {
-    id 'org.springframework.boot' version '<%= SPRING_BOOT_VERSION %>'
-    id 'io.spring.dependency-management' version '<%= SPRING_DEP_MNGMNT_VERSION %>'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
     id 'java-library'
-    id "com.gorylenko.gradle-git-properties" version "2.2.4"
-    id "com.github.ben-manes.versions" version "0.36.0"
-    id "com.github.spotbugs" version "4.6.0" apply false
-    id "org.sonarqube" version "3.0" apply false
+    id 'com.gorylenko.gradle-git-properties'
+    id 'com.github.ben-manes.versions'
+    id "com.github.spotbugs" apply false
+    id "org.sonarqube" apply false
 }
 apply plugin: "idea"
 apply plugin: "docker-compose"
-apply from: "gradle/tests.gradle"
 apply from: "gradle/code-quality.gradle"
 //apply from: "gradle/owasp.gradle"
 
@@ -36,14 +35,6 @@ configurations {
 repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
-}
-
-ext {
-    set('springCloudVersion', "<%= SPRING_CLOUD_VERSION %>")
-    set('testcontainersVersion', "<%= TEST_CONTAINERS_VERSION %>")
-    set('swaggerVersion', "<%= SWAGGER_VERSION %>")
-    set('awaitilityVersion', "<%= AWAITILITY_VERSION %>")
-    set('problemSpringWebVersion', "<%= PROBLEM_SPRING_WEB_VERSION %>")
 }
 
 dependencies {
@@ -74,13 +65,16 @@ dependencies {
     <%_ if (dbMigrationTool === 'liquibase') { _%>
     implementation 'org.liquibase:liquibase-core'
     <%_ } _%>
-    implementation "io.springfox:springfox-boot-starter:${swaggerVersion}"
-    implementation "org.zalando:problem-spring-web-starter:${problemSpringWebVersion}"
+    implementation "io.springfox:springfox-boot-starter:${swagger_version}"
+    implementation "org.zalando:problem-spring-web-starter:${problem_spring_web_version}"
+    implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
+    implementation "commons-io:commons-io:${commons_io_version}"
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation "org.projectlombok:lombok"
-    testImplementation "org.awaitility:awaitility:${awaitilityVersion}"
+    testImplementation "org.awaitility:awaitility:${awaitility_version}"
     testImplementation "org.testcontainers:junit-jupiter"
     <%_ if (databaseType === 'mysql') { _%>
     testImplementation "org.testcontainers:mysql"
@@ -98,10 +92,12 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${spring_cloud_version}"
+        mavenBom "org.testcontainers:testcontainers-bom:${testcontainers_version}"
     }
 }
+
+defaultTasks "bootRun"
 
 springBoot {
     buildInfo()
@@ -130,6 +126,41 @@ bootRun.dependsOn composeUp
 gitProperties {
     failOnNoGitDirectory = false
     keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+}
+
+test {
+    useJUnitPlatform()
+    exclude "**/*IT*", "**/*IntegrationTest*", "**/*IntTest*"
+    testLogging {
+        events = ["PASSED", "FAILED", "SKIPPED"]
+        showStandardStreams = true
+        exceptionFormat = "full"
+    }
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform()
+
+    include "**/*IT*", "**/*IntegrationTest*", "**/*IntTest*"
+    shouldRunAfter test
+
+    testLogging {
+        events = ["PASSED", "FAILED", "SKIPPED"]
+        showStandardStreams = true
+        exceptionFormat = "full"
+    }
+}
+
+check.dependsOn integrationTest
+
+task testReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn test
+}
+
+task integrationTestReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn integrationTest
 }
 
 wrapper {
