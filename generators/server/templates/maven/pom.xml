@@ -314,6 +314,7 @@
                 <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
                     <configLocation>build-config/checkstyle/checkstyle.xml</configLocation>
+                    <suppressionsLocation>build-config/checkstyle/suppressions.xml</suppressionsLocation>
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>

@@ -23,8 +23,8 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{`{{ runner.os }}`}}-gradle-${{`{{ hashFiles('**/*.gradle*') }}`}}
-          restore-keys: ${{`{{ runner.os }}`}}-gradle-
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
         run: ./gradlew clean build
