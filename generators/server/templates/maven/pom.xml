@@ -31,9 +31,11 @@
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <maven-checkstyle-plugin.version><%= MAVEN_CHECKSTYLE_PLUGIN_VERSION %></maven-checkstyle-plugin.version>
         <maven-pmd-plugin.version><%= MAVEN_PMD_PLUGIN_VERSION %></maven-pmd-plugin.version>
+        <spotless.version><%= MAVEN_SPOTLESS_PLUGIN_VERSION %></spotless.version>
         <dependency-check-maven.version><%= MAVEN_DEPENDENCY_CHECK_PLUGIN_VERSION %></dependency-check-maven.version>
         <properties-maven-plugin.version><%= MAVEN_PROPERTIES_PLUGIN_VERSION %></properties-maven-plugin.version>
         <maven-failsafe-plugin.version><%= MAVEN_FAILSAFE_PLUGIN_VERSION %></maven-failsafe-plugin.version>
+        <fabric8-docker-maven.version><%= MAVEN_FABRIC8_PLUGIN_VERSION %></fabric8-docker-maven.version>
         <sonar-maven-plugin.version><%= MAVEN_SONAR_PLUGIN_VERSION %></sonar-maven-plugin.version>
         <jacoco-maven-plugin.version><%= MAVEN_JACOCO_PLUGIN_VERSION %></jacoco-maven-plugin.version>
         <jacoco.minimum.coverage><%= JACOCO_MIN_COVERAGE_REQUIRED %></jacoco.minimum.coverage>
@@ -419,6 +421,50 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.version}</version>
+                <configuration>
+                    <java>
+                        <googleJavaFormat>
+                            <version>1.8</version>
+                            <style>AOSP</style>
+                        </googleJavaFormat>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${fabric8-docker-maven.version}</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <images>
+                        <image>
+                            <external>
+                                <type>compose</type>
+                                <basedir>docker</basedir>
+                                <composeFile>docker-compose.yml</composeFile>
+                            </external>
+                            <run>
+                                <wait>
+                                    <time>5000</time>
+                                    <!--<log>Docker databases are ready to accept connections</log>-->
+                                </wait>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.owasp</groupId>

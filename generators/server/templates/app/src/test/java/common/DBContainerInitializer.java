@@ -16,25 +16,28 @@ import org.testcontainers.containers.MariaDBContainer;
 
 @Slf4j
 public class DBContainerInitializer
-    implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
 <%_ if (databaseType === 'postgresql') { _%>
-    private static final PostgreSQLContainer<?> sqlContainer = new PostgreSQLContainer<>("postgres:12.3")
-        .withDatabaseName("integration-tests-db")
-        .withUsername("username")
-        .withPassword("password");
+    private static final PostgreSQLContainer<?> sqlContainer =
+            new PostgreSQLContainer<>("postgres:12.3")
+                    .withDatabaseName("integration-tests-db")
+                    .withUsername("username")
+                    .withPassword("password");
 <%_ } _%>
 <%_ if (databaseType === 'mysql') { _%>
-    private static final MySQLContainer<?> sqlContainer = new MySQLContainer<>("mysql:5.7")
-        .withDatabaseName("integration-tests-db")
-        .withUsername("username")
-        .withPassword("password");
+    private static final MySQLContainer<?> sqlContainer =
+            new MySQLContainer<>("mysql:5.7")
+                    .withDatabaseName("integration-tests-db")
+                    .withUsername("username")
+                    .withPassword("password");
 <%_ } _%>
 <%_ if (databaseType === 'mariadb') { _%>
-    private static final MariaDBContainer<?> sqlContainer = new MariaDBContainer<>("mariadb:10.3")
-        .withDatabaseName("integration-tests-db")
-        .withUsername("username")
-        .withPassword("password");
+    private static final MariaDBContainer<?> sqlContainer =
+            new MariaDBContainer<>("mariadb:10.3")
+                    .withDatabaseName("integration-tests-db")
+                    .withUsername("username")
+                    .withPassword("password");
 <%_ } _%>
 
     static {
@@ -43,10 +46,9 @@ public class DBContainerInitializer
 
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
         TestPropertyValues.of(
-            "spring.datasource.url=" + sqlContainer.getJdbcUrl(),
-            "spring.datasource.username=" + sqlContainer.getUsername(),
-            "spring.datasource.password=" + sqlContainer.getPassword()
-        ).applyTo(configurableApplicationContext.getEnvironment());
+                        "spring.datasource.url=" + sqlContainer.getJdbcUrl(),
+                        "spring.datasource.username=" + sqlContainer.getUsername(),
+                        "spring.datasource.password=" + sqlContainer.getPassword())
+                .applyTo(configurableApplicationContext.getEnvironment());
     }
-
 }

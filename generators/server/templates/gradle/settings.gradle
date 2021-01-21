@@ -6,6 +6,7 @@ pluginManagement {
         id 'org.sonarqube' version "${sonar_plugin_version}"
         id "com.github.spotbugs" version "${spotbugs_plugin_version}"
         id "com.github.ben-manes.versions" version "${benmanes_versions_plugin_version}"
+        id "com.github.sherter.google-java-format" version "${google_java_format_plugin_version}"
     }
 }
 

@@ -13,6 +13,7 @@ plugins {
     id 'java-library'
     id 'com.gorylenko.gradle-git-properties'
     id 'com.github.ben-manes.versions'
+    id "com.github.sherter.google-java-format"
     id "com.github.spotbugs" apply false
     id "org.sonarqube" apply false
 }
@@ -127,6 +128,12 @@ gitProperties {
     failOnNoGitDirectory = false
     keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
 }
+
+googleJavaFormat {
+    options style: 'AOSP'
+}
+
+check.dependsOn verifyGoogleJavaFormat
 
 test {
     useJUnitPlatform()
