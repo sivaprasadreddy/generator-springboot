@@ -12,18 +12,6 @@
     <rule ref="category/java/bestpractices.xml">
         <exclude name="GuardLogStatement"/>
     </rule>
-    <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod">
-        <properties>
-            <property name="ignoredAnnotations"
-                      value="org.axonframework.eventhandling.EventHandler"/>
-        </properties>
-    </rule>
-    <rule ref="category/java/bestpractices.xml/UnusedPrivateField">
-        <properties>
-            <property name="violationSuppressXPath"
-                      value="//ClassOrInterfaceDeclaration['.*Aggregate']"/>
-        </properties>
-    </rule>
     <rule ref="category/java/codestyle.xml/ShortClassName">
         <properties>
             <property name="minimum" value="3"/>
@@ -68,4 +56,5 @@
     <exclude-pattern>.*/src/test/.*</exclude-pattern>
     <!-- Exclude target folder that may contain generated sources -->
     <exclude-pattern>.*/target/.*</exclude-pattern>
+    <exclude-pattern>.*/build/.*</exclude-pattern>
 </ruleset>

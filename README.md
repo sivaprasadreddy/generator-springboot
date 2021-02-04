@@ -1,5 +1,5 @@
 # generator-springboot
-A Yeoman generator for generating Microservice with SpringBoot
+A Yeoman generator for generating Microservices with SpringBoot
 
 ## How to use?
 
@@ -17,11 +17,14 @@ A Yeoman generator for generating Microservice with SpringBoot
 * Spring Data JPA integration with option to select databases like MySQL, Postgresql, MariaDB etc
 * Flyway or Liquibase data migration support
 * SpringBoot Actuator configuration
-* Integration with Config Server, Service Registry, Sleuth, Zipkin
 * TestContainers integration
 * JUnit 5 
 * Docker configuration for Application, ELK, Prometheus, Grafana
+* Localstack configuration
 * Jenkinsfile
+* GitHub Actions Configuration
+* CheckStyle, PMD, SonarQube, Google-java-format static analysis tools configuration
+
 
 ### Generate SpringBoot Microservice
 

@@ -12,7 +12,7 @@ function prompting() {
             type: 'string',
             name: 'appName',
             validate: input =>
-                /^([a-z_][a-z0-9_]*)$/.test(input)
+                /^([a-z_][a-z0-9_\-]*)$/.test(input)
                     ? true
                     : 'The application name you have provided is not valid',
             message: 'What is the application name?',
@@ -22,7 +22,7 @@ function prompting() {
             type: 'string',
             name: 'packageName',
             validate: input =>
-                /^([a-z_][a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)
+                /^([a-z_][a-z0-9_]*(\.[a-z_][a-z0-9_]*)*)$/.test(input)
                     ? true
                     : 'The package name you have provided is not a valid Java package name.',
             message: 'What is the default package name?',

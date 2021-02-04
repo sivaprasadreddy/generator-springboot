@@ -1,25 +1,28 @@
 package <%= packageName %>.web.controllers;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import <%= packageName %>.common.AbstractIntegrationTest;
 import <%= packageName %>.entities.<%= entityName %>;
 import <%= packageName %>.repositories.<%= entityName %>Repository;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
 
-    @Autowired
-    private <%= entityName %>Repository <%= entityVarName %>Repository;
+    @Autowired private <%= entityName %>Repository <%= entityVarName %>Repository;
 
     private List<<%= entityName %>> <%= entityVarName %>List = null;
 
@@ -36,7 +39,8 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldFetchAll<%= entityName %>s() throws Exception {
-        this.mockMvc.perform(get("<%= basePath %>"))
+        this.mockMvc
+                .perform(get("<%= basePath %>"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(<%= entityVarName %>List.size())));
     }
@@ -46,7 +50,8 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
         <%= entityName %> <%= entityVarName %> = <%= entityVarName %>List.get(0);
         Long <%= entityVarName %>Id = <%= entityVarName %>.getId();
 
-        this.mockMvc.perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
+        this.mockMvc
+                .perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
     }
@@ -54,24 +59,30 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
     @Test
     void shouldCreateNew<%= entityName %>() throws Exception {
         <%= entityName %> <%= entityVarName %> = new <%= entityName %>(null, "New <%= entityName %>");
-        this.mockMvc.perform(post("<%= basePath %>")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+        this.mockMvc
+                .perform(
+                        post("<%= basePath %>")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
-
     }
 
     @Test
     void shouldReturn400WhenCreateNew<%= entityName %>WithoutText() throws Exception {
         <%= entityName %> <%= entityVarName %> = new <%= entityName %>(null, null);
 
-        this.mockMvc.perform(post("<%= basePath %>")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+        this.mockMvc
+                .perform(
+                        post("<%= basePath %>")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("https://zalando.github.io/problem/constraint-violation")))
+                .andExpect(
+                        jsonPath(
+                                "$.type",
+                                is("https://zalando.github.io/problem/constraint-violation")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
@@ -85,23 +96,22 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
         <%= entityName %> <%= entityVarName %> = <%= entityVarName %>List.get(0);
         <%= entityVarName %>.setText("Updated <%= entityName %>");
 
-        this.mockMvc.perform(put("<%= basePath %>/{id}", <%= entityVarName %>.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+        this.mockMvc
+                .perform(
+                        put("<%= basePath %>/{id}", <%= entityVarName %>.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
-
     }
 
     @Test
     void shouldDelete<%= entityName %>() throws Exception {
         <%= entityName %> <%= entityVarName %> = <%= entityVarName %>List.get(0);
 
-        this.mockMvc.perform(
-                delete("<%= basePath %>/{id}", <%= entityVarName %>.getId()))
+        this.mockMvc
+                .perform(delete("<%= basePath %>/{id}", <%= entityVarName %>.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
-
     }
-
 }

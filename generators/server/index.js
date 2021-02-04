@@ -86,6 +86,7 @@ module.exports = class extends BaseGenerator {
             this.templatePath('app/build-config'),
             this.destinationPath('build-config')
         );
+        this.fs.copyTpl(this.templatePath('app/README.md'), this.destinationPath('README.md'), configOptions);
     }
 
     _generateTravisCIfile(configOptions) {
@@ -176,14 +177,14 @@ module.exports = class extends BaseGenerator {
     _generateGradleBuildScript(configOptions) {
         const gradleConfigDir = 'gradle/';
 
-        ['build.gradle', 'settings.gradle'].forEach(tmpl => {
+        ['build.gradle', 'settings.gradle', 'gradle.properties'].forEach(tmpl => {
             this.fs.copyTpl(
                 this.templatePath(gradleConfigDir + tmpl),
                 this.destinationPath(tmpl),
                 configOptions
             );
         });
-        ['code-quality.gradle', 'tests.gradle','owasp.gradle'].forEach(tmpl => {
+        ['code-quality.gradle', 'owasp.gradle'].forEach(tmpl => {
             this.fs.copyTpl(
                 this.templatePath(gradleConfigDir + tmpl),
                 this.destinationPath('gradle/' + tmpl),
@@ -214,7 +215,8 @@ module.exports = class extends BaseGenerator {
             'application.properties',
             'application-local.properties',
             'application-prod.properties',
-            'application-heroku.properties'
+            'application-heroku.properties',
+            'logback-spring.xml'
         ];
         this.generateMainResCode(configOptions, mainResTemplates);
 
@@ -231,7 +233,8 @@ module.exports = class extends BaseGenerator {
         this.generateTestJavaCode(configOptions, testJavaTemplates);
 
         const testResTemplates = [
-            'application-integration-test.properties'
+            'application-integration-test.properties',
+            'logback-test.xml'
         ];
         this.generateTestResCode(configOptions, testResTemplates);
     }

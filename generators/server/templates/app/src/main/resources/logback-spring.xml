@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <springProfile name="default">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+    <springProfile name="!default">
+        <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+        <root level="INFO">
+            <appender-ref ref="FILE" />
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
+
+    <logger name="<%= packageName %>" level="DEBUG"/>
+    <%_ if (features.includes('localstack')) { _%>
+    <logger name="com.amazonaws.util.EC2MetadataUtils" level="ERROR"/>
+    <logger name="com.amazonaws.internal.InstanceMetadataServiceResourceFetcher" level="ERROR"/>
+    <%_ } _%>
+
+</configuration>
