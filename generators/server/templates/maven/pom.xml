@@ -241,7 +241,6 @@
                 <configuration>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
                     <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
-                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
                     <includeOnlyProperties>
                         <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
                         <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
@@ -357,10 +356,10 @@
                 <configuration>
                     <dataFile>${project.build.directory}/jacoco/test/jacoco.exec</dataFile>
                     <rules>
-                        <rule implementation="org.jacoco.maven.RuleConfiguration">
+                        <rule>
                             <element>BUNDLE</element>
                             <limits>
-                                <limit implementation="org.jacoco.report.check.Limit">
+                                <limit>
                                     <counter>COMPLEXITY</counter>
                                     <value>COVEREDRATIO</value>
                                     <minimum>${jacoco.minimum.coverage}</minimum>
@@ -370,9 +369,11 @@
                     </rules>
                     <excludes>
                         <exclude>**/*Application.*</exclude>
+                        <exclude>**/config/**</exclude>
                         <exclude>**/models/*</exclude>
                         <exclude>**/dtos/*</exclude>
                         <exclude>**/exceptions/*</exclude>
+                        <exclude>**/*Constants*</exclude>
                     </excludes>
                 </configuration>
                 <executions>

@@ -32,9 +32,11 @@ jacoco {
 
 def jacocoExcludes = [
     '**/*Application.*',
+    '**/config/**',
     '**/models/**',
     '**/exceptions/**',
     '**/dtos/**',
+    '**/*Constants*',
 ]
 
 jacocoTestReport {
@@ -56,11 +58,16 @@ jacocoTestReport {
 
 jacocoTestCoverageVerification {
     executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
-
+    afterEvaluate {
+        getClassDirectories().setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: jacocoExcludes)
+        }))
+    }
     violationRules {
         rule {
+            element = 'BUNDLE'
             limit {
-                counter = 'LINE'
+                counter = 'COMPLEXITY'
                 value = 'COVEREDRATIO'
                 minimum = new BigDecimal("${jacoco_min_coverage_required}")
             }

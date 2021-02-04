@@ -42,6 +42,9 @@ module.exports = class extends BaseGenerator {
         this.configOptions.entityName = this.options.entityName;
         this.configOptions.entityVarName = _.camelCase(this.options.entityName);
         this.configOptions.tableName = _.lowerCase(this.options.entityName)+'s';
+        this.configOptions.supportDatabaseSequences =
+            this.configOptions.databaseType === 'h2'
+            || this.configOptions.databaseType === 'postgresql';
     }
 
     writing() {
@@ -77,13 +80,13 @@ module.exports = class extends BaseGenerator {
     }
 
     _generateFlywayMigration(configOptions) {
-        const supportSequences = this._supportDatabaseSequences(configOptions.databaseType);
         const counter = configOptions[constants.KEY_FLYWAY_MIGRATION_COUNTER] + 1;
         let vendor = configOptions.databaseType;
         if(vendor === "mariadb") {
             vendor = "mysql";
         }
-        const scriptTemplate = supportSequences ? "V1__new_table_with_seq.sql" : "V1__new_table_no_seq.sql";
+        const scriptTemplate = configOptions.supportDatabaseSequences ?
+            "V1__new_table_with_seq.sql" : "V1__new_table_no_seq.sql";
 
         this.fs.copyTpl(
             this.templatePath('app/src/main/resources/db/migration/flyway/V1__new_table_with_seq.sql'),
@@ -99,14 +102,13 @@ module.exports = class extends BaseGenerator {
         const flywayMigrantCounter = {
             [constants.KEY_FLYWAY_MIGRATION_COUNTER]: counter
         };
-        //const updatedConfig = Object.assign({}, this.config.getAll(), flywayMigrantCounter);
         this.config.set(flywayMigrantCounter);
     }
 
     _generateLiquibaseMigration(configOptions) {
-        const supportSequences = this._supportDatabaseSequences(configOptions.databaseType);
         const counter = configOptions[constants.KEY_LIQUIBASE_MIGRATION_COUNTER] + 1;
-        const scriptTemplate = supportSequences ? "01-new_table_with_seq.xml" : "01-new_table_no_seq.xml";
+        const scriptTemplate = configOptions.supportDatabaseSequences ?
+            "01-new_table_with_seq.xml" : "01-new_table_no_seq.xml";
         this.fs.copyTpl(
             this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/'+scriptTemplate),
             this.destinationPath('src/main/resources/db/migration/changelog/0'+counter+'-create_'+configOptions.tableName+'_table.xml'),
@@ -117,9 +119,5 @@ module.exports = class extends BaseGenerator {
         };
         //const updatedConfig = Object.assign({}, this.config.getAll(), liquibaseMigrantCounter);
         this.config.set(liquibaseMigrantCounter);
-    }
-
-    _supportDatabaseSequences(databaseType) {
-        return  databaseType === 'h2' || databaseType === 'postgresql';
     }
 };

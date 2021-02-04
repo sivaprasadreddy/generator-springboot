@@ -1,5 +1,7 @@
 package <%= packageName %>.config;
 
+import static com.mycompany.myservice.utils.AppConstants.PROFILE_LOCAL;
+
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -16,7 +18,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("local")
+@Profile(PROFILE_LOCAL)
 public class AwsLocalConfig {
 
     public static final String TEST_ACCESS_KEY = "test";

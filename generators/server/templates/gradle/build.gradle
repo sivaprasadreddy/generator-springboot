@@ -20,7 +20,9 @@ plugins {
 apply plugin: "idea"
 apply plugin: "docker-compose"
 apply from: "gradle/code-quality.gradle"
-//apply from: "gradle/owasp.gradle"
+if (project.hasProperty("ci")) {
+    apply from: "gradle/owasp.gradle"
+}
 
 group = '<%= packageName %>'
 version = '<%= DEFAULT_APP_VERSION %>'
@@ -119,10 +121,12 @@ dockerCompose {
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
 
-bootRun {
-    args = ["--spring.profiles.active=local"]
+if (project.hasProperty("local")) {
+    bootRun {
+        args = ["--spring.profiles.active=local"]
+    }
+    bootRun.dependsOn composeUp
 }
-bootRun.dependsOn composeUp
 
 gitProperties {
     failOnNoGitDirectory = false

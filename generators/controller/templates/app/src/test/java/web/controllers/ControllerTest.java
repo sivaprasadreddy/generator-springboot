@@ -1,8 +1,25 @@
 package <%= packageName %>.web.controllers;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import <%= packageName %>.entities.<%= entityName %>;
 import <%= packageName %>.services.<%= entityName %>Service;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,31 +31,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @WebMvcTest(controllers = <%= entityName %>Controller.class)
 @ActiveProfiles("test")
 class <%= entityName %>ControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    @MockBean
-    private <%= entityName %>Service <%= entityVarName %>Service;
+    @MockBean private <%= entityName %>Service <%= entityVarName %>Service;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
     private List<<%= entityName %>> <%= entityVarName %>List;
 
@@ -57,7 +58,8 @@ class <%= entityName %>ControllerTest {
     void shouldFetchAll<%= entityName %>s() throws Exception {
         given(<%= entityVarName %>Service.findAll<%= entityName %>s()).willReturn(this.<%= entityVarName %>List);
 
-        this.mockMvc.perform(get("<%= basePath %>"))
+        this.mockMvc
+                .perform(get("<%= basePath %>"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(<%= entityVarName %>List.size())));
     }
@@ -68,7 +70,8 @@ class <%= entityName %>ControllerTest {
         <%= entityName %> <%= entityVarName %> = new <%= entityName %>(<%= entityVarName %>Id, "text 1");
         given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.of(<%= entityVarName %>));
 
-        this.mockMvc.perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
+        this.mockMvc
+                .perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
     }
@@ -78,35 +81,42 @@ class <%= entityName %>ControllerTest {
         Long <%= entityVarName %>Id = 1L;
         given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.empty());
 
-        this.mockMvc.perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
+        this.mockMvc
+                .perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
                 .andExpect(status().isNotFound());
-
     }
 
     @Test
     void shouldCreateNew<%= entityName %>() throws Exception {
-        given(<%= entityVarName %>Service.save<%= entityName %>(any(<%= entityName %>.class))).willAnswer((invocation) -> invocation.getArgument(0));
+        given(<%= entityVarName %>Service.save<%= entityName %>(any(<%= entityName %>.class)))
+                .willAnswer((invocation) -> invocation.getArgument(0));
 
         <%= entityName %> <%= entityVarName %> = new <%= entityName %>(1L, "some text");
-        this.mockMvc.perform(post("<%= basePath %>")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+        this.mockMvc
+                .perform(
+                        post("<%= basePath %>")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
-
     }
 
     @Test
     void shouldReturn400WhenCreateNew<%= entityName %>WithoutText() throws Exception {
         <%= entityName %> <%= entityVarName %> = new <%= entityName %>(null, null);
 
-        this.mockMvc.perform(post("<%= basePath %>")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+        this.mockMvc
+                .perform(
+                        post("<%= basePath %>")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("https://zalando.github.io/problem/constraint-violation")))
+                .andExpect(
+                        jsonPath(
+                                "$.type",
+                                is("https://zalando.github.io/problem/constraint-violation")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
@@ -120,14 +130,16 @@ class <%= entityName %>ControllerTest {
         Long <%= entityVarName %>Id = 1L;
         <%= entityName %> <%= entityVarName %> = new <%= entityName %>(<%= entityVarName %>Id, "Updated text");
         given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.of(<%= entityVarName %>));
-        given(<%= entityVarName %>Service.save<%= entityName %>(any(<%= entityName %>.class))).willAnswer((invocation) -> invocation.getArgument(0));
+        given(<%= entityVarName %>Service.save<%= entityName %>(any(<%= entityName %>.class)))
+                .willAnswer((invocation) -> invocation.getArgument(0));
 
-        this.mockMvc.perform(put("<%= basePath %>/{id}", <%= entityVarName %>.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+        this.mockMvc
+                .perform(
+                        put("<%= basePath %>/{id}", <%= entityVarName %>.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
-
     }
 
     @Test
@@ -136,11 +148,12 @@ class <%= entityName %>ControllerTest {
         given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.empty());
         <%= entityName %> <%= entityVarName %> = new <%= entityName %>(<%= entityVarName %>Id, "Updated text");
 
-        this.mockMvc.perform(put("<%= basePath %>/{id}", <%= entityVarName %>Id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+        this.mockMvc
+                .perform(
+                        put("<%= basePath %>/{id}", <%= entityVarName %>Id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isNotFound());
-
     }
 
     @Test
@@ -150,10 +163,10 @@ class <%= entityName %>ControllerTest {
         given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.of(<%= entityVarName %>));
         doNothing().when(<%= entityVarName %>Service).delete<%= entityName %>ById(<%= entityVarName %>.getId());
 
-        this.mockMvc.perform(delete("<%= basePath %>/{id}", <%= entityVarName %>.getId()))
+        this.mockMvc
+                .perform(delete("<%= basePath %>/{id}", <%= entityVarName %>.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
-
     }
 
     @Test
@@ -161,9 +174,8 @@ class <%= entityName %>ControllerTest {
         Long <%= entityVarName %>Id = 1L;
         given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.empty());
 
-        this.mockMvc.perform(delete("<%= basePath %>/{id}", <%= entityVarName %>Id))
+        this.mockMvc
+                .perform(delete("<%= basePath %>/{id}", <%= entityVarName %>Id))
                 .andExpect(status().isNotFound());
-
     }
-
 }

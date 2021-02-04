@@ -13,7 +13,7 @@ pipeline {
         stage('Build') {
             steps {
                 <%_ if (buildTool === 'maven') { _%>
-                sh './mvnw clean install'
+                sh './mvnw clean verify'
                 <%_ } _%>
                 <%_ if (buildTool === 'gradle') { _%>
                 sh './gradlew clean build'
