@@ -1,6 +1,6 @@
 package <%= packageName %>.config;
 
-import static com.mycompany.myservice.utils.AppConstants.PROFILE_LOCAL;
+import static <%= packageName %>.utils.AppConstants.PROFILE_LOCAL;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
