@@ -1,6 +1,6 @@
 package <%= packageName %>.config;
 
-import static com.mycompany.myservice.utils.AppConstants.PROFILE_PROD;
+import static <%= packageName %>.utils.AppConstants.PROFILE_PROD;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
