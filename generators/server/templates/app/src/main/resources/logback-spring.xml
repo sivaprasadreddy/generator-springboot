@@ -10,6 +10,13 @@
     </springProfile>
     <springProfile name="!default">
         <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+        <!-- definition of appender STDOUT -->
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+            </encoder>
+        </appender>
+        
         <root level="INFO">
             <appender-ref ref="FILE" />
             <appender-ref ref="STDOUT" />
