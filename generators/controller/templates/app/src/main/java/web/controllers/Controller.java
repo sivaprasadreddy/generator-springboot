@@ -1,7 +1,7 @@
 package <%= packageName %>.web.controllers;
 
-import com.mycompany.myservice.entities.Customer;
-import com.mycompany.myservice.services.CustomerService;
+import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.services.<%= entityName %>Service;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
