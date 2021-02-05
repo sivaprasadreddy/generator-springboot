@@ -84,3 +84,7 @@ However, there are certain JHipster features that does not fit for my preference
 ### Version 0.0.7
 * Removed support for generation of `config-server` and `service-registry`
 * Updated SpringBoot and other libraries version
+
+### Version 0.0.8
+* Configured Checkstyle, PMD, SonarQube, google-java-format plugins
+* Added Localstack autoconfiguration support
