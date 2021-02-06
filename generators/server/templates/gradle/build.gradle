@@ -173,7 +173,3 @@ task integrationTestReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn integrationTest
 }
-
-wrapper {
-    gradleVersion = "6.7.1"
-}

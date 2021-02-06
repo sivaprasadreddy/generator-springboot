@@ -12,7 +12,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
                 .allowCredentials(true);
     }
 }
