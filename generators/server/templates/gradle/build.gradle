@@ -115,6 +115,9 @@ bootBuildImage {
 }
 
 dockerCompose {
+    <%_ if (features.includes('localstack')) { _%>
+    environment.put 'TMPDIR', "/private"
+    <%_ } _%>
     useComposeFiles = ["docker/docker-compose.yml"]
 }
 
