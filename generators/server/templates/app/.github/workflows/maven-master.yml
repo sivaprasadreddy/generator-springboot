@@ -20,7 +20,7 @@ jobs:
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
 
-        - name: Cache local Maven repository
+      - name: Cache local Maven repository
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
