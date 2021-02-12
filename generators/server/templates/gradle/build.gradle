@@ -115,6 +115,9 @@ bootBuildImage {
 }
 
 dockerCompose {
+    <%_ if (features.includes('localstack')) { _%>
+    environment.put 'TMPDIR', "/private"
+    <%_ } _%>
     useComposeFiles = ["docker/docker-compose.yml"]
 }
 
@@ -172,8 +175,4 @@ task testReport(type: TestReport) {
 task integrationTestReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn integrationTest
-}
-
-wrapper {
-    gradleVersion = "6.7.1"
 }

@@ -39,8 +39,6 @@ services:
   localstack:
     image: localstack/localstack:0.11.2
     ports:
-      - "4572:4572"
-      - "4576:4576"
       - "4566:4566"
     environment:
       - SERVICES=S3,SQS
@@ -50,5 +48,5 @@ services:
     volumes:
       - "${TMPDIR:-/private}:/private"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - './.localstack:/docker-entrypoint-initaws.d'
+      - '../.localstack:/docker-entrypoint-initaws.d'
 <%_ } _%>
