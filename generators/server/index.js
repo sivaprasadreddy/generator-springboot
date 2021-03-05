@@ -3,14 +3,12 @@ const BaseGenerator = require('../base-generator');
 const constants = require('../constants');
 const prompts = require('./prompts');
 const path = require('path');
-const { execSync } = require('child_process');
 
 module.exports = class extends BaseGenerator {
 
     constructor(args, opts) {
         super(args, opts);
         this.configOptions = this.options.configOptions || {};
-        this.configOptions.isWin = process.platform === 'win32';
     }
 
     initializing() {
@@ -55,24 +53,6 @@ module.exports = class extends BaseGenerator {
             this.logSuccess("  > ./gradlew bootRun");
         }
         this.logError("==========================================");
-    }
-
-    _formatCode(configOptions) {
-        if (configOptions.buildTool === 'maven') {
-            this._formatCodeMaven(configOptions);
-        } else {
-            this._formatCodeGradle(configOptions);
-        }
-    }
-
-    _formatCodeMaven(configOptions) {
-        const command = configOptions.isWin ? 'mvnw.bat' : './mvnw';
-        execSync(`${command} spotless:apply`, {stdio: 'inherit'});
-    }
-
-    _formatCodeGradle(configOptions) {
-        const command = configOptions.isWin ? 'gradlew.bat' : './gradlew';
-        execSync(`${command} googleJavaFormat`, {stdio: 'inherit'});
     }
 
     _generateBuildToolConfig(configOptions) {
