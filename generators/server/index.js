@@ -3,13 +3,14 @@ const BaseGenerator = require('../base-generator');
 const constants = require('../constants');
 const prompts = require('./prompts');
 const path = require('path');
-const { exec } = require('child_process');
+const { execSync } = require('child_process');
 
 module.exports = class extends BaseGenerator {
 
     constructor(args, opts) {
         super(args, opts);
         this.configOptions = this.options.configOptions || {};
+        this.configOptions.isWin = process.platform === 'win32';
     }
 
     initializing() {
@@ -58,10 +59,20 @@ module.exports = class extends BaseGenerator {
 
     _formatCode(configOptions) {
         if (configOptions.buildTool === 'maven') {
-            exec('./mvnw spotless:apply');
+            this._formatCodeMaven(configOptions);
         } else {
-            this.logWarn('Automatic code format not yet implemented for Gradle.');
+            this._formatCodeGradle(configOptions);
         }
+    }
+
+    _formatCodeMaven(configOptions) {
+        const command = configOptions.isWin ? 'mvnw.bat' : './mvnw';
+        execSync(`${command} spotless:apply`, {stdio: 'inherit'});
+    }
+
+    _formatCodeGradle(configOptions) {
+        const command = configOptions.isWin ? 'gradlew.bat' : './gradlew';
+        execSync(`${command} googleJavaFormat`, {stdio: 'inherit'});
     }
 
     _generateBuildToolConfig(configOptions) {
