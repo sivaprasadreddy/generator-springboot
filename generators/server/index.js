@@ -3,6 +3,7 @@ const BaseGenerator = require('../base-generator');
 const constants = require('../constants');
 const prompts = require('./prompts');
 const path = require('path');
+const { exec } = require('child_process');
 
 module.exports = class extends BaseGenerator {
 
@@ -39,6 +40,7 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
+        this._formatCode(this.configOptions);
         this._printGenerationSummary(this.configOptions);
     }
 
@@ -47,11 +49,19 @@ module.exports = class extends BaseGenerator {
         this.logSuccess("Your application is generated successfully");
         this.logSuccess(`  cd ${configOptions.appName}`);
         if (configOptions.buildTool === 'maven') {
-            this.logSuccess("  > ./mvnw spring-boot:run")
+            this.logSuccess("  > ./mvnw spring-boot:run");
         } else {
-            this.logSuccess("  > ./gradlew bootRun")
+            this.logSuccess("  > ./gradlew bootRun");
         }
         this.logError("==========================================");
+    }
+
+    _formatCode(configOptions) {
+        if (configOptions.buildTool === 'maven') {
+            exec('./mvnw spotless:apply');
+        } else {
+            this.logWarn('Automatic code format not yet implemented for Gradle.');
+        }
     }
 
     _generateBuildToolConfig(configOptions) {
