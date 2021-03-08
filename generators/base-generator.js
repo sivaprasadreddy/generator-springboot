@@ -11,10 +11,6 @@ module.exports = class extends Generator {
         super(args, opts);
     }
 
-    configuring() {
-
-    }
-
     logSuccess(msg) {
         log(chalk.bold.green(msg));
     }
