@@ -39,6 +39,7 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
+        this._formatCode(this.configOptions);
         this._printGenerationSummary(this.configOptions);
     }
 
@@ -47,9 +48,9 @@ module.exports = class extends BaseGenerator {
         this.logSuccess("Your application is generated successfully");
         this.logSuccess(`  cd ${configOptions.appName}`);
         if (configOptions.buildTool === 'maven') {
-            this.logSuccess("  > ./mvnw spring-boot:run")
+            this.logSuccess("  > ./mvnw spring-boot:run");
         } else {
-            this.logSuccess("  > ./gradlew bootRun")
+            this.logSuccess("  > ./gradlew bootRun");
         }
         this.logError("==========================================");
     }
