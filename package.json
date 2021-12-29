@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/sivaprasadreddy/generator-springboot",
   "dependencies": {
-    "chalk": "4.1.0",
+    "chalk": "4.1.2",
     "lodash": "4.17.21",
     "yeoman-generator": "4.12.0"
   },
