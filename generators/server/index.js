@@ -38,7 +38,7 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
-        this._formatCode(this.configOptions);
+        //this._formatCode(this.configOptions);
         this._printGenerationSummary(this.configOptions);
     }
 
