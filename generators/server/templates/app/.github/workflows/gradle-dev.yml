@@ -12,24 +12,17 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up JDK <%= JAVA_VERSION %>
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3.1.1
         with:
           java-version: <%= JAVA_VERSION %>
+          distribution: 'zulu'
+          cache: 'gradle'
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
         run: ./gradlew clean build
