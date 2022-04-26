@@ -219,7 +219,7 @@ module.exports = class extends BaseGenerator {
         this.generateTestJavaCode(configOptions, testJavaTemplates);
 
         const testResTemplates = [
-            'application-integration-test.properties',
+            'application-test.properties',
             'logback-test.xml'
         ];
         this.generateTestResCode(configOptions, testResTemplates);

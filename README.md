@@ -23,7 +23,7 @@ A Yeoman generator for generating Microservices with SpringBoot
 * Localstack configuration
 * Jenkinsfile
 * GitHub Actions Configuration
-* CheckStyle, PMD, SonarQube, Google-java-format static analysis tools configuration
+* SonarQube, Google-java-format static analysis tools configuration
 
 
 ### Generate SpringBoot Microservice

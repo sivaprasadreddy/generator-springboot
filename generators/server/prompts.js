@@ -101,7 +101,7 @@ function prompting() {
                     name: 'Gradle'
                 }
             ],
-            default: 'gradle'
+            default: 'maven'
         }
     ];
 
