@@ -23,5 +23,5 @@ services:
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.mariadb.jdbc.Driver
       - SPRING_DATASOURCE_URL=jdbc:mariadb://<%= databaseType %>db:3306/appdb
       <%_ } _%>
-      - SPRING_DATASOURCE_USERNAME=siva
+      - SPRING_DATASOURCE_USERNAME=appuser
       - SPRING_DATASOURCE_PASSWORD=secret

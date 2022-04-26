@@ -1,9 +1,8 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath "com.avast.gradle:gradle-docker-compose-plugin:${docker_compose_plugin_version}"
         classpath "org.owasp:dependency-check-gradle:${owasp_plugin_version}"
     }
 }
@@ -14,11 +13,8 @@ plugins {
     id 'com.gorylenko.gradle-git-properties'
     id 'com.github.ben-manes.versions'
     id "com.github.sherter.google-java-format"
-    id "com.github.spotbugs" apply false
     id "org.sonarqube" apply false
 }
-apply plugin: "idea"
-apply plugin: "docker-compose"
 apply from: "gradle/code-quality.gradle"
 if (project.hasProperty("ci")) {
     apply from: "gradle/owasp.gradle"
@@ -49,7 +45,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     <%_ if (features.includes('localstack')) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-aws-messaging"
+    implementation "io.awspring.cloud:spring-cloud-aws-autoconfigure:${spring_cloud_aws_version}"
+    implementation "io.awspring.cloud:spring-cloud-aws-messaging:${spring_cloud_aws_version}"
     <%_ } _%>
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
@@ -68,14 +65,12 @@ dependencies {
     <%_ if (dbMigrationTool === 'liquibase') { _%>
     implementation 'org.liquibase:liquibase-core'
     <%_ } _%>
-    implementation "io.springfox:springfox-boot-starter:${swagger_version}"
+    implementation "org.springdoc:springdoc-openapi-ui:${springdoc_openapi_version}"
     implementation "org.zalando:problem-spring-web-starter:${problem_spring_web_version}"
     implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
     implementation "commons-io:commons-io:${commons_io_version}"
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.projectlombok:lombok"
     testImplementation "org.awaitility:awaitility:${awaitility_version}"
     testImplementation "org.testcontainers:junit-jupiter"
@@ -114,13 +109,6 @@ bootBuildImage {
     imageName = "DOCKER_USERNAME/<%= appName %>"
 }
 
-dockerCompose {
-    <%_ if (features.includes('localstack')) { _%>
-    environment.put 'TMPDIR', "/private"
-    <%_ } _%>
-    useComposeFiles = ["docker/docker-compose.yml"]
-}
-
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
 
@@ -128,7 +116,6 @@ if (project.hasProperty("local")) {
     bootRun {
         args = ["--spring.profiles.active=local"]
     }
-    bootRun.dependsOn composeUp
 }
 
 gitProperties {
@@ -137,6 +124,7 @@ gitProperties {
 }
 
 googleJavaFormat {
+    toolVersion = '1.15.0'
     options style: 'AOSP'
 }
 

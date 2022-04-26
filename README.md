@@ -88,3 +88,11 @@ However, there are certain JHipster features that does not fit for my preference
 ### Version 0.0.8
 * Configured Checkstyle, PMD, SonarQube, google-java-format plugins
 * Added Localstack autoconfiguration support
+
+### Version 0.0.10
+* Upgraded SpringBoot to 2.6.7 and library versions
+* Updated Spring Cloud AWS setup to use new https://awspring.io/ based configuration
+* Removed `springfox-boot-starter` and used `springdoc-openapi-ui`
+* Added google-java-format support
+* Upgraded plugins versions
+* Removed Checkstyle, PMD plugins

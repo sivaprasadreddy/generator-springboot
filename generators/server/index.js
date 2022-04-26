@@ -28,10 +28,9 @@ module.exports = class extends BaseGenerator {
     writing() {
         this._generateBuildToolConfig(this.configOptions);
         this._generateDockerConfig(this.configOptions);
-        this._generateJenkinsfile(this.configOptions);
+        this._generateJenkinsFile(this.configOptions);
         this._generateMiscFiles(this.configOptions);
-        this._generateTravisCIfile(this.configOptions);
-        this._generateGithubCIfile(this.configOptions);
+        this._generateGithubActionsFiles(this.configOptions);
         this._generateDbMigrationConfig(this.configOptions);
         this._generateDockerComposeFiles(this.configOptions);
         this._generateLocalstackConfig(this.configOptions);
@@ -71,7 +70,7 @@ module.exports = class extends BaseGenerator {
         );
     }
 
-    _generateJenkinsfile(configOptions) {
+    _generateJenkinsFile(configOptions) {
         this.fs.copyTpl(
             this.templatePath('app/Jenkinsfile'),
             this.destinationPath('Jenkinsfile'),
@@ -83,22 +82,10 @@ module.exports = class extends BaseGenerator {
         this.fs.copyTpl(this.templatePath('app/.editorconfig'), this.destinationPath('.editorconfig'), configOptions);
         this.fs.copyTpl(this.templatePath('app/lombok.config'), this.destinationPath('lombok.config'), configOptions);
         this.fs.copyTpl(this.templatePath('app/sonar-project.properties'), this.destinationPath('sonar-project.properties'), configOptions);
-        this.fs.copy(
-            this.templatePath('app/build-config'),
-            this.destinationPath('build-config')
-        );
         this.fs.copyTpl(this.templatePath('app/README.md'), this.destinationPath('README.md'), configOptions);
     }
 
-    _generateTravisCIfile(configOptions) {
-        this.fs.copyTpl(
-            this.templatePath('app/.travis.yml'),
-            this.destinationPath('.travis.yml'),
-            configOptions
-        );
-    }
-
-    _generateGithubCIfile(configOptions) {
+    _generateGithubActionsFiles(configOptions) {
         const devCiFile = '.github/workflows/' + configOptions.buildTool + '-dev.yml';
         const masterCiFile = '.github/workflows/' + configOptions.buildTool + '-master.yml';
         this.fs.copyTpl(
@@ -208,14 +195,12 @@ module.exports = class extends BaseGenerator {
         ];
         if(configOptions.features.includes("localstack")) {
             mainJavaTemplates.push('config/AwsConfig.java');
-            mainJavaTemplates.push('config/AwsLocalConfig.java');
         }
         this.generateMainJavaCode(configOptions, mainJavaTemplates);
 
         const mainResTemplates = [
             'application.properties',
             'application-local.properties',
-            'application-prod.properties',
             'application-heroku.properties',
             'logback-spring.xml'
         ];
@@ -285,7 +270,9 @@ module.exports = class extends BaseGenerator {
 
     _generateDockerComposeFiles(configOptions) {
         this._generateAppDockerComposeFile(configOptions);
-        this._generateMonitoringConfig(configOptions);
+        if(configOptions.features.includes('monitoring')) {
+            this._generateMonitoringConfig(configOptions);
+        }
         if(configOptions.features.includes('elk')) {
             this._generateELKConfig(configOptions);
         }

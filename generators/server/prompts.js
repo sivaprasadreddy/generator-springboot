@@ -78,6 +78,10 @@ function prompting() {
                     name: 'ELK Docker configuration'
                 },
                 {
+                    value: 'monitoring',
+                    name: 'Prometheus, Grafana Docker configuration'
+                },
+                {
                     value: 'localstack',
                     name: 'Localstack Docker configuration'
                 }
@@ -89,12 +93,12 @@ function prompting() {
             message: 'Which build tool do you want to use?',
             choices: [
                 {
-                    value: 'gradle',
-                    name: 'Gradle'
-                },
-                {
                     value: 'maven',
                     name: 'Maven'
+                },
+                {
+                    value: 'gradle',
+                    name: 'Gradle'
                 }
             ],
             default: 'gradle'

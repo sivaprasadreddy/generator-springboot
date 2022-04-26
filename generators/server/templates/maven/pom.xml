@@ -20,8 +20,11 @@
 
         <java.version><%= JAVA_VERSION %></java.version>
         <spring-cloud.version><%= SPRING_CLOUD_VERSION %></spring-cloud.version>
+        <%_ if (features.includes('localstack')) { _%>
+        <spring-cloud-aws-version><%= SPRING_CLOUD_AWS_VERSION %></spring-cloud-aws-version>
+        <%_ } _%>
         <problem-spring-web.version><%= PROBLEM_SPRING_WEB_VERSION %></problem-spring-web.version>
-        <swagger.version><%= SWAGGER_VERSION %></swagger.version>
+        <springdoc-openapi.version><%= SPRINGDOC_OPENAPI_VERSION %></springdoc-openapi.version>
         <commons-lang3.version><%= COMMONS_LANG_VERSION %></commons-lang3.version>
         <commons-io.version><%= COMMONS_IO_VERSION %></commons-io.version>
 
@@ -29,13 +32,10 @@
         <awaitility.version><%= AWAITILITY_VERSION %></awaitility.version>
 
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
-        <maven-checkstyle-plugin.version><%= MAVEN_CHECKSTYLE_PLUGIN_VERSION %></maven-checkstyle-plugin.version>
-        <maven-pmd-plugin.version><%= MAVEN_PMD_PLUGIN_VERSION %></maven-pmd-plugin.version>
         <spotless.version><%= MAVEN_SPOTLESS_PLUGIN_VERSION %></spotless.version>
         <dependency-check-maven.version><%= MAVEN_DEPENDENCY_CHECK_PLUGIN_VERSION %></dependency-check-maven.version>
         <properties-maven-plugin.version><%= MAVEN_PROPERTIES_PLUGIN_VERSION %></properties-maven-plugin.version>
         <maven-failsafe-plugin.version><%= MAVEN_FAILSAFE_PLUGIN_VERSION %></maven-failsafe-plugin.version>
-        <fabric8-docker-maven.version><%= MAVEN_FABRIC8_PLUGIN_VERSION %></fabric8-docker-maven.version>
         <sonar-maven-plugin.version><%= MAVEN_SONAR_PLUGIN_VERSION %></sonar-maven-plugin.version>
         <jacoco-maven-plugin.version><%= MAVEN_JACOCO_PLUGIN_VERSION %></jacoco-maven-plugin.version>
         <jacoco.minimum.coverage><%= JACOCO_MIN_COVERAGE_REQUIRED %></jacoco.minimum.coverage>
@@ -82,8 +82,14 @@
         </dependency>
         <%_ if (features.includes('localstack')) { _%>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-aws-messaging</artifactId>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-autoconfigure</artifactId>
+            <version>${spring-cloud-aws-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-messaging</artifactId>
+            <version>${spring-cloud-aws-version}</version>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -129,9 +135,9 @@
         </dependency>
         <%_ } _%>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${swagger.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc-openapi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -148,12 +154,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.awaitility</groupId>
@@ -310,41 +310,22 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven-checkstyle-plugin.version}</version>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.version}</version>
                 <configuration>
-                    <configLocation>build-config/checkstyle/checkstyle.xml</configLocation>
-                    <suppressionsLocation>build-config/checkstyle/suppressions.xml</suppressionsLocation>
-                    <encoding>UTF-8</encoding>
-                    <consoleOutput>true</consoleOutput>
-                    <failsOnError>true</failsOnError>
-                    <linkXRef>false</linkXRef>
+                    <java>
+                        <googleJavaFormat>
+                            <version>1.15.0</version>
+                            <style>AOSP</style>
+                        </googleJavaFormat>
+                    </java>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>checkstyle-validation</id>
-                        <phase>validate</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven-pmd-plugin.version}</version>
-                <configuration>
-                    <rulesets>
-                        <ruleset>build-config/pmd/pmd-ruleset.xml</ruleset>
-                    </rulesets>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                            <goal>cpd-check</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -422,50 +403,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>${spotless.version}</version>
-                <configuration>
-                    <java>
-                        <googleJavaFormat>
-                            <version>1.8</version>
-                            <style>AOSP</style>
-                        </googleJavaFormat>
-                    </java>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>${fabric8-docker-maven.version}</version>
-                <configuration>
-                    <verbose>true</verbose>
-                    <images>
-                        <image>
-                            <external>
-                                <type>compose</type>
-                                <basedir>docker</basedir>
-                                <composeFile>docker-compose.yml</composeFile>
-                            </external>
-                            <run>
-                                <wait>
-                                    <time>5000</time>
-                                    <!--<log>Docker databases are ready to accept connections</log>-->
-                                </wait>
-                            </run>
-                        </image>
-                    </images>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.owasp</groupId>

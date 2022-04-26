@@ -7,6 +7,8 @@ import com.amazonaws.services.sqs.model.AmazonSQSException;
 import com.amazonaws.services.sqs.model.CreateQueueRequest;
 import com.amazonaws.services.sqs.model.Message;
 import <%= packageName %>.common.LocalStackConfig;
+import io.awspring.cloud.autoconfigure.messaging.SqsAutoConfiguration;
+import io.awspring.cloud.messaging.core.QueueMessagingTemplate;
 import java.time.Duration;
 import java.util.List;
 import org.awaitility.Awaitility;
@@ -14,14 +16,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.cloud.aws.autoconfigure.messaging.MessagingAutoConfiguration;
-import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @Import({LocalStackConfig.class})
-@ImportAutoConfiguration({MessagingAutoConfiguration.class})
+@ImportAutoConfiguration({SqsAutoConfiguration.class})
 public class SqsListenerTest {
 
     @Autowired private AmazonSQSAsync amazonSQS;
