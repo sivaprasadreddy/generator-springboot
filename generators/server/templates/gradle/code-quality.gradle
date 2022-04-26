@@ -1,30 +1,5 @@
-apply plugin: 'checkstyle'
-apply plugin: 'pmd'
 apply plugin: 'jacoco'
-apply plugin: "com.github.spotbugs"
 apply plugin: "org.sonarqube"
-
-checkstyle {
-    toolVersion "${checkstyle_plugin_version}"
-    maxWarnings = 0
-    configFile = file("build-config/checkstyle/checkstyle.xml")
-    sourceSets = [sourceSets.main]
-}
-
-pmd {
-    toolVersion = "${pmd_plugin_version}"
-    consoleOutput = true
-    ruleSets = []
-    ruleSetFiles = files("build-config/pmd/pmd-ruleset.xml")
-    sourceSets = [sourceSets.main]
-}
-
-tasks.matching {task -> task.name.startsWith('spotbugs')}.forEach {
-    it.reports {
-        html.enabled = true
-        xml.enabled = false
-    }
-}
 
 jacoco {
     toolVersion = "${jacoco_plugin_version}"

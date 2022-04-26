@@ -77,7 +77,7 @@ describe('SpringBoot Generator', () => {
                     "databaseType": "postgresql",
                     "dbMigrationTool": "flywaydb",
                     "buildTool": "maven",
-                    "features": ["elk"]
+                    "features": ["elk", "monitoring"]
                 })
                 .on('end', done);
         });
@@ -163,7 +163,7 @@ describe('SpringBoot Generator', () => {
                     "databaseType": "postgresql",
                     "dbMigrationTool": "flywaydb",
                     "buildTool": "gradle",
-                    "features": ["elk"]
+                    "features": ["elk", "monitoring"]
                 })
                 .on('end', done);
         });

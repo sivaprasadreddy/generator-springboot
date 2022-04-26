@@ -3,9 +3,9 @@ services:
 
 <%_ if (databaseType === 'postgresql') { _%>
   postgresqldb:
-    image: postgres:12.3
+    image: postgres:14-alpine
     environment:
-      - POSTGRES_USER=siva
+      - POSTGRES_USER=appuser
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=appdb
     ports:
@@ -13,10 +13,10 @@ services:
 <%_ } _%>
 <%_ if (databaseType === 'mysql') { _%>
   mysqldb:
-    image: mysql:5.7
+    image: mysql:8.0.28
     environment:
       - MYSQL_DATABASE=appdb
-      - MYSQL_USER=siva
+      - MYSQL_USER=appuser
       - MYSQL_PASSWORD=secret
       - MYSQL_ROOT_PASSWORD=root
     ports:
@@ -25,10 +25,10 @@ services:
   <%_ } _%>
 <%_ if (databaseType === 'mariadb') { _%>
   mariadb:
-    image: mariadb:10.5.8
+    image: mariadb:10.8.2
     environment:
       - MYSQL_DATABASE=appdb
-      - MYSQL_USER=siva
+      - MYSQL_USER=appuser
       - MYSQL_PASSWORD=secret
       - MYSQL_ROOT_PASSWORD=root
     ports:
@@ -37,11 +37,11 @@ services:
 
 <%_ if (features.includes('localstack')) { _%>
   localstack:
-    image: localstack/localstack:0.11.2
+    image: localstack/localstack:0.14.2
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=S3,SQS
+      - SERVICES=s3,sqs
       - DEFAULT_REGION=us-east-1
       - DOCKER_HOST=unix:///var/run/docker.sock
       - HOST_TMP_FOLDER=${TMPDIR}

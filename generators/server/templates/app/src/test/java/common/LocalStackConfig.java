@@ -3,7 +3,6 @@ package <%= packageName %>.common;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
 
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -19,19 +18,12 @@ import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration
 public class LocalStackConfig {
-
-    public static final String TEST_ACCESS_KEY = "test";
-    public static final String TEST_SECRET_KEY = "test";
-
-    public static final AWSCredentials TEST_CREDENTIALS =
-            new BasicAWSCredentials(TEST_ACCESS_KEY, TEST_SECRET_KEY);
-
     static LocalStackContainer localStackContainer;
 
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.11.2"))
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.14.2"))
                         .withServices(S3, SQS)
                         .withExposedPorts(4566);
         localStackContainer.start();
@@ -57,6 +49,6 @@ public class LocalStackConfig {
     }
 
     private AWSCredentialsProvider getCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(TEST_CREDENTIALS);
+        return new AWSStaticCredentialsProvider(new BasicAWSCredentials("test", "test"));
     }
 }

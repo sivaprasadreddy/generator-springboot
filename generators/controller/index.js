@@ -52,6 +52,11 @@ module.exports = class extends BaseGenerator {
         this._generateDbMigrationConfig(this.configOptions)
     }
 
+    end() {
+        //TODO; Disabling this temporarily to fix test failures.
+        //this._formatCode(this.configOptions);
+    }
+
     _generateAppCode(configOptions) {
         const mainJavaTemplates = [
             {src: 'entities/Entity.java', dest: 'entities/'+configOptions.entityName+'.java'},

@@ -3,6 +3,7 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const _ = require('lodash');
 const log = console.log;
+const { execSync } = require('child_process');
 
 module.exports = class extends Generator {
 
@@ -62,5 +63,27 @@ module.exports = class extends Generator {
                 );
             }
         });
+    }
+
+    _formatCode(configOptions) {
+        if (configOptions.buildTool === 'maven') {
+            this._formatCodeMaven();
+        } else {
+            this._formatCodeGradle();
+        }
+    }
+
+    _formatCodeMaven() {
+        const command = this._isWin() ? 'mvnw.bat' : './mvnw';
+        execSync(`${command} spotless:apply`, {stdio: 'inherit'});
+    }
+
+    _formatCodeGradle() {
+        const command = this._isWin() ? 'gradlew.bat' : './gradlew';
+        execSync(`${command} googleJavaFormat`, {stdio: 'inherit'});
+    }
+
+    _isWin() {
+        return process.platform === 'win32';
     }
 };
