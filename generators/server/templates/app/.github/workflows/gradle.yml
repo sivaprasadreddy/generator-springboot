@@ -1,0 +1,43 @@
+name: CI Build
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distribution: [ 'temurin' ]
+        java: [ '<%= JAVA_VERSION %>' ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Java <%= JAVA_VERSION %>
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: ${{ matrix.distribution }}
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        name: SonarQube Scan
+        run: ./gradlew sonarqube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        name: Build and Publish Docker Image
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          ./gradlew bootBuildImage --imageName=${{ secrets.DOCKER_USERNAME }}/<%= appName %>
+          docker push ${{ secrets.DOCKER_USERNAME }}/<%= appName %>

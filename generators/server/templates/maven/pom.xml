@@ -134,6 +134,12 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <%_ } _%>
+        <%_ if (databaseType === 'mysql' || databaseType === 'mariadb') { _%>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
@@ -241,10 +247,12 @@
                 <configuration>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
                     <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
                     <includeOnlyProperties>
-                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
-                        <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
                         <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.user.name$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.message.full$</includeOnlyProperty>
                     </includeOnlyProperties>
                 </configuration>
             </plugin>

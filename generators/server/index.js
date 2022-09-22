@@ -23,6 +23,7 @@ module.exports = class extends BaseGenerator {
         this.destinationRoot(path.join(this.destinationRoot(), '/'+this.configOptions.appName));
         this.config.set(this.configOptions);
         Object.assign(this.configOptions, constants);
+        this.configOptions.formatCode = this.options.formatCode !== false
     }
 
     writing() {
@@ -38,7 +39,9 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
-        //this._formatCode(this.configOptions);
+        if(this.configOptions.formatCode !== false) {
+            this._formatCode(this.configOptions);
+        }
         this._printGenerationSummary(this.configOptions);
     }
 
@@ -86,16 +89,11 @@ module.exports = class extends BaseGenerator {
     }
 
     _generateGithubActionsFiles(configOptions) {
-        const devCiFile = '.github/workflows/' + configOptions.buildTool + '-dev.yml';
-        const masterCiFile = '.github/workflows/' + configOptions.buildTool + '-master.yml';
+        const ciFile = '.github/workflows/' + configOptions.buildTool + '.yml';
+
         this.fs.copyTpl(
-            this.templatePath('app/' + devCiFile),
-            this.destinationPath(devCiFile),
-            configOptions
-        );
-        this.fs.copyTpl(
-            this.templatePath('app/' + masterCiFile),
-            this.destinationPath(masterCiFile),
+            this.templatePath('app/' + ciFile),
+            this.destinationPath(ciFile),
             configOptions
         );
     }

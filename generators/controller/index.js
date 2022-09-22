@@ -45,6 +45,7 @@ module.exports = class extends BaseGenerator {
         this.configOptions.supportDatabaseSequences =
             this.configOptions.databaseType === 'h2'
             || this.configOptions.databaseType === 'postgresql';
+        this.configOptions.formatCode = this.options.formatCode !== false
     }
 
     writing() {
@@ -53,8 +54,9 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
-        //TODO; Disabling this temporarily to fix test failures.
-        //this._formatCode(this.configOptions);
+        if(this.configOptions.formatCode !== false) {
+            this._formatCode(this.configOptions);
+        }
     }
 
     _generateAppCode(configOptions) {
