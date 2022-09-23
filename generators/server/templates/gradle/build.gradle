@@ -120,7 +120,12 @@ if (project.hasProperty("local")) {
 
 gitProperties {
     failOnNoGitDirectory = false
-    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+    keys = [
+            "git.branch",
+            "git.commit.id.abbrev",
+            "git.commit.user.name",
+            "git.commit.message.full"
+    ]
 }
 
 googleJavaFormat {

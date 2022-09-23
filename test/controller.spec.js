@@ -13,7 +13,7 @@ describe('SpringBoot Generator', () => {
                     fse.copySync(path.join(__dirname, '../test/templates/basic-microservice-flyway'), dir);
                 })
                 .withArguments(['Customer'])
-                .withOptions({ 'base-path': '/api/customers' })
+                .withOptions({ 'base-path': '/api/customers', 'formatCode': false })
                 .on('end', done);
         });
 
@@ -35,7 +35,7 @@ describe('SpringBoot Generator', () => {
                     fse.copySync(path.join(__dirname, '../test/templates/basic-microservice-liquibase'), dir);
                 })
                 .withArguments(['Customer'])
-                .withOptions({ 'base-path': '/api/customers' })
+                .withOptions({ 'base-path': '/api/customers', 'formatCode': false })
                 .on('end', done);
         });
 

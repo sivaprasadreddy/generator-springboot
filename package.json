@@ -1,6 +1,6 @@
 {
   "name": "generator-springboot",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "A Yeoman generator for generating SpringBoot microservices",
   "keywords": [
     "yeoman-generator",
@@ -30,6 +30,7 @@
   "dependencies": {
     "chalk": "4.1.0",
     "lodash": "4.17.20",
+    "shelljs": "^0.8.5",
     "yeoman-generator": "4.12.0"
   },
   "devDependencies": {

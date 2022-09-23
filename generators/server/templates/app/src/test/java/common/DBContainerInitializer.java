@@ -20,21 +20,21 @@ public class DBContainerInitializer
 
 <%_ if (databaseType === 'postgresql') { _%>
     private static final PostgreSQLContainer<?> sqlContainer =
-            new PostgreSQLContainer<>("postgres:14-alpine")
+            new PostgreSQLContainer<>("<%= POSTGRESQL_IMAGE %>")
                     .withDatabaseName("integration-tests-db")
                     .withUsername("username")
                     .withPassword("password");
 <%_ } _%>
 <%_ if (databaseType === 'mysql') { _%>
     private static final MySQLContainer<?> sqlContainer =
-            new MySQLContainer<>("mysql:8.0.28")
+            new MySQLContainer<>("<%= MYSQL_IMAGE %>")
                     .withDatabaseName("integration-tests-db")
                     .withUsername("username")
                     .withPassword("password");
 <%_ } _%>
 <%_ if (databaseType === 'mariadb') { _%>
     private static final MariaDBContainer<?> sqlContainer =
-            new MariaDBContainer<>("mariadb:10.8.2")
+            new MariaDBContainer<>("<%= MARIADB_IMAGE %>")
                     .withDatabaseName("integration-tests-db")
                     .withUsername("username")
                     .withPassword("password");

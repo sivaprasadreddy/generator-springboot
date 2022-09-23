@@ -3,7 +3,7 @@ services:
 
 <%_ if (databaseType === 'postgresql') { _%>
   postgresqldb:
-    image: postgres:14-alpine
+    image: <%= POSTGRESQL_IMAGE %>
     environment:
       - POSTGRES_USER=appuser
       - POSTGRES_PASSWORD=secret
@@ -13,7 +13,7 @@ services:
 <%_ } _%>
 <%_ if (databaseType === 'mysql') { _%>
   mysqldb:
-    image: mysql:8.0.28
+    image: <%= MYSQL_IMAGE %>
     environment:
       - MYSQL_DATABASE=appdb
       - MYSQL_USER=appuser
@@ -25,7 +25,7 @@ services:
   <%_ } _%>
 <%_ if (databaseType === 'mariadb') { _%>
   mariadb:
-    image: mariadb:10.8.2
+    image: <%= MARIADB_IMAGE %>
     environment:
       - MYSQL_DATABASE=appdb
       - MYSQL_USER=appuser
@@ -37,7 +37,7 @@ services:
 
 <%_ if (features.includes('localstack')) { _%>
   localstack:
-    image: localstack/localstack:0.14.2
+    image: <%= LOCALSTACK_IMAGE %>
     ports:
       - "4566:4566"
     environment:

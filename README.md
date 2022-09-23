@@ -96,3 +96,8 @@ However, there are certain JHipster features that does not fit for my preference
 * Added google-java-format support
 * Upgraded plugins versions
 * Removed Checkstyle, PMD plugins
+
+### Version 0.1.0
+* Upgraded SpringBoot to 2.7.4 and other library versions
+* Fixed code formatting
+* Fixed Flyway with MySQL and MariaDB issue

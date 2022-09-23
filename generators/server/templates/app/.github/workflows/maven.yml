@@ -1,0 +1,43 @@
+name: CI Build
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distribution: [ 'temurin' ]
+        java: [ '<%= JAVA_VERSION %>' ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Java <%= JAVA_VERSION %>
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: ${{ matrix.distribution }}
+          cache: 'maven'
+
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
+
+      - name: Build with Maven
+        run: ./mvnw clean verify
+
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        name: SonarQube Scan
+        run: ./mvnw compile sonar:sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        name: Build and Publish Docker Image
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USERNAME }}/<%= appName %>
+          docker push ${{ secrets.DOCKER_USERNAME }}/<%= appName %>

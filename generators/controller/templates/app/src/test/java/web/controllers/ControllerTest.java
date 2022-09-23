@@ -1,7 +1,6 @@
 package <%= packageName %>.web.controllers;
 
 import static <%= packageName %>.utils.AppConstants.PROFILE_TEST;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
@@ -83,9 +82,7 @@ class <%= entityName %>ControllerTest {
         Long <%= entityVarName %>Id = 1L;
         given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.empty());
 
-        this.mockMvc
-                .perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
-                .andExpect(status().isNotFound());
+        this.mockMvc.perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id)).andExpect(status().isNotFound());
     }
 
     @Test
