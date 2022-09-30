@@ -1,6 +1,7 @@
 package <%= packageName %>.web.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,9 +32,9 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
         <%= entityVarName %>Repository.deleteAll();
 
         <%= entityVarName %>List = new ArrayList<>();
-        <%= entityVarName %>List.add(new <%= entityName %>(1L, "First <%= entityName %>"));
-        <%= entityVarName %>List.add(new <%= entityName %>(2L, "Second <%= entityName %>"));
-        <%= entityVarName %>List.add(new <%= entityName %>(3L, "Third <%= entityName %>"));
+        <%= entityVarName %>List.add(new <%= entityName %>(null, "First <%= entityName %>"));
+        <%= entityVarName %>List.add(new <%= entityName %>(null, "Second <%= entityName %>"));
+        <%= entityVarName %>List.add(new <%= entityName %>(null, "Third <%= entityName %>"));
         <%= entityVarName %>List = <%= entityVarName %>Repository.saveAll(<%= entityVarName %>List);
     }
 
@@ -65,6 +66,7 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
     }
 
