@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.response.<%= entityName %>Response;
 import <%= packageName %>.services.<%= entityName %>Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,12 +58,25 @@ class <%= entityName %>ControllerTest {
 
     @Test
     void shouldFetchAll<%= entityName %>s() throws Exception {
-        given(<%= entityVarName %>Service.findAll<%= entityName %>s()).willReturn(this.<%= entityVarName %>List);
+        <%= entityName %>Response <%= entityVarName %>Response = new <%= entityName %>Response();
+        <%= entityVarName %>Response.setContent(this.<%= entityVarName %>List);
+        <%= entityVarName %>Response.setLast(false);
+        <%= entityVarName %>Response.setTotalPages(1);
+        <%= entityVarName %>Response.setPageNo(0);
+        <%= entityVarName %>Response.setTotalElements(11);
+        <%= entityVarName %>Response.setPageSize(10);
+        given(<%= entityVarName %>Service.findAll<%= entityName %>s(0, 10, "id", "asc"))
+                .willReturn(<%= entityVarName %>Response);
 
         this.mockMvc
                 .perform(get("<%= basePath %>"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(<%= entityVarName %>List.size())));
+                .andExpect(jsonPath("$.content.size()", is(<%= entityVarName %>List.size())))
+                .andExpect(jsonPath("$.last",  is(false)))
+                .andExpect(jsonPath("$.totalPages",  is(1)))
+                .andExpect(jsonPath("$.pageNo",  is(0)))
+                .andExpect(jsonPath("$.totalElements",  is(11)))
+                .andExpect(jsonPath("$.pageSize",  is(10)));
     }
 
     @Test

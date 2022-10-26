@@ -1,7 +1,9 @@
 package <%= packageName %>.web.controllers;
 
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.response.<%= entityName %>Response;
 import <%= packageName %>.services.<%= entityName %>Service;
+import <%= packageName %>.utils.AppConstants;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,8 +34,29 @@ public class <%= entityName %>Controller {
     }
 
     @GetMapping
-    public List<<%= entityName %>> getAll<%= entityName %>s() {
-        return <%= entityVarName %>Service.findAll<%= entityName %>s();
+    public <%= entityName %>Response getAll<%= entityName %>s(
+            @RequestParam(
+                value = "pageNo",
+                defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,
+                required = false)
+            int pageNo,
+            @RequestParam(
+                        value = "pageSize",
+                        defaultValue = AppConstants.DEFAULT_PAGE_SIZE,
+                        required = false)
+                int pageSize,
+            @RequestParam(
+                        value = "sortBy",
+                        defaultValue = AppConstants.DEFAULT_SORT_BY,
+                        required = false)
+                String sortBy,
+            @RequestParam(
+                        value = "sortDir",
+                        defaultValue = AppConstants.DEFAULT_SORT_DIRECTION,
+                        required = false)
+                String sortDir
+                ) {
+        return <%= entityVarName %>Service.findAll<%= entityName %>s(pageNo, pageSize, sortBy, sortDir);
     }
 
     @GetMapping("/{id}")

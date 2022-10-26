@@ -43,7 +43,7 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(get("<%= basePath %>"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(<%= entityVarName %>List.size())));
+                .andExpect(jsonPath("$.content.size()", is(<%= entityVarName %>List.size())));
     }
 
     @Test

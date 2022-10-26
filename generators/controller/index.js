@@ -62,6 +62,7 @@ module.exports = class extends BaseGenerator {
     _generateAppCode(configOptions) {
         const mainJavaTemplates = [
             {src: 'entities/Entity.java', dest: 'entities/'+configOptions.entityName+'.java'},
+            {src: 'model/response/Response.java', dest: 'model/response/'+configOptions.entityName+'Response.java'},
             {src: 'repositories/Repository.java', dest: 'repositories/'+configOptions.entityName+'Repository.java'},
             {src: 'services/Service.java', dest: 'services/'+configOptions.entityName+'Service.java'},
             {src: 'web/controllers/Controller.java', dest: 'web/controllers/'+configOptions.entityName+'Controller.java'},
