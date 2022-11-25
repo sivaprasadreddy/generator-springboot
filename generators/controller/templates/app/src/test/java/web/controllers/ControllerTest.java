@@ -60,13 +60,6 @@ class <%= entityName %>ControllerTest {
 
     @Test
     void shouldFetchAll<%= entityName %>s() throws Exception {
-        Response <%= entityVarName %>Response = new <%= entityName %>Response();
-        <%= entityVarName %>Response.setContent(this.<%= entityVarName %>List);
-        <%= entityVarName %>Response.setLast(false);
-        <%= entityVarName %>Response.setTotalPages(1);
-        <%= entityVarName %>Response.setPageNo(0);
-        <%= entityVarName %>Response.setTotalElements(11);
-        <%= entityVarName %>Response.setPageSize(10);
         Page<<%= entityName %>> page = new PageImpl<>(<%= entityVarName %>List);
         PagedResult<<%= entityName %>> <%= entityVarName %>PagedResult = new PagedResult<>(page);
         given(<%= entityVarName %>Service.findAll<%= entityName %>s(0, 10, "id", "asc"))
