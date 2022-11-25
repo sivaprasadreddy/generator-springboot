@@ -1,7 +1,7 @@
 package <%= packageName %>.web.controllers;
 
 import <%= packageName %>.entities.<%= entityName %>;
-import <%= packageName %>.model.response.<%= entityName %>Response;
+import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.services.<%= entityName %>Service;
 import <%= packageName %>.utils.AppConstants;
 import java.util.List;
@@ -34,7 +34,7 @@ public class <%= entityName %>Controller {
     }
 
     @GetMapping
-    public <%= entityName %>Response getAll<%= entityName %>s(
+    public PagedResult<<%= entityName %>> getAll<%= entityName %>(
             @RequestParam(
                 value = "pageNo",
                 defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,

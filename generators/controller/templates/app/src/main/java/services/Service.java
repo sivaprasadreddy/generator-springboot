@@ -1,7 +1,7 @@
 package <%= packageName %>.services;
 
 import <%= packageName %>.entities.<%= entityName %>;
-import <%= packageName %>.model.response.<%= entityName %>Response;
+import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.repositories.<%= entityName %>Repository;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class <%= entityName %>Service {
         this.<%= entityVarName %>Repository = <%= entityVarName %>Repository;
     }
 
-    public <%= entityName %>Response findAll<%= entityName %>s(
+    public PagedResult<<%= entityName %>> findAll<%= entityName %>s(
         int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort =
         sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
@@ -34,18 +34,8 @@ public class <%= entityName %>Service {
         // create Pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<<%= entityName %>> <%= entityVarName %>sPage = <%= entityVarName %>Repository.findAll(pageable);
-        // get content for page object
-        List<<%= entityName %>> content = <%= entityVarName %>sPage.getContent();
 
-        <%= entityName %>Response <%= entityVarName %>Response = new <%= entityName %>Response();
-        <%= entityVarName %>Response.setContent(content);
-        <%= entityVarName %>Response.setPageNo(<%= entityVarName %>sPage.getNumber());
-        <%= entityVarName %>Response.setPageSize(<%= entityVarName %>sPage.getSize());
-        <%= entityVarName %>Response.setTotalElements(<%= entityVarName %>sPage.getTotalElements());
-        <%= entityVarName %>Response.setTotalPages(<%= entityVarName %>sPage.getTotalPages());
-        <%= entityVarName %>Response.setLast(<%= entityVarName %>sPage.isLast());
-
-        return <%= entityVarName %>Response;
+        return new PagedResult<>(<%= entityVarName %>sPage);
     }
 
     public Optional<<%= entityName %>> find<%= entityName %>ById(Long id) {
