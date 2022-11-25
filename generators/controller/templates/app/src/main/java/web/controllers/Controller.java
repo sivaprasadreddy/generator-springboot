@@ -34,7 +34,7 @@ public class <%= entityName %>Controller {
     }
 
     @GetMapping
-    public PagedResult<<%= entityName %>> getAll<%= entityName %>(
+    public PagedResult<<%= entityName %>> getAll<%= entityName %>s(
             @RequestParam(
                 value = "pageNo",
                 defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,
