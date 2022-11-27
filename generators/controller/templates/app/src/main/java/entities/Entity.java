@@ -6,9 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-<%_ if (supportDatabaseSequences) { _%>
-import jakarta.persistence.SequenceGenerator;
-<%_ } _%>
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -27,11 +24,7 @@ public class <%= entityName %> {
 
     @Id
 <%_ if (supportDatabaseSequences) { _%>
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "<%= entityVarName %>_id_generator")
-    @SequenceGenerator(
-            name = "<%= entityVarName %>_id_generator",
-            sequenceName = "<%= entityVarName %>_id_seq",
-            allocationSize = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
 <%_ } _%>
 <%_ if (!supportDatabaseSequences) { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
