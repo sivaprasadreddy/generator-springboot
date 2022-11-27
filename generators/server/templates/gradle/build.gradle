@@ -45,8 +45,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     <%_ if (features.includes('localstack')) { _%>
-    implementation "io.awspring.cloud:spring-cloud-aws-autoconfigure:${spring_cloud_aws_version}"
-    implementation "io.awspring.cloud:spring-cloud-aws-messaging:${spring_cloud_aws_version}"
+    implementation "io.awspring.cloud:spring-cloud-aws-starter"
+    implementation "io.awspring.cloud:spring-cloud-aws-starter-sqs"
     <%_ } _%>
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
@@ -84,6 +84,8 @@ dependencies {
     <%_ } _%>
     <%_ if (features.includes('localstack')) { _%>
     testImplementation "org.testcontainers:localstack"
+    <!-- AWS SDK v1 is required by testcontainers-localstack -->
+    testImplementation "com.amazonaws:aws-java-sdk-core"
     <%_ } _%>
 }
 
@@ -91,7 +93,7 @@ dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${spring_cloud_version}"
         <%_ if (features.includes('localstack')) { _%>
-        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${spring-cloud-aws.version}"
+        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${spring_cloud_aws_version}"
         <%_ } _%>
         mavenBom "org.testcontainers:testcontainers-bom:${testcontainers_version}"
     }

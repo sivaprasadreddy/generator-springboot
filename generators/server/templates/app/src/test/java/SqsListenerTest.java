@@ -2,39 +2,37 @@ package <%= packageName %>;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.amazonaws.services.sqs.model.AmazonSQSException;
-import com.amazonaws.services.sqs.model.CreateQueueRequest;
-import com.amazonaws.services.sqs.model.Message;
-import <%= packageName %>.common.LocalStackConfig;
-import io.awspring.cloud.autoconfigure.messaging.SqsAutoConfiguration;
-import io.awspring.cloud.messaging.core.QueueMessagingTemplate;
+import <%= packageName %>.common.AbstractIntegrationTest;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import lombok.extern.slf4j.Slf4j;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import software.amazon.awssdk.services.sqs.SqsAsyncClient;
+import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
+import software.amazon.awssdk.services.sqs.model.CreateQueueResponse;
+import software.amazon.awssdk.services.sqs.model.Message;
+import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
+import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
-@ExtendWith(SpringExtension.class)
-@Import({LocalStackConfig.class})
-@ImportAutoConfiguration({SqsAutoConfiguration.class})
-public class SqsListenerTest {
+@Slf4j
+class SqsListenerTest extends AbstractIntegrationTest {
 
-    @Autowired private AmazonSQSAsync amazonSQS;
+    @Autowired private SqsAsyncClient sqsAsyncClient;
 
     @Test
-    void shouldSendAndReceiveSqsMessage() {
+    void shouldSendAndReceiveSqsMessage() throws ExecutionException, InterruptedException {
         String queueName = "test_queue";
-        this.createQueue(queueName);
+        String queueURL =
+                this.createQueue(queueName).thenApply(CreateQueueResponse::queueUrl).get();
 
-        QueueMessagingTemplate queueMessagingTemplate = new QueueMessagingTemplate(amazonSQS);
-        queueMessagingTemplate.convertAndSend(queueName, "test message");
-
-        String queueUrl = amazonSQS.getQueueUrl(queueName).getQueueUrl();
+        this.sqsAsyncClient
+                .sendMessage(request -> request.messageBody("test message").queueUrl(queueURL))
+                .thenRun(() -> log.info("Message sent successfully to the Amazon sqs."));
 
         Awaitility.given()
                 .atMost(Duration.ofSeconds(30))
@@ -43,22 +41,21 @@ public class SqsListenerTest {
                 .untilAsserted(
                         () -> {
                             List<Message> messages =
-                                    amazonSQS.receiveMessage(queueUrl).getMessages();
+                                    sqsAsyncClient
+                                            .receiveMessage(builder -> builder.queueUrl(queueURL))
+                                            .thenApply(ReceiveMessageResponse::messages)
+                                            .get();
                             assertThat(messages).isNotEmpty();
                         });
     }
 
-    private void createQueue(String queueName) {
+    private CompletableFuture<CreateQueueResponse> createQueue(String queueName) {
         CreateQueueRequest createQueueRequest =
-                new CreateQueueRequest(queueName)
-                        .addAttributesEntry("MessageRetentionPeriod", "86400");
+                CreateQueueRequest.builder()
+                        .queueName(queueName)
+                        .attributes(Map.of(QueueAttributeName.MESSAGE_RETENTION_PERIOD, "86400"))
+                        .build();
 
-        try {
-            amazonSQS.createQueue(createQueueRequest);
-        } catch (AmazonSQSException e) {
-            if (!e.getErrorCode().equals("QueueAlreadyExists")) {
-                throw e;
-            }
-        }
+        return sqsAsyncClient.createQueue(createQueueRequest);
     }
 }
