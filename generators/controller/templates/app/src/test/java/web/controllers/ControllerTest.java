@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.services.<%= entityName %>Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -57,12 +60,22 @@ class <%= entityName %>ControllerTest {
 
     @Test
     void shouldFetchAll<%= entityName %>s() throws Exception {
-        given(<%= entityVarName %>Service.findAll<%= entityName %>s()).willReturn(this.<%= entityVarName %>List);
+        Page<<%= entityName %>> page = new PageImpl<>(<%= entityVarName %>List);
+        PagedResult<<%= entityName %>> <%= entityVarName %>PagedResult = new PagedResult<>(page);
+        given(<%= entityVarName %>Service.findAll<%= entityName %>s(0, 10, "id", "asc"))
+                .willReturn(<%= entityVarName %>PagedResult);
 
         this.mockMvc
                 .perform(get("<%= basePath %>"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(<%= entityVarName %>List.size())));
+                .andExpect(jsonPath("$.data.size()", is(<%= entityVarName %>List.size())))
+                .andExpect(jsonPath("$.totalElements", is(3)))
+                .andExpect(jsonPath("$.pageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPages", is(1)))
+                .andExpect(jsonPath("$.isFirst", is(true)))
+                .andExpect(jsonPath("$.isLast", is(true)))
+                .andExpect(jsonPath("$.hasNext", is(false)))
+                .andExpect(jsonPath("$.hasPrevious", is(false)));
     }
 
     @Test

@@ -1,10 +1,15 @@
 package <%= packageName %>.services;
 
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.repositories.<%= entityName %>Repository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +24,18 @@ public class <%= entityName %>Service {
         this.<%= entityVarName %>Repository = <%= entityVarName %>Repository;
     }
 
-    public List<<%= entityName %>> findAll<%= entityName %>s() {
-        return <%= entityVarName %>Repository.findAll();
+    public PagedResult<<%= entityName %>> findAll<%= entityName %>s(
+        int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort =
+        sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        // create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<<%= entityName %>> <%= entityVarName %>sPage = <%= entityVarName %>Repository.findAll(pageable);
+
+        return new PagedResult<>(<%= entityVarName %>sPage);
     }
 
     public Optional<<%= entityName %>> find<%= entityName %>ById(Long id) {
