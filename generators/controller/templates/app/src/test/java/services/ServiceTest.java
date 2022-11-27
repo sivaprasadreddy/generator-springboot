@@ -58,7 +58,10 @@ class <%= entityName %>ServiceTest {
         // when
         Optional<<%= entityName %>> optional<%= entityName %> = <%= entityVarName %>Service.find<%= entityName %>ById(1L);
         // then
-        assertThat(optional<%= entityName %>).isPresent().isEqualTo(get<%= entityName %>);
+        assertThat(optional<%= entityName %>).isPresent();
+        <%= entityName %> <%= entityVarName %> = optional<%= entityName %>.get();
+        assertThat(<%= entityVarName %>.getId()).isEqualTo(1L);
+        assertThat(<%= entityVarName %>.getText()).isEqualTo("junitTest");
     }
 
     @Test

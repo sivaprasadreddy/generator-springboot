@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles({PROFILE_TEST})
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@ContextConfiguration(initializers = {DBContainerInitializer.class <%_ if (features.includes('localstack')) { _%>,LocalStackConfig.class}<%_ } _%>)
+@ContextConfiguration(initializers = {DBContainerInitializer.class <%_ if (features.includes('localstack')) { _%>,LocalStackConfig.class<%_ } _%>})
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest {
 
