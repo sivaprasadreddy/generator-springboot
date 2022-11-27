@@ -118,7 +118,7 @@ module.exports = class extends BaseGenerator {
             "01-new_table_with_seq.xml" : "01-new_table_no_seq.xml";
         this.fs.copyTpl(
             this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/'+scriptTemplate),
-            this.destinationPath('src/main/resources/db/migration/changelog/0'+counter+'-create_'+configOptions.tableName+'_table.xml'),
+            this.destinationPath('src/main/resources/db/changelog/migration/0'+counter+'-create_'+configOptions.tableName+'_table.xml'),
             configOptions
         );
         const liquibaseMigrantCounter = {
