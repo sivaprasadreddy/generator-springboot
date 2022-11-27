@@ -209,7 +209,7 @@ module.exports = class extends BaseGenerator {
         ];
         if(configOptions.features.includes("localstack")) {
             testJavaTemplates.push('common/LocalStackConfig.java');
-            testJavaTemplates.push('SqsListenerTest.java');
+            testJavaTemplates.push('SqsListenerIntegrationTest.java');
         }
         this.generateTestJavaCode(configOptions, testJavaTemplates);
 

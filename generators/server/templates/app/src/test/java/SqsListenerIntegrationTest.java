@@ -20,7 +20,7 @@ import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
 @Slf4j
-class SqsListenerTest extends AbstractIntegrationTest {
+class SqsListenerIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired private SqsAsyncClient sqsAsyncClient;
 
