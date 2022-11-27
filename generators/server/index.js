@@ -189,6 +189,7 @@ module.exports = class extends BaseGenerator {
             'config/Initializer.java',
             'config/logging/Loggable.java',
             'config/logging/LoggingAspect.java',
+            'exception/ErrorDetailProblemHandlingControllerAdvice.java',
             'utils/AppConstants.java'
         ];
         this.generateMainJavaCode(configOptions, mainJavaTemplates);

@@ -15,7 +15,7 @@ public class LocalStackConfig
 
     static {
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.2.0"))
+                new LocalStackContainer(DockerImageName.parse("<%= LOCALSTACK_IMAGE %>"))
                         .withServices(S3, SQS)
                         .withExposedPorts(4566);
         localStackContainer.start();
