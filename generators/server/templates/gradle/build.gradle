@@ -84,9 +84,10 @@ dependencies {
     <%_ } _%>
     <%_ if (features.includes('localstack')) { _%>
     testImplementation "org.testcontainers:localstack"
-    <!-- AWS SDK v1 is required by testcontainers-localstack -->
+    // AWS SDK v1 is required by testcontainers-localstack
     testImplementation "com.amazonaws:aws-java-sdk-core"
     <%_ } _%>
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 dependencyManagement {
