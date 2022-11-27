@@ -44,7 +44,7 @@ describe('SpringBoot Generator', () => {
             assert.file('src/main/java/com/mycompany/myservice/repositories/CustomerRepository.java');
             assert.file('src/main/java/com/mycompany/myservice/services/CustomerService.java');
             assert.file('src/main/java/com/mycompany/myservice/web/controllers/CustomerController.java');
-            assert.file('src/main/resources/db/migration/changelog/02-create_customers_table.xml');
+            assert.file('src/main/resources/db/changelog/migration/02-create_customers_table.xml');
         });
     });
 });
