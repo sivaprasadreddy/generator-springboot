@@ -92,7 +92,7 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.detail", is("Invalid request content.")))
-                .andExpect(jsonPath("$.instance", is("/api/customers")))
+                .andExpect(jsonPath("$.instance", is("<%= basePath %>")))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field", is("text")))
                 .andExpect(jsonPath("$.violations[0].message", is("Text cannot be empty")))
