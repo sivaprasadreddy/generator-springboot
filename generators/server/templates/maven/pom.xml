@@ -77,7 +77,7 @@
         <%_ if (features.includes('localstack')) { _%>
         <dependency>
             <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-aws-strater</artifactId>
+            <artifactId>spring-cloud-aws-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>io.awspring.cloud</groupId>
