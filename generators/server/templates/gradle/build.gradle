@@ -90,6 +90,9 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${spring_cloud_version}"
+        <%_ if (features.includes('localstack')) { _%>
+        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${spring-cloud-aws.version}"
+        <%_ } _%>
         mavenBom "org.testcontainers:testcontainers-bom:${testcontainers_version}"
     }
 }
