@@ -51,7 +51,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
     <%_ if (databaseType === 'mysql') { _%>
-    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     <%_ } _%>
     <%_ if (databaseType === 'postgresql') { _%>
     runtimeOnly 'org.postgresql:postgresql'
@@ -65,14 +65,13 @@ dependencies {
     <%_ if (dbMigrationTool === 'liquibase') { _%>
     implementation 'org.liquibase:liquibase-core'
     <%_ } _%>
-    implementation "org.springdoc:springdoc-openapi-ui:${springdoc_openapi_version}"
-    implementation "org.zalando:problem-spring-web-starter:${problem_spring_web_version}"
-    implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdoc_openapi_version}"
+    implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io:${commons_io_version}"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.projectlombok:lombok"
-    testImplementation "org.awaitility:awaitility:${awaitility_version}"
+    testImplementation "org.awaitility:awaitility"
     testImplementation "org.testcontainers:junit-jupiter"
     <%_ if (databaseType === 'mysql') { _%>
     testImplementation "org.testcontainers:mysql"

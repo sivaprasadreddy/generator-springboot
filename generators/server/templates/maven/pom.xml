@@ -23,18 +23,16 @@
         <%_ if (features.includes('localstack')) { _%>
         <spring-cloud-aws-version><%= SPRING_CLOUD_AWS_VERSION %></spring-cloud-aws-version>
         <%_ } _%>
-        <problem-spring-web.version><%= PROBLEM_SPRING_WEB_VERSION %></problem-spring-web.version>
         <springdoc-openapi.version><%= SPRINGDOC_OPENAPI_VERSION %></springdoc-openapi.version>
-        <commons-lang3.version><%= COMMONS_LANG_VERSION %></commons-lang3.version>
         <commons-io.version><%= COMMONS_IO_VERSION %></commons-io.version>
 
         <testcontainers.version><%= TEST_CONTAINERS_VERSION %></testcontainers.version>
-        <awaitility.version><%= AWAITILITY_VERSION %></awaitility.version>
-
+        
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <spotless.version><%= MAVEN_SPOTLESS_PLUGIN_VERSION %></spotless.version>
         <dependency-check-maven.version><%= MAVEN_DEPENDENCY_CHECK_PLUGIN_VERSION %></dependency-check-maven.version>
         <properties-maven-plugin.version><%= MAVEN_PROPERTIES_PLUGIN_VERSION %></properties-maven-plugin.version>
+        <maven-surefire-plugin.version><%= MAVEN_SUREFIRE_PLUGIN_VERSION %></maven-surefire-plugin.version>
         <maven-failsafe-plugin.version><%= MAVEN_FAILSAFE_PLUGIN_VERSION %></maven-failsafe-plugin.version>
         <sonar-maven-plugin.version><%= MAVEN_SONAR_PLUGIN_VERSION %></sonar-maven-plugin.version>
         <jacoco-maven-plugin.version><%= MAVEN_JACOCO_PLUGIN_VERSION %></jacoco-maven-plugin.version>
@@ -61,14 +59,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>problem-spring-web-starter</artifactId>
-            <version>${problem-spring-web.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -110,8 +104,8 @@
         <%_ } _%>
         <%_ if (databaseType === 'mysql') { _%>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
         <%_ } _%>
@@ -142,13 +136,12 @@
         <%_ } _%>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc-openapi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -164,7 +157,6 @@
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
-            <version>${awaitility.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -235,8 +227,8 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <goals>
