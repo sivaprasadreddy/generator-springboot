@@ -23,6 +23,9 @@
         <%_ if (features.includes('localstack')) { _%>
         <spring-cloud-aws-version><%= SPRING_CLOUD_AWS_VERSION %></spring-cloud-aws-version>
         <%_ } _%>
+        <%_ if (features.includes('elk')) { _%>
+        <logstash-logback-encoder.version><%= LOGSTASH_LOGBACK_ENCODER %></logstash-logback-encoder.version>
+        <%_ } _%>
         <problem-spring-web.version><%= PROBLEM_SPRING_WEB_VERSION %></problem-spring-web.version>
         <springdoc-openapi.version><%= SPRINGDOC_OPENAPI_VERSION %></springdoc-openapi.version>
         <commons-lang3.version><%= COMMONS_LANG_VERSION %></commons-lang3.version>
@@ -90,6 +93,13 @@
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-messaging</artifactId>
             <version>${spring-cloud-aws-version}</version>
+        </dependency>
+        <%_ } _%>
+        <%_ if (features.includes('elk')) { _%>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
         <%_ } _%>
         <dependency>

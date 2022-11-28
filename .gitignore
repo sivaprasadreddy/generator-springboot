@@ -5,4 +5,4 @@ node_modules/
 /testapp
 /myservice/
 logs/
-generators/server/templates/gradle/.gradle
+generators/server/templates/gradle/.gradle/
