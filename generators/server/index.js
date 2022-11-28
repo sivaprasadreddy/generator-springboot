@@ -241,8 +241,8 @@ module.exports = class extends BaseGenerator {
 
         if(configOptions.dbMigrationTool === 'liquibase') {
             const resTemplates = [
-                {src: 'db/migration/liquibase/liquibase-changelog.xml', dest: 'db/migration/liquibase-changelog.xml'},
-                {src: 'db/migration/liquibase/changelog/01-init.xml', dest: 'db/migration/changelog/01-init.xml'},
+                {src: 'db/migration/liquibase/changelog/db.changelog-master.yaml', dest: 'db/changelog/db.changelog-master.yaml'},
+                {src: 'db/migration/liquibase/changelog/01-init.xml', dest: 'db/changelog/migration/01-init.xml'},
 
             ];
             this.generateFiles(configOptions, resTemplates, 'app/','src/main/resources/');

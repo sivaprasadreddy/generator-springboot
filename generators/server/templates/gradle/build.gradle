@@ -48,6 +48,9 @@ dependencies {
     implementation "io.awspring.cloud:spring-cloud-aws-starter"
     implementation "io.awspring.cloud:spring-cloud-aws-starter-sqs"
     <%_ } _%>
+    <%_ if (features.includes('elk')) { _%>
+    implementation 'net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}'
+    <%_ } _%>
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
     <%_ if (databaseType === 'mysql') { _%>
