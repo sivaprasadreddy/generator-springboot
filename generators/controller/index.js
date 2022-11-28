@@ -41,7 +41,7 @@ module.exports = class extends BaseGenerator {
         this.configOptions.basePath = this.options['base-path'];
         this.configOptions.entityName = this.options.entityName;
         this.configOptions.entityVarName = _.camelCase(this.options.entityName);
-        this.configOptions.tableName = _.lowerCase(this.options.entityName)+'s';
+        this.configOptions.tableName = _.snakeCase(this.options.entityName)+'s';
         this.configOptions.supportDatabaseSequences =
             this.configOptions.databaseType === 'h2'
             || this.configOptions.databaseType === 'postgresql';
@@ -62,6 +62,7 @@ module.exports = class extends BaseGenerator {
     _generateAppCode(configOptions) {
         const mainJavaTemplates = [
             {src: 'entities/Entity.java', dest: 'entities/'+configOptions.entityName+'.java'},
+            {src: 'model/response/PagedResult.java', dest: 'model/response/PagedResult.java'},
             {src: 'repositories/Repository.java', dest: 'repositories/'+configOptions.entityName+'Repository.java'},
             {src: 'services/Service.java', dest: 'services/'+configOptions.entityName+'Service.java'},
             {src: 'web/controllers/Controller.java', dest: 'web/controllers/'+configOptions.entityName+'Controller.java'},

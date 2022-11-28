@@ -2,7 +2,7 @@ name: Generator SpringBoot
 on:
   push:
     branches:
-      - '*'
+      - '**'
 jobs:
   build:
     name: npm test
@@ -14,9 +14,9 @@ jobs:
         node_version: [14.x, 16.x, 18.x]
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.1.3
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node_version }}
       - run: npm install

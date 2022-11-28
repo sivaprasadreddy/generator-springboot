@@ -28,7 +28,7 @@ public class <%= entityName %> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "<%= entityVarName %>_id_generator")
     @SequenceGenerator(
             name = "<%= entityVarName %>_id_generator",
-            sequenceName = "<%= entityVarName %>_id_seq",
+            sequenceName = "<%= tableName %>_id_seq",
             allocationSize = 100)
 <%_ } _%>
 <%_ if (!supportDatabaseSequences) { _%>
