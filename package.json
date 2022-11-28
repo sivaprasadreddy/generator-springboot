@@ -28,17 +28,17 @@
   },
   "homepage": "https://github.com/sivaprasadreddy/generator-springboot",
   "dependencies": {
-    "chalk": "5.1.2",
+    "chalk": "4.1.2",
     "lodash": "4.17.21",
     "shelljs": "0.8.5",
-    "yeoman-environment": "3.12.1",
+    "yeoman-environment": "3.10.0",
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
-    "chai": "4.3.7",
+    "chai": "4.3.6",
     "fs-extra": "10.1.0",
-    "mocha": "10.1.0",
-    "sinon": "14.0.2",
+    "mocha": "10.0.0",
+    "sinon": "14.0.0",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "6.3.0"
   }
