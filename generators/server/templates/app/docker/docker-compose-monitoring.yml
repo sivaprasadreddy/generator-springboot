@@ -16,7 +16,7 @@ services:
     - prometheus
 
   prometheus:
-    image: prom/prometheus:v2.38.0
+    image: prom/prometheus:v2.40.3
     ports:
       - "9090:9090"
     volumes:
