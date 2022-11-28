@@ -3,15 +3,15 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <changeSet author="sivalabs" id="createTable-<%= tableName %>">
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+    <changeSet author="app" id="createTable-<%= tableName %>">
         <createSequence
-                        sequenceName="<%= entityVarName %>_id_seq"
-                        incrementBy="100"
+                        sequenceName="<%= tableName %>_seq"
+                        incrementBy="50"
                         startValue="1"
                         />
         <createTable tableName="<%= tableName %>">
-            <column name="id" type="bigint" defaultValueSequenceNext="<%= entityVarName %>_id_seq">
+            <column name="id" type="bigint" defaultValueSequenceNext="<%= tableName %>_seq">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="text" type="varchar(1024)">

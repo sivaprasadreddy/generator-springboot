@@ -1,19 +1,18 @@
 package <%= packageName %>.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-<%_ if (supportDatabaseSequences) { _%>
-import javax.persistence.SequenceGenerator;
-<%_ } _%>
-import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import java.util.Objects;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
 @Entity
 @Table(name = "<%= tableName %>")
@@ -25,11 +24,7 @@ public class <%= entityName %> {
 
     @Id
 <%_ if (supportDatabaseSequences) { _%>
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "<%= entityVarName %>_id_generator")
-    @SequenceGenerator(
-            name = "<%= entityVarName %>_id_generator",
-            sequenceName = "<%= entityVarName %>_id_seq",
-            allocationSize = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
 <%_ } _%>
 <%_ if (!supportDatabaseSequences) { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +34,17 @@ public class <%= entityName %> {
     @Column(nullable = false)
     @NotEmpty(message = "Text cannot be empty")
     private String text;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        <%= entityName %> <%= entityVarName %> = (<%= entityName %>) o;
+        return id != null && Objects.equals(id, <%= entityVarName %>.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

@@ -74,12 +74,12 @@ module.exports = class extends Generator {
     }
 
     _formatCodeMaven() {
-        const command = this._isWin() ? 'mvnw.bat' : './mvnw';
+        const command = this._isWin() ? 'mvnw' : './mvnw';
         shell.exec(`${command} spotless:apply`);
     }
 
     _formatCodeGradle() {
-        const command = this._isWin() ? 'gradlew.bat' : './gradlew';
+        const command = this._isWin() ? 'gradlew' : './gradlew';
         shell.exec(`${command} googleJavaFormat`);
     }
 

@@ -41,7 +41,7 @@ module.exports = class extends BaseGenerator {
         this.configOptions.basePath = this.options['base-path'];
         this.configOptions.entityName = this.options.entityName;
         this.configOptions.entityVarName = _.camelCase(this.options.entityName);
-        this.configOptions.tableName = _.lowerCase(this.options.entityName)+'s';
+        this.configOptions.tableName = _.snakeCase(this.options.entityName)+'s';
         this.configOptions.supportDatabaseSequences =
             this.configOptions.databaseType === 'h2'
             || this.configOptions.databaseType === 'postgresql';
@@ -62,6 +62,7 @@ module.exports = class extends BaseGenerator {
     _generateAppCode(configOptions) {
         const mainJavaTemplates = [
             {src: 'entities/Entity.java', dest: 'entities/'+configOptions.entityName+'.java'},
+            {src: 'model/response/PagedResult.java', dest: 'model/response/PagedResult.java'},
             {src: 'repositories/Repository.java', dest: 'repositories/'+configOptions.entityName+'Repository.java'},
             {src: 'services/Service.java', dest: 'services/'+configOptions.entityName+'Service.java'},
             {src: 'web/controllers/Controller.java', dest: 'web/controllers/'+configOptions.entityName+'Controller.java'},
@@ -71,6 +72,7 @@ module.exports = class extends BaseGenerator {
         const testJavaTemplates = [
             {src: 'web/controllers/ControllerTest.java', dest: 'web/controllers/'+configOptions.entityName+'ControllerTest.java'},
             {src: 'web/controllers/ControllerIT.java', dest: 'web/controllers/'+configOptions.entityName+'ControllerIT.java'},
+            {src: 'services/ServiceTest.java', dest: 'services/'+configOptions.entityName+'ServiceTest.java'},
         ];
         this.generateTestJavaCode(configOptions, testJavaTemplates);
     }
@@ -118,7 +120,7 @@ module.exports = class extends BaseGenerator {
             "01-new_table_with_seq.xml" : "01-new_table_no_seq.xml";
         this.fs.copyTpl(
             this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/'+scriptTemplate),
-            this.destinationPath('src/main/resources/db/migration/changelog/0'+counter+'-create_'+configOptions.tableName+'_table.xml'),
+            this.destinationPath('src/main/resources/db/changelog/migration/0'+counter+'-create_'+configOptions.tableName+'_table.xml'),
             configOptions
         );
         const liquibaseMigrantCounter = {
