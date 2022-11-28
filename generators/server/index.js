@@ -189,11 +189,9 @@ module.exports = class extends BaseGenerator {
             'config/Initializer.java',
             'config/logging/Loggable.java',
             'config/logging/LoggingAspect.java',
+            'exception/ErrorDetailProblemHandlingControllerAdvice.java',
             'utils/AppConstants.java'
         ];
-        if(configOptions.features.includes("localstack")) {
-            mainJavaTemplates.push('config/AwsConfig.java');
-        }
         this.generateMainJavaCode(configOptions, mainJavaTemplates);
 
         const mainResTemplates = [
@@ -206,13 +204,12 @@ module.exports = class extends BaseGenerator {
 
         const testJavaTemplates = [
             'ApplicationIntegrationTest.java',
-            'common/ExceptionHandling.java',
             'common/AbstractIntegrationTest.java',
             'common/DBContainerInitializer.java'
         ];
         if(configOptions.features.includes("localstack")) {
             testJavaTemplates.push('common/LocalStackConfig.java');
-            testJavaTemplates.push('SqsListenerTest.java');
+            testJavaTemplates.push('SqsListenerIntegrationTest.java');
         }
         this.generateTestJavaCode(configOptions, testJavaTemplates);
 
