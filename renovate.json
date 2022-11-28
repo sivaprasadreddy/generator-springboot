@@ -3,10 +3,5 @@
   "extends": [
     "config:base"
   ],
-  "includeForks": true,
-  "packageRules": [
-    {
-      "automerge": true
-    }
-  ]
+  "includeForks": true
 }
