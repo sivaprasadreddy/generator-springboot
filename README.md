@@ -65,6 +65,7 @@ However, there are certain JHipster features that does not fit for my preference
 ```
 > git clone https://github.com/sivaprasadreddy/generator-springboot.git
 > cd generator-springboot
+> npm install -g yo
 > npm install 
 > npm link
 > yo springboot

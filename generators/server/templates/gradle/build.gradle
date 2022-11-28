@@ -45,13 +45,16 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     <%_ if (features.includes('localstack')) { _%>
-    implementation "io.awspring.cloud:spring-cloud-aws-autoconfigure:${spring_cloud_aws_version}"
-    implementation "io.awspring.cloud:spring-cloud-aws-messaging:${spring_cloud_aws_version}"
+    implementation "io.awspring.cloud:spring-cloud-aws-starter"
+    implementation "io.awspring.cloud:spring-cloud-aws-starter-sqs"
+    <%_ } _%>
+    <%_ if (features.includes('elk')) { _%>
+    implementation 'net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}'
     <%_ } _%>
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
     <%_ if (databaseType === 'mysql') { _%>
-    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     <%_ } _%>
     <%_ if (databaseType === 'postgresql') { _%>
     runtimeOnly 'org.postgresql:postgresql'
@@ -65,14 +68,13 @@ dependencies {
     <%_ if (dbMigrationTool === 'liquibase') { _%>
     implementation 'org.liquibase:liquibase-core'
     <%_ } _%>
-    implementation "org.springdoc:springdoc-openapi-ui:${springdoc_openapi_version}"
-    implementation "org.zalando:problem-spring-web-starter:${problem_spring_web_version}"
-    implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdoc_openapi_version}"
+    implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io:${commons_io_version}"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.projectlombok:lombok"
-    testImplementation "org.awaitility:awaitility:${awaitility_version}"
+    testImplementation "org.awaitility:awaitility"
     testImplementation "org.testcontainers:junit-jupiter"
     <%_ if (databaseType === 'mysql') { _%>
     testImplementation "org.testcontainers:mysql"
@@ -85,12 +87,18 @@ dependencies {
     <%_ } _%>
     <%_ if (features.includes('localstack')) { _%>
     testImplementation "org.testcontainers:localstack"
+    // AWS SDK v1 is required by testcontainers-localstack
+    testImplementation "com.amazonaws:aws-java-sdk-core"
     <%_ } _%>
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${spring_cloud_version}"
+        <%_ if (features.includes('localstack')) { _%>
+        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${spring_cloud_aws_version}"
+        <%_ } _%>
         mavenBom "org.testcontainers:testcontainers-bom:${testcontainers_version}"
     }
 }

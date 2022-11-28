@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.services.<%= entityName %>Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +27,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.zalando.problem.jackson.ProblemModule;
-import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
 @WebMvcTest(controllers = <%= entityName %>Controller.class)
 @ActiveProfiles(PROFILE_TEST)
@@ -50,19 +51,26 @@ class <%= entityName %>ControllerTest {
         this.<%= entityVarName %>List.add(new <%= entityName %>(1L, "text 1"));
         this.<%= entityVarName %>List.add(new <%= entityName %>(2L, "text 2"));
         this.<%= entityVarName %>List.add(new <%= entityName %>(3L, "text 3"));
-
-        objectMapper.registerModule(new ProblemModule());
-        objectMapper.registerModule(new ConstraintViolationProblemModule());
     }
 
     @Test
     void shouldFetchAll<%= entityName %>s() throws Exception {
-        given(<%= entityVarName %>Service.findAll<%= entityName %>s()).willReturn(this.<%= entityVarName %>List);
+        Page<<%= entityName %>> page = new PageImpl<>(<%= entityVarName %>List);
+        PagedResult<<%= entityName %>> <%= entityVarName %>PagedResult = new PagedResult<>(page);
+        given(<%= entityVarName %>Service.findAll<%= entityName %>s(0, 10, "id", "asc"))
+                .willReturn(<%= entityVarName %>PagedResult);
 
         this.mockMvc
                 .perform(get("<%= basePath %>"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(<%= entityVarName %>List.size())));
+                .andExpect(jsonPath("$.data.size()", is(<%= entityVarName %>List.size())))
+                .andExpect(jsonPath("$.totalElements", is(3)))
+                .andExpect(jsonPath("$.pageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPages", is(1)))
+                .andExpect(jsonPath("$.isFirst", is(true)))
+                .andExpect(jsonPath("$.isLast", is(true)))
+                .andExpect(jsonPath("$.hasNext", is(false)))
+                .andExpect(jsonPath("$.hasPrevious", is(false)));
     }
 
     @Test
@@ -112,12 +120,11 @@ class <%= entityName %>ControllerTest {
                                 .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(
-                        jsonPath(
-                                "$.type",
-                                is("https://zalando.github.io/problem/constraint-violation")))
+                .andExpect(jsonPath("$.type", is("about:blank")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.detail", is("Invalid request content.")))
+                .andExpect(jsonPath("$.instance", is("<%= basePath %>")))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field", is("text")))
                 .andExpect(jsonPath("$.violations[0].message", is("Text cannot be empty")))

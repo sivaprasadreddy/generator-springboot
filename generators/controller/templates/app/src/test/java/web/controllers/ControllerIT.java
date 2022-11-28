@@ -1,6 +1,7 @@
 package <%= packageName %>.web.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,9 +32,9 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
         <%= entityVarName %>Repository.deleteAll();
 
         <%= entityVarName %>List = new ArrayList<>();
-        <%= entityVarName %>List.add(new <%= entityName %>(1L, "First <%= entityName %>"));
-        <%= entityVarName %>List.add(new <%= entityName %>(2L, "Second <%= entityName %>"));
-        <%= entityVarName %>List.add(new <%= entityName %>(3L, "Third <%= entityName %>"));
+        <%= entityVarName %>List.add(new <%= entityName %>(null, "First <%= entityName %>"));
+        <%= entityVarName %>List.add(new <%= entityName %>(null, "Second <%= entityName %>"));
+        <%= entityVarName %>List.add(new <%= entityName %>(null, "Third <%= entityName %>"));
         <%= entityVarName %>List = <%= entityVarName %>Repository.saveAll(<%= entityVarName %>List);
     }
 
@@ -42,7 +43,14 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(get("<%= basePath %>"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(<%= entityVarName %>List.size())));
+                .andExpect(jsonPath("$.data.size()", is(<%= entityVarName %>List.size())))
+                .andExpect(jsonPath("$.totalElements", is(3)))
+                .andExpect(jsonPath("$.pageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPages", is(1)))
+                .andExpect(jsonPath("$.isFirst", is(true)))
+                .andExpect(jsonPath("$.isLast", is(true)))
+                .andExpect(jsonPath("$.hasNext", is(false)))
+                .andExpect(jsonPath("$.hasPrevious", is(false)));
     }
 
     @Test
@@ -65,6 +73,7 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
     }
 
@@ -79,12 +88,11 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
                                 .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(
-                        jsonPath(
-                                "$.type",
-                                is("https://zalando.github.io/problem/constraint-violation")))
+                .andExpect(jsonPath("$.type", is("about:blank")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.detail", is("Invalid request content.")))
+                .andExpect(jsonPath("$.instance", is("<%= basePath %>")))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field", is("text")))
                 .andExpect(jsonPath("$.violations[0].message", is("Text cannot be empty")))

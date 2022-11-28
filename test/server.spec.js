@@ -20,7 +20,7 @@ describe('SpringBoot Generator', () => {
         });
 
         it('creates expected default files for minimal microservice with maven', () => {
-            assert.file('pom.xml');
+            assert.file('myservice/pom.xml');
         });
     });
 
@@ -41,7 +41,7 @@ describe('SpringBoot Generator', () => {
         });
 
         it('creates expected default files for basic microservice with maven', () => {
-            assert.file('pom.xml');
+            assert.file('myservice/pom.xml');
         });
     });
 
@@ -62,7 +62,7 @@ describe('SpringBoot Generator', () => {
         });
 
         it('creates expected default files for basic microservice with maven', () => {
-            assert.file('pom.xml');
+            assert.file('myservice/pom.xml');
         });
     });
 
@@ -83,10 +83,10 @@ describe('SpringBoot Generator', () => {
         });
 
         it('creates expected default files for complete microservice with maven', () => {
-            assert.file('pom.xml');
-            assert.file('docker/docker-compose.yml');
-            assert.file('docker/docker-compose-elk.yml');
-            assert.file('docker/docker-compose-monitoring.yml');
+            assert.file('myservice/pom.xml');
+            assert.file('myservice/docker/docker-compose.yml');
+            assert.file('myservice/docker/docker-compose-elk.yml');
+            assert.file('myservice/docker/docker-compose-monitoring.yml');
         });
     });
 
@@ -106,7 +106,7 @@ describe('SpringBoot Generator', () => {
         });
 
         it('creates expected default files for minimal microservice with Gradle', () => {
-            assert.file('build.gradle');
+            assert.file('myservice/build.gradle');
         });
     });
 
@@ -127,7 +127,7 @@ describe('SpringBoot Generator', () => {
         });
 
         it('creates expected default files for basic microservice with Gradle', () => {
-            assert.file('build.gradle');
+            assert.file('myservice/build.gradle');
         });
     });
 
@@ -148,7 +148,7 @@ describe('SpringBoot Generator', () => {
         });
 
         it('creates expected default files for basic microservice with maven', () => {
-            assert.file('build.gradle');
+            assert.file('myservice/build.gradle');
         });
     });
 
@@ -169,10 +169,10 @@ describe('SpringBoot Generator', () => {
         });
 
         it('creates expected default files for complete microservice with Gradle', () => {
-            assert.file('build.gradle');
-            assert.file('docker/docker-compose.yml');
-            assert.file('docker/docker-compose-elk.yml');
-            assert.file('docker/docker-compose-monitoring.yml');
+            assert.file('myservice/build.gradle');
+            assert.file('myservice/docker/docker-compose.yml');
+            assert.file('myservice/docker/docker-compose-elk.yml');
+            assert.file('myservice/docker/docker-compose-monitoring.yml');
         });
     });
 });

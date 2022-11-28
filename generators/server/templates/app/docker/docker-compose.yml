@@ -44,9 +44,10 @@ services:
       - SERVICES=s3,sqs
       - DEFAULT_REGION=us-east-1
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - HOST_TMP_FOLDER=${TMPDIR}
+      - USE_SSL=0
+      - AWS_CBOR_DISABLE=1
     volumes:
-      - "${TMPDIR:-/private}:/private"
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - '../.localstack:/docker-entrypoint-initaws.d'
 <%_ } _%>
