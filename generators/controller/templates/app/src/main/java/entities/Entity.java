@@ -23,10 +23,10 @@ import org.hibernate.Hibernate;
 public class <%= entityName %> {
 
     @Id
-<%_ if (supportDatabaseSequences) { _%>
+<%_ if (!doesNotSupportDatabaseSequences) { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
 <%_ } _%>
-<%_ if (!supportDatabaseSequences) { _%>
+<%_ if (doesNotSupportDatabaseSequences) { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 <%_ } _%>
     private Long id;
