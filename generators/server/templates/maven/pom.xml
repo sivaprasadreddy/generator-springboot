@@ -136,7 +136,7 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType === 'mysql' || databaseType === 'mariadb') { _%>
+        <%_ if (dbMigrationTool  === 'flywaydb' && (databaseType === 'mysql' || databaseType === 'mariadb')) { _%>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
