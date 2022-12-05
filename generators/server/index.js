@@ -189,11 +189,9 @@ module.exports = class extends BaseGenerator {
             'config/Initializer.java',
             'config/logging/Loggable.java',
             'config/logging/LoggingAspect.java',
+            'exception/ErrorDetailProblemHandlingControllerAdvice.java',
             'utils/AppConstants.java'
         ];
-        if(configOptions.features.includes("localstack")) {
-            mainJavaTemplates.push('config/AwsConfig.java');
-        }
         this.generateMainJavaCode(configOptions, mainJavaTemplates);
 
         const mainResTemplates = [
@@ -206,13 +204,12 @@ module.exports = class extends BaseGenerator {
 
         const testJavaTemplates = [
             'ApplicationIntegrationTest.java',
-            'common/ExceptionHandling.java',
             'common/AbstractIntegrationTest.java',
             'common/DBContainerInitializer.java'
         ];
         if(configOptions.features.includes("localstack")) {
             testJavaTemplates.push('common/LocalStackConfig.java');
-            testJavaTemplates.push('SqsListenerTest.java');
+            testJavaTemplates.push('SqsListenerIntegrationTest.java');
         }
         this.generateTestJavaCode(configOptions, testJavaTemplates);
 
@@ -244,8 +241,8 @@ module.exports = class extends BaseGenerator {
 
         if(configOptions.dbMigrationTool === 'liquibase') {
             const resTemplates = [
-                {src: 'db/migration/liquibase/liquibase-changelog.xml', dest: 'db/migration/liquibase-changelog.xml'},
-                {src: 'db/migration/liquibase/changelog/01-init.xml', dest: 'db/migration/changelog/01-init.xml'},
+                {src: 'db/migration/liquibase/changelog/db.changelog-master.yaml', dest: 'db/changelog/db.changelog-master.yaml'},
+                {src: 'db/migration/liquibase/changelog/01-init.xml', dest: 'db/changelog/migration/01-init.xml'},
 
             ];
             this.generateFiles(configOptions, resTemplates, 'app/','src/main/resources/');

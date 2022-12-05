@@ -65,6 +65,7 @@ However, there are certain JHipster features that does not fit for my preference
 ```
 > git clone https://github.com/sivaprasadreddy/generator-springboot.git
 > cd generator-springboot
+> npm install -g yo
 > npm install 
 > npm link
 > yo springboot
@@ -101,3 +102,12 @@ However, there are certain JHipster features that does not fit for my preference
 * Upgraded SpringBoot to 2.7.4 and other library versions
 * Fixed code formatting
 * Fixed Flyway with MySQL and MariaDB issue
+
+### Version 0.1.1
+* Upgraded SpringBoot to 3.0.0 and other library versions
+* Upgraded AWS to 3.0.0-M3, compitable version with SpringBoot 3 which uses AWS 2.0 API
+* Tweaked code to get All entries from datasource using pagination
+* Supporting developing application in VSCode
+* Enchanced support for logback encoder when elk stack is selected
+* Fixes issue while generating api and tables when tablename contains camelCase([#47](https://github.com/sivaprasadreddy/generator-springboot/issues/47))
+* Upgraded liquibase configuration to use Out of the Box format and location

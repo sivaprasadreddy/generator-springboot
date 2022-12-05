@@ -5,7 +5,7 @@
 `$ ./mvnw clean verify`
 
 ### Run locally
-```
+```shell
 $ docker-compose -f docker/docker-compose.yml up -d
 $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
@@ -16,7 +16,7 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 `$ ./gradlew clean build`
 
 ### Run locally
-```
+```shell
 $ docker-compose -f docker/docker-compose.yml up -d
 $ ./gradlew bootRun -Plocal
 ```

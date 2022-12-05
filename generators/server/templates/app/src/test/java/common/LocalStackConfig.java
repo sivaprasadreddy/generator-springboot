@@ -3,21 +3,14 @@ package <%= packageName %>.common;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
-@TestConfiguration
-public class LocalStackConfig {
+public class LocalStackConfig
+        implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     static LocalStackContainer localStackContainer;
 
     static {
@@ -28,26 +21,17 @@ public class LocalStackConfig {
         localStackContainer.start();
     }
 
-    @Bean
-    @Primary
-    public AmazonS3 localstackAmazonS3() {
-        return AmazonS3ClientBuilder.standard()
-                .enablePathStyleAccess()
-                .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(SQS))
-                .withCredentials(getCredentialsProvider())
-                .build();
-    }
-
-    @Bean
-    @Primary
-    public AmazonSQSAsync localstackAmazonSQSAsync() {
-        return AmazonSQSAsyncClientBuilder.standard()
-                .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(SQS))
-                .withCredentials(getCredentialsProvider())
-                .build();
-    }
-
-    private AWSCredentialsProvider getCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials("test", "test"));
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        TestPropertyValues.of(
+                        "spring.cloud.aws.sqs.endpoint="
+                                + localStackContainer.getEndpointOverride(SQS),
+                        "spring.cloud.aws.sqs.region=" + localStackContainer.getRegion(),
+                        "spring.cloud.aws.region.static=" + localStackContainer.getRegion(),
+                        "spring.cloud.aws.credentials.access-key="
+                                + localStackContainer.getAccessKey(),
+                        "spring.cloud.aws.credentials.secret-key="
+                                + localStackContainer.getSecretKey())
+                .applyTo(applicationContext.getEnvironment());
     }
 }
