@@ -61,7 +61,7 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(<%= entityVarName %>.getId())))
+                .andExpect(jsonPath("$.id", is(<%= entityVarName %>.getId()), Long.class))
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
     }
 
@@ -111,7 +111,7 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(<%= entityVarName %>.getId())))
+                .andExpect(jsonPath("$.id", is(<%= entityVarName %>.getId()), Long.class))
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
     }
 
@@ -122,7 +122,7 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(delete("<%= basePath %>/{id}", <%= entityVarName %>.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(<%= entityVarName %>.getId())))
+                .andExpect(jsonPath("$.id", is(<%= entityVarName %>.getId()), Long.class))
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
     }
 }
