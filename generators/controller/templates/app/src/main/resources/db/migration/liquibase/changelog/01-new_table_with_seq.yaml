@@ -1,0 +1,25 @@
+# https://docs.liquibase.com/concepts/changelogs/yaml-format.html
+databaseChangeLog:
+  - changeSet:
+      author: author
+      id: createTable-<%= tableName %>
+      changes:
+        - createSequence:
+            sequenceName: <%= tableName %>_seq
+            incrementBy: 50
+            startValue: 1
+        - createTable:
+            tableName: <%= tableName %>
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueSequenceNext: <%= tableName %>_seq
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar(1024)
+                  constraints:
+                    nullable: false

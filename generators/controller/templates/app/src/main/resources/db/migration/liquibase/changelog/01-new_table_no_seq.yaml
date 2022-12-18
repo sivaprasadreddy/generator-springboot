@@ -1,0 +1,21 @@
+# https://docs.liquibase.com/concepts/changelogs/yaml-format.html
+databaseChangeLog:
+  - changeSet:
+      author: author
+      id: createTable-<%= tableName %>
+      changes:
+        - createTable:
+            tableName: <%= tableName %>
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar(1024)
+                  constraints:
+                    nullable: false
