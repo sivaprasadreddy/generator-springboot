@@ -1,6 +1,2 @@
 # https://docs.liquibase.com/concepts/changelogs/yaml-format.html
-databaseChangeLog:
-  - changeSet:
-      author: author
-      id: 01-init
-      changes: []
+databaseChangeLog: []
