@@ -1,3 +1,2 @@
 -- liquibase formatted sql
--- changeset author:author id:01-init
 -- see https://docs.liquibase.com/concepts/changelogs/sql-format.html
