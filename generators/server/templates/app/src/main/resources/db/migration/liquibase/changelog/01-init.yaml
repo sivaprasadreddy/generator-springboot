@@ -1,0 +1,2 @@
+# https://docs.liquibase.com/concepts/changelogs/yaml-format.html
+databaseChangeLog: []

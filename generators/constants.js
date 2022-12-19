@@ -30,8 +30,8 @@ module.exports = {
     KEY_FLYWAY_MIGRATION_COUNTER : 'flywayMigrationCounter',
     KEY_LIQUIBASE_MIGRATION_COUNTER : 'liquibaseMigrationCounter',
 
-    LOCALSTACK_IMAGE: 'localstack/localstack:1.2.0',
+    LOCALSTACK_IMAGE: 'localstack/localstack:1.3.1',
     POSTGRESQL_IMAGE: 'postgres:15-alpine',
-    MARIADB_IMAGE: 'mariadb:10.9',
+    MARIADB_IMAGE: 'mariadb:10.10',
     MYSQL_IMAGE: 'mysql:8.0',
 }
