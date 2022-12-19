@@ -9,7 +9,7 @@ create table <%= tableName %> (
     id bigint DEFAULT nextval('<%= tableName %>_seq') not null,
     <%_ } _%>
     <%_ if (databaseType === 'mariadb') { _%>
-    id bigint DEFAULT nextval(<%= tableName %>_seq) not null,
+    id bigint DEFAULT nextval(`<%= tableName %>_seq`) not null,
     <%_ } _%>
     text varchar(1024) not null,
     primary key (id)
