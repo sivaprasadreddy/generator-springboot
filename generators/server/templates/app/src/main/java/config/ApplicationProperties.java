@@ -2,14 +2,13 @@ package <%= packageName %>.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @Data
 @ConfigurationProperties("application")
 public class ApplicationProperties {
-    <%_ if (features.includes('localstack')) { _%>
-    private String endpointUri;
-    private String region;
-    <%_ } _%>
+
+    @NestedConfigurationProperty
     private Cors cors = new Cors();
 
     @Data
