@@ -65,6 +65,9 @@ dependencies {
     <%_ if (dbMigrationTool  === 'flywaydb') { _%>
     implementation 'org.flywaydb:flyway-core'
     <%_ } _%>
+    <%_ if (dbMigrationTool  === 'flywaydb' && (databaseType === 'mysql' || databaseType === 'mariadb')) { _%>
+    implementation 'org.flywaydb:flyway-mysql'
+    <%_ } _%>
     <%_ if (dbMigrationTool === 'liquibase') { _%>
     implementation 'org.liquibase:liquibase-core'
     <%_ } _%>
