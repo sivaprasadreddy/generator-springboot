@@ -111,3 +111,9 @@ However, there are certain JHipster features that does not fit for my preference
 * Enchanced support for logback encoder when elk stack is selected
 * Fixes issue while generating api and tables when tablename contains camelCase([#47](https://github.com/sivaprasadreddy/generator-springboot/issues/47))
 * Upgraded liquibase configuration to use Out of the Box format and location
+
+### Version 0.1.2
+* Fixes issue with mysql and mariadb when flyway is selected ([#58](https://github.com/sivaprasadreddy/generator-springboot/issues/58))
+* Support Mariadb Sequences ([#59](https://github.com/sivaprasadreddy/generator-springboot/issues/59))
+* Support other liquibase formats ([#69](https://github.com/sivaprasadreddy/generator-springboot/issues/69))
+* Upgraded SpringBoot to 3.0.2 and other library versions

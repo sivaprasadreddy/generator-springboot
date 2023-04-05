@@ -65,12 +65,18 @@ dependencies {
     <%_ if (dbMigrationTool  === 'flywaydb') { _%>
     implementation 'org.flywaydb:flyway-core'
     <%_ } _%>
+    <%_ if (dbMigrationTool  === 'flywaydb' && (databaseType === 'mysql' || databaseType === 'mariadb')) { _%>
+    implementation 'org.flywaydb:flyway-mysql'
+    <%_ } _%>
     <%_ if (dbMigrationTool === 'liquibase') { _%>
     implementation 'org.liquibase:liquibase-core'
     <%_ } _%>
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdoc_openapi_version}"
     implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io:${commons_io_version}"
+    <%_ if (features.includes('monitoring')) { _%>
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    <%_ } _%>
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.projectlombok:lombok"

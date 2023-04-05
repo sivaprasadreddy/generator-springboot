@@ -223,9 +223,6 @@ module.exports = class extends BaseGenerator {
     _generateDbMigrationConfig(configOptions) {
         if(configOptions.dbMigrationTool === 'flywaydb') {
             let vendor = configOptions.databaseType;
-            if(vendor === "mariadb") {
-                vendor = "mysql";
-            }
             const resTemplates = [
                 {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/h2/V1__01_init.sql'},
                 {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/'+ vendor +'/V1__01_init.sql'},
@@ -240,9 +237,10 @@ module.exports = class extends BaseGenerator {
         }
 
         if(configOptions.dbMigrationTool === 'liquibase') {
+            const dbFmt = configOptions.dbMigrationFormat;
             const resTemplates = [
                 {src: 'db/migration/liquibase/changelog/db.changelog-master.yaml', dest: 'db/changelog/db.changelog-master.yaml'},
-                {src: 'db/migration/liquibase/changelog/01-init.xml', dest: 'db/changelog/migration/01-init.xml'},
+                {src: `db/migration/liquibase/changelog/01-init.${dbFmt}`, dest: `db/changelog/migration/01-init.${dbFmt}`},
 
             ];
             this.generateFiles(configOptions, resTemplates, 'app/','src/main/resources/');

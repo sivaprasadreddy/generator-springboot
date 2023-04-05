@@ -69,6 +69,26 @@ function prompting() {
             default: 'flywaydb'
         },
         {
+            type: 'list',
+            name: 'dbMigrationFormat',
+            message: 'Which format do you want to use for database migrations?',
+            choices: [
+                {
+                    value: 'yaml',
+                    name: 'YAML (like \'001-init.yaml\')'
+                },
+                {
+                    value: 'xml',
+                    name: 'XML (like \'001-init.xml\')'
+                },
+                {
+                    value: 'sql',
+                    name: 'SQL (like \'001-init.sql\')'
+                }
+            ],
+            default: 'xml'
+        },
+        {
             type: 'checkbox',
             name: 'features',
             message: 'Select the features you want?',

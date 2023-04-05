@@ -5,6 +5,7 @@
     "packageFolder": "com/mycompany/myservice",
     "databaseType": "postgresql",
     "dbMigrationTool": "liquibase",
+    "dbMigrationFormat": "xml",
     "features": ["elk"],
     "buildTool": "maven",
     "liquibaseMigrationCounter": 1

@@ -136,7 +136,7 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType === 'mysql' || databaseType === 'mariadb') { _%>
+        <%_ if (dbMigrationTool  === 'flywaydb' && (databaseType === 'mysql' || databaseType === 'mariadb')) { _%>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
@@ -156,6 +156,15 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
+
+        <%_ if (features.includes('monitoring')) { _%>
+        <!-- Metrics -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <%_ } _%>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
