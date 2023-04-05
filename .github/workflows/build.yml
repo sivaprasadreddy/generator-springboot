@@ -23,3 +23,11 @@ jobs:
       - run: npm test
         env:
           CI: true
+      - name: Build package
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: npm run build
+      - name: Publish package
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
