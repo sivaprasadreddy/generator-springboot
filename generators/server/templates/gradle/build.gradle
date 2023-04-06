@@ -143,7 +143,7 @@ gitProperties {
 }
 
 googleJavaFormat {
-    toolVersion = '1.15.0'
+    toolVersion = '1.16.0'
     options style: 'AOSP'
 }
 
