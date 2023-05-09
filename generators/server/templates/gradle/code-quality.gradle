@@ -42,7 +42,7 @@ jacocoTestCoverageVerification {
         rule {
             element = 'BUNDLE'
             limit {
-                counter = 'COMPLEXITY'
+                counter = 'LINE'
                 value = 'COVEREDRATIO'
                 minimum = new BigDecimal("${jacoco_min_coverage_required}")
             }

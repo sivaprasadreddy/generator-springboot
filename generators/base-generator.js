@@ -67,20 +67,24 @@ module.exports = class extends Generator {
 
     _formatCode(configOptions) {
         if (configOptions.buildTool === 'maven') {
-            this._formatCodeMaven();
+            this._formatCodeMaven(configOptions);
         } else {
-            this._formatCodeGradle();
+            this._formatCodeGradle(configOptions);
         }
     }
 
-    _formatCodeMaven() {
+    _formatCodeMaven(configOptions) {
         const command = this._isWin() ? 'mvnw' : './mvnw';
+        shell.cd(configOptions.appName);
         shell.exec(`${command} spotless:apply`);
+        shell.cd('..');
     }
 
-    _formatCodeGradle() {
+    _formatCodeGradle(configOptions) {
         const command = this._isWin() ? 'gradlew' : './gradlew';
-        shell.exec(`${command} googleJavaFormat`);
+        shell.cd(configOptions.appName);
+        shell.exec(`${command} spotlessApply`);
+        shell.cd('..');
     }
 
     _isWin() {
