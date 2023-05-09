@@ -65,26 +65,34 @@ module.exports = class extends Generator {
         });
     }
 
-    _formatCode(configOptions) {
+    _formatCode(configOptions, baseDir) {
         if (configOptions.buildTool === 'maven') {
-            this._formatCodeMaven(configOptions);
+            this._formatCodeMaven(configOptions, baseDir);
         } else {
-            this._formatCodeGradle(configOptions);
+            this._formatCodeGradle(configOptions, baseDir);
         }
     }
 
-    _formatCodeMaven(configOptions) {
+    _formatCodeMaven(configOptions, baseDir) {
         const command = this._isWin() ? 'mvnw' : './mvnw';
-        shell.cd(configOptions.appName);
-        shell.exec(`${command} spotless:apply`);
-        shell.cd('..');
+        if(baseDir) {
+            shell.cd(configOptions.appName);
+            shell.exec(`${command} spotless:apply`);
+            shell.cd('..');
+        } else {
+            shell.exec(`${command} spotless:apply`);
+        }
     }
 
-    _formatCodeGradle(configOptions) {
+    _formatCodeGradle(configOptions, baseDir) {
         const command = this._isWin() ? 'gradlew' : './gradlew';
-        shell.cd(configOptions.appName);
-        shell.exec(`${command} spotlessApply`);
-        shell.cd('..');
+        if(baseDir) {
+            shell.cd(configOptions.appName);
+            shell.exec(`${command} spotlessApply`);
+            shell.cd('..');
+        } else {
+            shell.exec(`${command} spotlessApply`);
+        }
     }
 
     _isWin() {
