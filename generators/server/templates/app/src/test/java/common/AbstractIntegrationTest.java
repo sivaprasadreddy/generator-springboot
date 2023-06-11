@@ -10,16 +10,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-<%_ if (features.includes('localstack')) { _%>
-import org.springframework.test.context.ContextConfiguration;
-<%_ } _%>
 import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles({PROFILE_TEST})
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-<%_ if (features.includes('localstack')) { _%>
-@ContextConfiguration(initializers = {LocalStackConfig.class})
-<%_ } _%>
 @AutoConfigureMockMvc
 @Import(TestApplication.class)
 public abstract class AbstractIntegrationTest {
