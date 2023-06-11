@@ -80,6 +80,7 @@ dependencies {
     <%_ } _%>
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.boot:spring-boot-testcontainers"
     testImplementation "org.projectlombok:lombok"
     testImplementation "org.awaitility:awaitility"
     testImplementation "org.testcontainers:junit-jupiter"
@@ -104,7 +105,6 @@ dependencyManagement {
         <%_ if (features.includes("localstack")) { _%>
         mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${spring_cloud_aws_version}"
         <%_ } _%>
-        mavenBom "org.testcontainers:testcontainers-bom:${testcontainers_version}"
     }
 }
 

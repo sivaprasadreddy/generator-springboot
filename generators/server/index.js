@@ -205,7 +205,7 @@ module.exports = class extends BaseGenerator {
         const testJavaTemplates = [
             'ApplicationIntegrationTest.java',
             'common/AbstractIntegrationTest.java',
-            'common/DBContainerInitializer.java'
+            'TestApplication.java'
         ];
         if(configOptions.features.includes("localstack")) {
             testJavaTemplates.push('common/LocalStackConfig.java');
