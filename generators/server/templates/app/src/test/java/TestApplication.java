@@ -50,6 +50,7 @@ public class TestApplication {
         propertyRegistry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
         propertyRegistry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
         return localStackContainer;
+    }
     <%_ } _%>
 
     public static void main(String[] args) {
