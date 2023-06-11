@@ -8,5 +8,5 @@ import org.springframework.test.context.TestPropertySource;
 public class SchemaValidationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
-    void schemaIsValid() {}
+    void testSchemaValidity() {}
 }
