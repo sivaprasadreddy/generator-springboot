@@ -11,7 +11,7 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
 ### Using Testcontainers at Development Time
 ```shell
-`./mvnw spotless:apply spring-boot:test-run
+./mvnw spotless:apply spring-boot:test-run
 ```
 <%_ } _%>
 
@@ -26,7 +26,7 @@ $ ./gradlew bootRun -Plocal
 ```
 ### Using Testcontainers at Development Time
 ```
-`./gradlew spotlessApply springBootTestRun
+./gradlew spotlessApply springBootTestRun
 ```
 <%_ } _%>
 
