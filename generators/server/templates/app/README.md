@@ -9,6 +9,10 @@
 $ docker-compose -f docker/docker-compose.yml up -d
 $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
+### Using Testcontainers at Development Time
+```shell
+`./mvnw spotless:apply spring-boot:test-run
+```
 <%_ } _%>
 
 <%_ if (buildTool === 'gradle') { _%>
@@ -19,6 +23,10 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```shell
 $ docker-compose -f docker/docker-compose.yml up -d
 $ ./gradlew bootRun -Plocal
+```
+### Using Testcontainers at Development Time
+```
+`./gradlew spotlessApply springBootTestRun
 ```
 <%_ } _%>
 
