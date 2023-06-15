@@ -13,11 +13,6 @@ import org.testcontainers.containers.MySQLContainer;
 <%_ if (databaseType === 'mariadb') { _%>
 import org.testcontainers.containers.MariaDBContainer;
 <%_ } _%>
-<%_ if (features.includes('localstack')) { _%>
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.testcontainers.containers.localstack.LocalStackContainer;
-<%_ } _%>
-import org.testcontainers.utility.DockerImageName;
     
 @TestConfiguration(proxyBeanMethods = false)
 public class TestApplication {
@@ -26,30 +21,17 @@ public class TestApplication {
     @ServiceConnection
     <%_ if (databaseType === 'postgresql') { _%>
     PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("<%= POSTGRESQL_IMAGE %>"));
+        return new PostgreSQLContainer<>("<%= POSTGRESQL_IMAGE %>");
     }
     <%_ } _%>
     <%_ if (databaseType === 'mysql') { _%>
     MySQLContainer<?> sqlContainer () {
-        return new MySQLContainer<>(DockerImageName.parse("<%= MYSQL_IMAGE %>"));
+        return new MySQLContainer<>("<%= MYSQL_IMAGE %>");
     }
     <%_ } _%>
     <%_ if (databaseType === 'mariadb') { _%>
     MariaDBContainer<?> sqlContainer () {
-        return new MariaDBContainer<>(DockerImageName.parse("<%= MARIADB_IMAGE %>"));
-    }
-    <%_ } _%>
-
-    <%_ if (features.includes('localstack')) { _%>
-    @Bean
-    LocalStackContainer localStackContainer(DynamicPropertyRegistry propertyRegistry) {
-        LocalStackContainer localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("<%= LOCALSTACK_IMAGE %>"));
-        propertyRegistry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
-        propertyRegistry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);
-        propertyRegistry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
-        propertyRegistry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
-        return localStackContainer;
+        return new MariaDBContainer<>("<%= MARIADB_IMAGE %>");
     }
     <%_ } _%>
 
