@@ -49,5 +49,5 @@ services:
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - '../.localstack:/docker-entrypoint-initaws.d'
+      - "../.localstack:/etc/localstack/init/ready.d"  # ready hook
 <%_ } _%>
