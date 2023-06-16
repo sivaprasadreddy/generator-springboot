@@ -26,12 +26,13 @@ jacocoTestReport {
     }
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.required = true
+        html.required = true
     }
 }
 
 jacocoTestCoverageVerification {
+    dependsOn ":integrationTest"
     executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
     afterEvaluate {
         getClassDirectories().setFrom(files(classDirectories.files.collect {
