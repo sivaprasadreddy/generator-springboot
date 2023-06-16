@@ -82,7 +82,6 @@ module.exports = class extends BaseGenerator {
     }
 
     _generateMiscFiles(configOptions) {
-        this.fs.copyTpl(this.templatePath('app/.editorconfig'), this.destinationPath('.editorconfig'), configOptions);
         this.fs.copyTpl(this.templatePath('app/lombok.config'), this.destinationPath('lombok.config'), configOptions);
         this.fs.copyTpl(this.templatePath('app/sonar-project.properties'), this.destinationPath('sonar-project.properties'), configOptions);
         this.fs.copyTpl(this.templatePath('app/README.md'), this.destinationPath('README.md'), configOptions);
@@ -189,7 +188,7 @@ module.exports = class extends BaseGenerator {
             'config/Initializer.java',
             'config/logging/Loggable.java',
             'config/logging/LoggingAspect.java',
-            'exception/ErrorDetailProblemHandlingControllerAdvice.java',
+            'exception/GlobalExceptionHandler.java',
             'utils/AppConstants.java'
         ];
         this.generateMainJavaCode(configOptions, mainJavaTemplates);
@@ -197,7 +196,6 @@ module.exports = class extends BaseGenerator {
         const mainResTemplates = [
             'application.properties',
             'application-local.properties',
-            'application-heroku.properties',
             'logback-spring.xml'
         ];
         this.generateMainResCode(configOptions, mainResTemplates);
@@ -209,6 +207,7 @@ module.exports = class extends BaseGenerator {
             'TestApplication.java'
         ];
         if(configOptions.features.includes("localstack")) {
+            testJavaTemplates.push('common/LocalStackConfig.java');
             testJavaTemplates.push('SqsListenerIntegrationTest.java');
         }
         this.generateTestJavaCode(configOptions, testJavaTemplates);
