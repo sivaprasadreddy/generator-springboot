@@ -2,7 +2,8 @@ version: '3.8'
 services:
 
   grafana:
-    image: grafana/grafana:9.2.6
+    image: grafana/grafana:10.0.1
+    extra_hosts: ['host.docker.internal:host-gateway']
     ports:
     - "3000:3000"
     volumes:
@@ -16,7 +17,8 @@ services:
     - prometheus
 
   prometheus:
-    image: prom/prometheus:v2.40.3
+    image: prom/prometheus:v2.44.0
+    extra_hosts: ['host.docker.internal:host-gateway']
     ports:
       - "9090:9090"
     volumes:
