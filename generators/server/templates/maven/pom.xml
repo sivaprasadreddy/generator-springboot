@@ -30,7 +30,6 @@
         <%_ } _%>
         <springdoc-openapi.version><%= SPRINGDOC_OPENAPI_VERSION %></springdoc-openapi.version>
         <commons-io.version><%= COMMONS_IO_VERSION %></commons-io.version>
-
         <testcontainers.version><%= TEST_CONTAINERS_VERSION %></testcontainers.version>
         
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
@@ -158,7 +157,6 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
-
         <%_ if (features.includes('monitoring')) { _%>
         <!-- Metrics -->
         <dependency>

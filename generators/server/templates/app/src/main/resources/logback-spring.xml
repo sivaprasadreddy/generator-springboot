@@ -1,47 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
-    <%_ if (features.includes('elk')) { _%>
-        <springProperty defaultValue="localhost" name="logstashHost"
-        scope="context" source="application.logstash-host"/>
-
-        <appender class="net.logstash.logback.appender.LogstashTcpSocketAppender" name="stash">
-            <!--<destination>localhost:5000</destination>-->
-            <destination>${logstashHost}:5000</destination>
-    
-            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-                <providers>
-                    <mdc/> <!-- MDC variables on the Thread will be written as JSON fields-->
-                    <context/> <!--Outputs entries from logback's context -->
-                    <version/> <!-- Logstash json format version, the @version field in the output-->
-                    <logLevel/>
-                    <loggerName/>
-    
-                    <pattern>
-                        <pattern>
-                            {
-                            <!-- we can add some custom fields to be sent with all the log entries.-->
-                            <!--make filtering easier in Logstash-->
-                            "app-name": ${spring.application.name}
-                            }
-                        </pattern>
-                    </pattern>
-    
-                    <threadName/>
-                    <message/>
-    
-                    <logstashMarkers/> <!-- Useful so we can add extra information for specific log lines as Markers-->
-                    <arguments/> <!--or through StructuredArguments-->
-    
-                    <stackTrace/>
-                </providers>
-            </encoder>
-        </appender>
-    <%_ } _%>
-
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
     <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <%_ if (features.includes('elk')) { _%>
+    <springProperty defaultValue="localhost" name="logstashHost"
+    scope="context" source="application.logstash-host"/>
 
+    <appender class="net.logstash.logback.appender.LogstashTcpSocketAppender" name="stash">
+        <!--<destination>localhost:5000</destination>-->
+        <destination>${logstashHost}:5000</destination>
+
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <mdc/> <!-- MDC variables on the Thread will be written as JSON fields-->
+                <context/> <!--Outputs entries from logback's context -->
+                <version/> <!-- Logstash json format version, the @version field in the output-->
+                <logLevel/>
+                <loggerName/>
+
+                <pattern>
+                    <pattern>
+                        {
+                        <!-- we can add some custom fields to be sent with all the log entries.-->
+                        <!--make filtering easier in Logstash-->
+                        "app-name": ${spring.application.name}
+                        }
+                    </pattern>
+                </pattern>
+
+                <threadName/>
+                <message/>
+
+                <logstashMarkers/> <!-- Useful so we can add extra information for specific log lines as Markers-->
+                <arguments/> <!--or through StructuredArguments-->
+
+                <stackTrace/>
+            </providers>
+        </encoder>
+    </appender>
+    <%_ } _%>
     <springProfile name="default">
         <root level="INFO">
             <appender-ref ref="CONSOLE" />
@@ -53,12 +50,13 @@
             <appender-ref ref="FILE" />
             <appender-ref ref="CONSOLE" />
             <%_ if (features.includes('elk')) { _%>
-                <appender-ref ref="stash"/>
+            <appender-ref ref="stash"/>
             <%_ } _%>   
         </root>
     </springProfile>
 
     <logger name="<%= packageName %>" level="DEBUG"/>
+    <logger name="org.springframework" level="INFO"/>
     <%_ if (features.includes('localstack')) { _%>
     <logger name="com.amazonaws.util.EC2MetadataUtils" level="ERROR"/>
     <logger name="com.amazonaws.internal.InstanceMetadataServiceResourceFetcher" level="ERROR"/>
