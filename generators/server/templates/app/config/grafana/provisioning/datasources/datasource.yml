@@ -13,6 +13,7 @@ datasources:
 - name: Prometheus
   # <string, required> datasource type. Required
   type: prometheus
+  uid : PBFA97CFB590B2093
   # <string, required> access mode. direct or proxy. Required
   access: proxy
   # <int> org id. will default to orgId 1 if not specified
