@@ -30,8 +30,8 @@ jobs:
         run: ./gradlew build
 
       - if: ${{ github.ref == 'refs/heads/main' }}
-        name: SonarQube Scan
-        run: ./gradlew sonarqube
+        name: Sonar Scan
+        run: ./gradlew sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
