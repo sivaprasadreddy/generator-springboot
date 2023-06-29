@@ -20,7 +20,7 @@ services:
         hard: -1
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.17.10
+    image: docker.elastic.co/logstash/logstash:7.17.11
     container_name: logstash
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:
