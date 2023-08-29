@@ -174,13 +174,15 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+check.dependsOn jacocoTestReport
 
-task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn test
+tasks.register('testReport', TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(test)
 }
 
-task integrationTestReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn integrationTest
+tasks.register('integrationTestReport', TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(integrationTest)
 }
+
