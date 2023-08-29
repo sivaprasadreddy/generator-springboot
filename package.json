@@ -22,6 +22,7 @@
   "files": [
     "generators"
   ],
+  "main": "generators/app/index.js",
   "scripts": {
     "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
     "test:unit": "mocha --timeout 120000 --slow 0 --reporter spec"
