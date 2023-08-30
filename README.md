@@ -1,44 +1,140 @@
 # generator-springboot
-A Yeoman generator for generating Microservices with SpringBoot
+The Yeoman generator for generating Spring Boot based microservices.
+
+## Prerequisites
+* Node 16+
+* JDK 17+
+
+## Installation
+```shell
+$ npm install -g yo
+$ npm install -g generator-springboot
+```
 
 ## How to use?
+Run the following command and answer the questions:
 
-```
-> npm install -g yo
-> npm install -g generator-springboot
-> yo springboot
+```shell
+$ yo springboot
 ```
 
 ## Features
-
 * SpringBoot REST API with jar type packaging
 * CORS configuration
 * Swagger UI Integration
-* Spring Data JPA integration with option to select databases like MySQL, Postgresql, MariaDB etc
-* Flyway or Liquibase data migration support
+* Spring Data JPA integration with an option to select databases like MySQL, Postgresql, MariaDB etc
+* Flyway and Liquibase database migration support
 * SpringBoot Actuator configuration
-* TestContainers integration
-* JUnit 5 
-* Docker configuration for Application, ELK, Prometheus, Grafana
-* Localstack configuration
-* Jenkinsfile
+* Testcontainers based testing and local dev mode setup
+* DockerCompose configuration for application, ELK, Prometheus, Grafana
+* Spring Cloud AWS support with LocalStack configuration
 * GitHub Actions Configuration
+* Dockerfile
+* Jenkinsfile
 * SonarQube, Google-java-format static analysis tools configuration
+* JUnit 5 
 
+### Generate a SpringBoot Microservice
+```shell
+➜  ~ yo springboot
+Generating SpringBoot Application
+? What is the application name? blog
+? What is the default package name? com.sivalabs.blog
+? Which type of database you want to use? Postgresql
+? Which type of database migration tool you want to use? FlywayDB
+? Select the features you want? ELK Docker configuration, Prometheus, Grafana Docker configuration, Localstack Docker configuration
+? Which build tool do you want to use? Maven
+    force blog/.yo-rc.json
+   create blog/mvnw
+   create blog/mvnw.cmd
+   create blog/.gitignore
+   create blog/.mvn/wrapper/maven-wrapper.jar
+   create blog/.mvn/wrapper/maven-wrapper.properties
+   create blog/pom.xml
+   create blog/Dockerfile
+   create blog/Jenkinsfile
+   create blog/lombok.config
+   create blog/sonar-project.properties
+   create blog/README.md
+   create blog/.github/workflows/maven.yml
+   create blog/src/main/resources/db/migration/postgresql/V1__01_init.sql
+   create blog/docker/docker-compose.yml
+   create blog/docker/docker-compose-app.yml
+   create blog/docker/docker-compose-monitoring.yml
+   create blog/config/prometheus/prometheus.yml
+   create blog/config/grafana/provisioning/dashboards/basic-dashboard.json
+   create blog/config/grafana/provisioning/dashboards/dashboard.yml
+   create blog/config/grafana/provisioning/dashboards/jvm-micrometer_rev10.json
+   create blog/config/grafana/provisioning/datasources/datasource.yml
+   create blog/docker/docker-compose-elk.yml
+   create blog/config/elk/logstash.conf
+   create blog/.localstack/01_init.sh
+   create blog/src/main/java/com/sivalabs/blog/Application.java
+   create blog/src/main/java/com/sivalabs/blog/config/WebMvcConfig.java
+   create blog/src/main/java/com/sivalabs/blog/config/SwaggerConfig.java
+   create blog/src/main/java/com/sivalabs/blog/config/ApplicationProperties.java
+   create blog/src/main/java/com/sivalabs/blog/config/Initializer.java
+   create blog/src/main/java/com/sivalabs/blog/config/GlobalExceptionHandler.java
+   create blog/src/main/java/com/sivalabs/blog/config/logging/Loggable.java
+   create blog/src/main/java/com/sivalabs/blog/config/logging/LoggingAspect.java
+   create blog/src/main/java/com/sivalabs/blog/utils/AppConstants.java
+   create blog/src/main/resources/application.properties
+   create blog/src/main/resources/application-local.properties
+   create blog/src/main/resources/logback-spring.xml
+   create blog/src/test/java/com/sivalabs/blog/ApplicationIntegrationTest.java
+   create blog/src/test/java/com/sivalabs/blog/SchemaValidationTest.java
+   create blog/src/test/java/com/sivalabs/blog/common/ContainersConfig.java
+   create blog/src/test/java/com/sivalabs/blog/common/AbstractIntegrationTest.java
+   create blog/src/test/java/com/sivalabs/blog/TestApplication.java
+   create blog/src/test/java/com/sivalabs/blog/SqsListenerIntegrationTest.java
+   create blog/src/test/resources/application-test.properties
+   create blog/src/test/resources/logback-test.xml
 
-### Generate SpringBoot Microservice
-
-![Microservice Generation](docs/server-generation-1.png)
-![Microservice Generation](docs/server-generation-2.png)
+No change to package.json was detected. No package manager install will be executed.
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------------< com.sivalabs.blog:blog >-----------------------
+[INFO] Building blog 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- spotless:2.39.0:apply (default-cli) @ blog ---
+[INFO] Index file does not exist. Fallback to an empty index
+[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/TestApplication.java
+[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/SqsListenerIntegrationTest.java
+[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/SchemaValidationTest.java
+[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/common/AbstractIntegrationTest.java
+[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/common/ContainersConfig.java
+[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/config/GlobalExceptionHandler.java
+[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/config/SwaggerConfig.java
+[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/config/logging/LoggingAspect.java
+[INFO] Spotless.Java is keeping 15 files clean - 8 were changed to be clean, 7 were already clean, 0 were skipped because caching determined they were already clean
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.192 s
+[INFO] Finished at: 2023-08-30T11:30:00+05:30
+[INFO] ------------------------------------------------------------------------
+==========================================
+Your application is generated successfully
+  cd blog
+  > ./mvnw spring-boot:run
+==========================================
+➜  ~
+```
 
 ### Generate REST API with CRUD operations
 You can generate REST API with CRUD operation using the following command:
 
-:high_brightness: You should run the following command from within the generated project folder. 
+**IMPORTANT:** You should run the following command from within the generated project folder. 
 
-`myservice> yo springboot:controller Customer --base-path /api/customers`
+```shell
+$ cd blog
+$ yo springboot:controller Customer --base-path /api/customers
+```
 
-This will generate:
+This sub-generator will generate the following:
+
 * JPA entity
 * Spring Data JPA Repository
 * Service
@@ -46,74 +142,65 @@ This will generate:
 * Unit and Integration Tests for REST Controller
 * Flyway or Liquibase migration to create table
 
-![CRUD Generation](docs/crud-generation.png)
+```shell
+$ yo springboot:controller Customer --base-path /api/customers
+Generating JPA entity, repository, service and controller
+EntityName: Customer, basePath: /api/customers
+    force .yo-rc.json
+   create src/main/java/com/sivalabs/blog/entities/Customer.java
+   create src/main/java/com/sivalabs/blog/model/response/PagedResult.java
+   create src/main/java/com/sivalabs/blog/repositories/CustomerRepository.java
+   create src/main/java/com/sivalabs/blog/services/CustomerService.java
+   create src/main/java/com/sivalabs/blog/web/controllers/CustomerController.java
+   create src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerTest.java
+   create src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerIT.java
+   create src/test/java/com/sivalabs/blog/services/CustomerServiceTest.java
+   create src/main/resources/db/migration/postgresql/V2__create_customers_table.sql
 
-
-## Why another generator when you have JHipster?
-JHipster is an amazing SpringBoot application generator with lots and lots of cool features.
-However, there are certain JHipster features that does not fit for my preferences such as:
-
-1. I like *jar* packaging
-2. I like to use spring-boot-starter-* than configuring individual libraries
-3. I like to have an option to generate application without spring-security
-4. I prefer Flyway to Liquibase
-5. I like to have only minimum and required configuration ie no AsyncConfiguration, LocaleConfiguration, CacheConfiguration, Logstash Logging etc.
-6. I like .properties over .yml
+No change to package.json was detected. No package manager install will be executed.
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------------< com.sivalabs.blog:blog >-----------------------
+[INFO] Building blog 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- spotless:2.39.0:apply (default-cli) @ blog ---
+[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerTest.java
+[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerIT.java
+[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/services/CustomerServiceTest.java
+[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/web/controllers/CustomerController.java
+[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/model/response/PagedResult.java
+[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/services/CustomerService.java
+[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/entities/Customer.java
+[INFO] Spotless.Java is keeping 23 files clean - 7 were changed to be clean, 1 were already clean, 15 were skipped because caching determined they were already clean
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.190 s
+[INFO] Finished at: 2023-08-30T11:32:50+05:30
+[INFO] ------------------------------------------------------------------------
+➜  blog
+```
 
 ## Local Development Setup
 
+```shell
+$ git clone https://github.com/sivaprasadreddy/generator-springboot.git
+$ cd generator-springboot
+$ npm install -g yo
+$ npm install 
+$ npm link
+$ yo springboot
 ```
-> git clone https://github.com/sivaprasadreddy/generator-springboot.git
-> cd generator-springboot
-> npm install -g yo
-> npm install 
-> npm link
-> yo springboot
+
+## Releasing a new version
+Before publishing a new release, make sure to update the version number in `package.json` updated.
+
+```shell
+$ npm login
+$ npm publish
 ```
 
-## Changelog
-
-### Version 0.0.5
-* Added support for generating docker-compose yml files for application, ELK, Prometheus, Grafana
-
-### Version 0.0.6
-* Updated to use testcontainers-spring-boot https://github.com/testcontainers/testcontainers-spring-boot
-* Generate Zipkin docker-compose file when Distributed Tracing is selected
-* Fixed Flyway/Liquibase db migration script generation issue
-* Added tests for sanity check
-
-### Version 0.0.7
-* Removed support for generation of `config-server` and `service-registry`
-* Updated SpringBoot and other libraries version
-
-### Version 0.0.8
-* Configured Checkstyle, PMD, SonarQube, google-java-format plugins
-* Added Localstack autoconfiguration support
-
-### Version 0.0.10
-* Upgraded SpringBoot to 2.6.7 and library versions
-* Updated Spring Cloud AWS setup to use new https://awspring.io/ based configuration
-* Removed `springfox-boot-starter` and used `springdoc-openapi-ui`
-* Added google-java-format support
-* Upgraded plugins versions
-* Removed Checkstyle, PMD plugins
-
-### Version 0.1.0
-* Upgraded SpringBoot to 2.7.4 and other library versions
-* Fixed code formatting
-* Fixed Flyway with MySQL and MariaDB issue
-
-### Version 0.1.1
-* Upgraded SpringBoot to 3.0.0 and other library versions
-* Upgraded AWS to 3.0.0-M3, compatible version with SpringBoot 3 which uses AWS 2.0 API
-* Tweaked code to get All entries from datasource using pagination
-* Supporting developing application in VSCode
-* Enhanced support for logback encoder when elk stack is selected
-* Fixes issue while generating api and tables when `tablename` contains camelCase([#47](https://github.com/sivaprasadreddy/generator-springboot/issues/47))
-* Upgraded liquibase configuration to use Out of the Box format and location
-
-### Version 0.1.2
-* Fixes issue with mysql and mariadb when flyway is selected ([#58](https://github.com/sivaprasadreddy/generator-springboot/issues/58))
-* Support Mariadb Sequences ([#59](https://github.com/sivaprasadreddy/generator-springboot/issues/59))
-* Support other liquibase formats ([#69](https://github.com/sivaprasadreddy/generator-springboot/issues/69))
-* Upgraded SpringBoot to 3.0.2 and other library versions
+## License
+The **generator-springboot** is an Open Source software released under the [MIT Licence](https://opensource.org/license/mit/)
