@@ -19,24 +19,29 @@ $ yo springboot
 ```
 
 ## Features
-* SpringBoot REST API with jar type packaging
+The generator-springboot generates a Spring Boot application with the following features configured:
+
+* Spring Boot project with Maven and Gradle support
+* Spring Data JPA integration with an option to select databases like MySQL, Postgresql, MariaDB.
+* Flyway and Liquibase database migration support.
+* Spring Cloud AWS support with LocalStack configuration.
 * CORS configuration
 * Swagger UI Integration
-* Spring Data JPA integration with an option to select databases like MySQL, Postgresql, MariaDB etc
-* Flyway and Liquibase database migration support
 * SpringBoot Actuator configuration
-* Testcontainers based testing and local dev mode setup
+* Testcontainers based Testing and Local dev mode setup
 * DockerCompose configuration for application, ELK, Prometheus, Grafana
-* Spring Cloud AWS support with LocalStack configuration
 * GitHub Actions Configuration
 * Dockerfile
 * Jenkinsfile
-* SonarQube, Google-java-format static analysis tools configuration
-* JUnit 5 
+* SonarQube and JaCoCo based static analysis tools configuration
+* Code formatting using Spotless and google-java-format 
+* JUnit 5
 
 ### Generate a SpringBoot Microservice
+After installing the `generator-springboot`, you can generate a new Spring Boot application as follows:
+
 ```shell
-➜  ~ yo springboot
+$ yo springboot
 Generating SpringBoot Application
 ? What is the application name? blog
 ? What is the default package name? com.sivalabs.blog
@@ -120,7 +125,7 @@ Your application is generated successfully
   cd blog
   > ./mvnw spring-boot:run
 ==========================================
-➜  ~
+
 ```
 
 ### Generate REST API with CRUD operations
@@ -180,7 +185,6 @@ No change to package.json was detected. No package manager install will be execu
 [INFO] Total time:  1.190 s
 [INFO] Finished at: 2023-08-30T11:32:50+05:30
 [INFO] ------------------------------------------------------------------------
-➜  blog
 ```
 
 ## Local Development Setup
