@@ -202,6 +202,8 @@ module.exports = class extends BaseGenerator {
 
         const testJavaTemplates = [
             'ApplicationIntegrationTest.java',
+            'SchemaValidationTest.java',
+            'common/ContainersConfig.java',
             'common/AbstractIntegrationTest.java',
             'TestApplication.java'
         ];
