@@ -51,7 +51,6 @@ dependencies {
     implementation "net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}"
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    runtimeOnly "com.h2database:h2"
     <%_ if (databaseType === "mysql") { _%>
     runtimeOnly "com.mysql:mysql-connector-j"
     <%_ } _%>
@@ -174,13 +173,15 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+check.dependsOn jacocoTestReport
 
-task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn test
+tasks.register('testReport', TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(test)
 }
 
-task integrationTestReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn integrationTest
+tasks.register('integrationTestReport', TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(integrationTest)
 }
+

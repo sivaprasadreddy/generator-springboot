@@ -1,5 +1,13 @@
 # https://docs.liquibase.com/concepts/changelogs/yaml-format.html
 databaseChangeLog:
+  -  property:
+       dbms:  postgresql
+       name:  string.type
+       value:  text
+  -  property:
+       dbms:  "!postgresql"
+       name:  string.type
+       value:  varchar(255)
   - changeSet:
       author: author
       id: createTable-<%= tableName %>
@@ -16,6 +24,6 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: text
-                  type: varchar(1024)
+                  type: ${string.type}
                   constraints:
                     nullable: false

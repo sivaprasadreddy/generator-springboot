@@ -1,9 +1,17 @@
 # <%= appName %>
 
 <%_ if (buildTool === 'maven') { _%>
+### Format code
+
+```shell
+$ ./mvnw spotless:apply
+```
+
 ### Run tests
 
-`$ ./mvnw clean verify`
+```shell
+$ ./mvnw clean verify
+```
 
 ### Run locally
 
@@ -11,19 +19,28 @@
 $ docker-compose -f docker/docker-compose.yml up -d
 $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
+
 ### Using Testcontainers at Development Time
 You can run `TestApplication.java` from your IDE directly.
 You can also run the application using Maven as follows:
 
 ```shell
-./mvnw spotless:apply spring-boot:test-run
+./mvnw spring-boot:test-run
 ```
 <%_ } _%>
 
 <%_ if (buildTool === 'gradle') { _%>
+### Format code
+
+```shell
+$ ./gradlew spotlessApply
+```
+
 ### Run tests
 
-`$ ./gradlew clean build`
+```shell
+$ ./gradlew clean build`
+```
 
 ### Run locally
 
@@ -36,8 +53,8 @@ $ ./gradlew bootRun -Plocal
 You can run `TestApplication.java` from your IDE directly.
 You can also run the application using Gradle as follows:
 
-```
-./gradlew spotlessApply bootTestRun
+```shell
+$ ./gradlew bootTestRun
 ```
 <%_ } _%>
 

@@ -9,14 +9,6 @@
     "spring-boot",
     "microservice"
   ],
-  "files": [
-    "generators"
-  ],
-  "main": "index.js",
-  "scripts": {
-    "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
-    "test:unit": "mocha --timeout 120000 --slow 0 --reporter spec"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/sivaprasadreddy/generator-springboot"
@@ -27,6 +19,14 @@
     "url": "https://github.com/sivaprasadreddy/generator-springboot/issues"
   },
   "homepage": "https://github.com/sivaprasadreddy/generator-springboot",
+  "files": [
+    "generators"
+  ],
+  "main": "generators/app/index.js",
+  "scripts": {
+    "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
+    "test:unit": "mocha --timeout 120000 --slow 0 --reporter spec"
+  },
   "dependencies": {
     "chalk": "4.1.2",
     "lodash": "4.17.21",
