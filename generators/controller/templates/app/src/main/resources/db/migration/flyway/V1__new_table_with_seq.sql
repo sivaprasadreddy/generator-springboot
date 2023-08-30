@@ -7,6 +7,11 @@ create table <%= tableName %> (
     <%_ if (databaseType === 'mariadb') { _%>
     id bigint DEFAULT nextval(`<%= tableName %>_seq`) not null,
     <%_ } _%>
+    <%_ if (databaseType != 'postgresql') { _%>
     text varchar(1024) not null,
+    <%_ } _%>
+    <%_ if (databaseType === 'postgresql') { _%>
+    text text not null,
+    <%_ } _%>
     primary key (id)
 );
