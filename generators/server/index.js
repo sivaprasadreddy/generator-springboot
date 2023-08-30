@@ -223,7 +223,6 @@ module.exports = class extends BaseGenerator {
         if(configOptions.dbMigrationTool === 'flywaydb') {
             let vendor = configOptions.databaseType;
             const resTemplates = [
-                {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/h2/V1__01_init.sql'},
                 {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/'+ vendor +'/V1__01_init.sql'},
 
             ];
