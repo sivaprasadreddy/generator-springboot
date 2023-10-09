@@ -1,4 +1,4 @@
-# generator-springboot
+# Generator SpringBoot
 The Yeoman generator for generating Spring Boot microservices.
 
 ## Prerequisites
@@ -34,7 +34,7 @@ The generator-springboot generates a Spring Boot application with the following 
 * Dockerfile
 * Jenkinsfile
 * SonarQube and JaCoCo based static analysis tools configuration
-* Code formatting using Spotless and google-java-format 
+* Code formatting using Spotless and google-java-format
 * JUnit 5
 
 ### Generate a SpringBoot Microservice
@@ -125,13 +125,12 @@ Your application is generated successfully
   cd blog
   > ./mvnw spring-boot:run
 ==========================================
-
 ```
 
 ### Generate REST API with CRUD operations
 You can generate REST API with CRUD operation using the following command:
 
-**IMPORTANT:** You should run the following command from within the generated project folder. 
+**IMPORTANT:** You should run the following command from within the generated project folder.
 
 ```shell
 $ cd blog
@@ -186,25 +185,3 @@ No change to package.json was detected. No package manager install will be execu
 [INFO] Finished at: 2023-08-30T11:32:50+05:30
 [INFO] ------------------------------------------------------------------------
 ```
-
-## Local Development Setup
-
-```shell
-$ git clone https://github.com/sivaprasadreddy/generator-springboot.git
-$ cd generator-springboot
-$ npm install -g yo
-$ npm install 
-$ npm link
-$ yo springboot
-```
-
-## Releasing a new version
-Before publishing a new release, make sure to update the version number in `package.json` updated.
-
-```shell
-$ npm login
-$ npm publish
-```
-
-## License
-The **generator-springboot** is an Open Source software released under the [MIT Licence](https://opensource.org/license/mit/)
