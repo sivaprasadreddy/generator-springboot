@@ -48,23 +48,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
-  common-steps:
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node_version }}
-
-      - run: npm install
-
-      - run: npm test
-        env:
-          CI: true
-
 # Define separate jobs for each matrix combination
   build-windows:
     needs: []
@@ -76,8 +59,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Run common steps
-        uses: ./.github/actions/common-steps
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - run: npm install
+
+      - run: npm test
+        env:
+          CI: true
 
   build-macos:
     needs: []
@@ -89,8 +80,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Run common steps
-        uses: ./.github/actions/common-steps
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - run: npm install
+
+      - run: npm test
+        env:
+          CI: true
 
   build-ubuntu:
     needs: []
@@ -102,5 +101,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Run common steps
-        uses: ./.github/actions/common-steps
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+      - run: npm install
+      - run: npm test
+        env:
+          CI: true
