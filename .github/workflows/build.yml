@@ -1,34 +1,25 @@
 name: Generator SpringBoot
+
 on:
   push:
     branches:
       - '**'
+
 jobs:
-  build:
-    name: npm test
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        node_version: [16.x, 18.x, 20.x]
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    env:
-      PUBLISHED: 'false'  # Flag to track if npm publish has been done
+  publish:
+    name: npm publish
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-macos, build-ubuntu]
+    if: always()
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node_version }}
-
-      - run: npm install
-
-      - run: npm test
-        env:
-          CI: true
+          node-version: 20
 
       - name: Check if version changed
         id: version-check
@@ -50,10 +41,60 @@ jobs:
           fi
 
       - name: Build and Publish on version change
-        if: env.VERSION_CHANGED == 'true' && env.PUBLISHED == 'false'
+        if: env.VERSION_CHANGED == 'true'
         run: |
           npm run build
           npm publish
-          echo "PUBLISHED=true" >> $GITHUB_ENV
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+  common-steps:
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - run: npm install
+
+      - run: npm test
+        env:
+          CI: true
+
+# Define separate jobs for each matrix combination
+  build-windows:
+    needs: []
+    strategy:
+      matrix:
+        os: [windows-latest]
+        node_version: [16.x, 18.x, 20.x]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Run common steps
+        uses: ./.github/actions/common-steps
+
+  build-macos:
+    needs: []
+    strategy:
+      matrix:
+        os: [macos-latest]
+        node_version: [16.x, 18.x, 20.x]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Run common steps
+        uses: ./.github/actions/common-steps
+
+  build-ubuntu:
+    needs: []
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node_version: [16.x, 18.x, 20.x]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Run common steps
+        uses: ./.github/actions/common-steps
