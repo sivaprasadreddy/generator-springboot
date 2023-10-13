@@ -50,16 +50,17 @@ jobs:
 
   common-steps:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node_version }}
+
       - run: npm install
+
       - run: npm test
         env:
           CI: true
@@ -71,6 +72,7 @@ jobs:
       matrix:
         os: [windows-latest]
         node_version: [16.x, 18.x, 20.x]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -83,6 +85,7 @@ jobs:
       matrix:
         os: [macos-latest]
         node_version: [16.x, 18.x, 20.x]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -95,6 +98,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         node_version: [16.x, 18.x, 20.x]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
