@@ -13,16 +13,23 @@ jobs:
       matrix:
         node_version: [16.x, 18.x, 20.x]
         os: [ubuntu-latest, macos-latest, windows-latest]
+    env:
+      PUBLISHED: 'false'  # Flag to track if npm publish has been done
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node_version }}
+
       - run: npm install
+
       - run: npm test
         env:
           CI: true
+
       - name: Check if version changed
         id: version-check
         run: |
@@ -41,11 +48,12 @@ jobs:
             echo "Not on the main branch. Skipping publish."
             echo "VERSION_CHANGED=false" >> $GITHUB_ENV
           fi
-      - name: Build package on version change
-        if: env.VERSION_CHANGED == 'true'
-        run: npm run build
-      - name: Publish package on version change
-        if: env.VERSION_CHANGED == 'true'
-        run: npm publish
+
+      - name: Build and Publish on version change
+        if: env.VERSION_CHANGED == 'true' && env.PUBLISHED == 'false'
+        run: |
+          npm run build
+          npm publish
+          echo "PUBLISHED=true" >> $GITHUB_ENV
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
