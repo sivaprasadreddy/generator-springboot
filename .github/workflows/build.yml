@@ -51,6 +51,7 @@ jobs:
 # Define separate jobs for each matrix combination
   build-windows:
     needs: []
+    timeout-minutes: 20
     strategy:
       matrix:
         os: [windows-latest]
@@ -72,6 +73,7 @@ jobs:
 
   build-macos:
     needs: []
+    timeout-minutes: 20
     strategy:
       matrix:
         os: [macos-latest]
@@ -93,6 +95,7 @@ jobs:
 
   build-ubuntu:
     needs: []
+    timeout-minutes: 20
     strategy:
       matrix:
         os: [ubuntu-latest]
