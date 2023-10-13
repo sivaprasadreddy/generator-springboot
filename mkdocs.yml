@@ -1,0 +1,32 @@
+site_name: "Generator Spring Boot"
+site_description: "The Yeoman generator for generating Spring Boot microservices"
+site_author: "K Siva Prasad Reddy"
+site_url: "https://sivaprasadreddy.github.io/generator-springboot"
+
+# Repository
+repo_name: "sivaprasadreddy/generator-springboot"
+repo_url: "https://github.com/sivaprasadreddy/generator-springboot"
+
+# Copyright
+copyright: "Copyright &copy; 2023 K Siva Prasad Reddy"
+
+theme:
+  name: material
+nav:
+  - Home: index.md
+
+# Customization
+extra:
+  manifest: "manifest.webmanifest"
+  social:
+    - icon: fontawesome/brands/github-alt
+      link: "https://github.com/sivaprasadreddy"
+    - icon: fontawesome/brands/twitter
+      link: "https://twitter.com/sivalabs"
+    - icon: fontawesome/brands/linkedin
+      link: "https://www.linkedin.com/in/siva-prasad-reddy-katamreddy/"
+
+# Extensions
+markdown_extensions:
+  - codehilite
+  - tables

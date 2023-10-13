@@ -69,17 +69,18 @@ function prompting() {
             default: 'flywaydb'
         },
         {
+            when: (answers) => answers.dbMigrationTool === 'liquibase',
             type: 'list',
             name: 'dbMigrationFormat',
             message: 'Which format do you want to use for database migrations?',
             choices: [
                 {
-                    value: 'yaml',
-                    name: 'YAML (like \'001-init.yaml\')'
-                },
-                {
                     value: 'xml',
                     name: 'XML (like \'001-init.xml\')'
+                },
+                {
+                    value: 'yaml',
+                    name: 'YAML (like \'001-init.yaml\')'
                 },
                 {
                     value: 'sql',

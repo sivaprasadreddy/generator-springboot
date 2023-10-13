@@ -7,12 +7,12 @@ buildscript {
     }
 }
 plugins {
-    id 'org.springframework.boot'
-    id 'io.spring.dependency-management'
-    id 'java-library'
-    id 'com.gorylenko.gradle-git-properties'
-    id 'com.github.ben-manes.versions'
-    id "com.github.sherter.google-java-format"
+    id "org.springframework.boot"
+    id "io.spring.dependency-management"
+    id "java-library"
+    id "com.gorylenko.gradle-git-properties"
+    id "com.github.ben-manes.versions"
+    id "com.diffplug.spotless"
     id "org.sonarqube" apply false
 }
 apply from: "gradle/code-quality.gradle"
@@ -20,8 +20,8 @@ if (project.hasProperty("ci")) {
     apply from: "gradle/owasp.gradle"
 }
 
-group = '<%= packageName %>'
-version = '<%= DEFAULT_APP_VERSION %>'
+group = "<%= packageName %>"
+version = "<%= DEFAULT_APP_VERSION %>"
 sourceCompatibility = <%= JAVA_VERSION %>
 targetCompatibility = <%= JAVA_VERSION %>
 
@@ -33,79 +33,75 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    <%_ if (features.includes('localstack')) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+    <%_ if (features.includes("localstack")) { _%>
     implementation "io.awspring.cloud:spring-cloud-aws-starter"
     implementation "io.awspring.cloud:spring-cloud-aws-starter-sqs"
     <%_ } _%>
-    <%_ if (features.includes('elk')) { _%>
-    implementation 'net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}'
+    <%_ if (features.includes("elk")) { _%>
+    implementation "net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}"
     <%_ } _%>
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.h2database:h2'
-    <%_ if (databaseType === 'mysql') { _%>
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    <%_ if (databaseType === "mysql") { _%>
+    runtimeOnly "com.mysql:mysql-connector-j"
     <%_ } _%>
-    <%_ if (databaseType === 'postgresql') { _%>
-    runtimeOnly 'org.postgresql:postgresql'
+    <%_ if (databaseType === "postgresql") { _%>
+    runtimeOnly "org.postgresql:postgresql"
     <%_ } _%>
-    <%_ if (databaseType === 'mariadb') { _%>
+    <%_ if (databaseType === "mariadb") { _%>
     runtimeOnly "org.mariadb.jdbc:mariadb-java-client"
     <%_ } _%>
-    <%_ if (dbMigrationTool  === 'flywaydb') { _%>
-    implementation 'org.flywaydb:flyway-core'
+    <%_ if (dbMigrationTool  === "flywaydb") { _%>
+    implementation "org.flywaydb:flyway-core"
     <%_ } _%>
-    <%_ if (dbMigrationTool  === 'flywaydb' && (databaseType === 'mysql' || databaseType === 'mariadb')) { _%>
-    implementation 'org.flywaydb:flyway-mysql'
+    <%_ if (dbMigrationTool  === "flywaydb" && (databaseType === "mysql" || databaseType === "mariadb")) { _%>
+    implementation "org.flywaydb:flyway-mysql"
     <%_ } _%>
-    <%_ if (dbMigrationTool === 'liquibase') { _%>
-    implementation 'org.liquibase:liquibase-core'
+    <%_ if (dbMigrationTool === "liquibase") { _%>
+    implementation "org.liquibase:liquibase-core"
     <%_ } _%>
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdoc_openapi_version}"
     implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io:${commons_io_version}"
-    <%_ if (features.includes('monitoring')) { _%>
-    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    <%_ if (features.includes("monitoring")) { _%>
+    runtimeOnly "io.micrometer:micrometer-registry-prometheus"
     <%_ } _%>
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.boot:spring-boot-testcontainers"
     testImplementation "org.projectlombok:lombok"
     testImplementation "org.awaitility:awaitility"
     testImplementation "org.testcontainers:junit-jupiter"
-    <%_ if (databaseType === 'mysql') { _%>
+    <%_ if (databaseType === "mysql") { _%>
     testImplementation "org.testcontainers:mysql"
     <%_ } _%>
-    <%_ if (databaseType === 'postgresql') { _%>
+    <%_ if (databaseType === "postgresql") { _%>
     testImplementation "org.testcontainers:postgresql"
     <%_ } _%>
-    <%_ if (databaseType === 'mariadb') { _%>
+    <%_ if (databaseType === "mariadb") { _%>
     testImplementation "org.testcontainers:mariadb"
     <%_ } _%>
-    <%_ if (features.includes('localstack')) { _%>
+    <%_ if (features.includes("localstack")) { _%>
     testImplementation "org.testcontainers:localstack"
-    // AWS SDK v1 is required by testcontainers-localstack
-    testImplementation "com.amazonaws:aws-java-sdk-core"
     <%_ } _%>
-    testAnnotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor "org.projectlombok:lombok"
 }
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${spring_cloud_version}"
-        <%_ if (features.includes('localstack')) { _%>
+        <%_ if (features.includes("localstack")) { _%>
         mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${spring_cloud_aws_version}"
         <%_ } _%>
-        mavenBom "org.testcontainers:testcontainers-bom:${testcontainers_version}"
     }
 }
 
@@ -142,12 +138,16 @@ gitProperties {
     ]
 }
 
-googleJavaFormat {
-    toolVersion = '1.15.0'
-    options style: 'AOSP'
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        palantirJavaFormat("2.30.0")
+        formatAnnotations()
+    }
 }
 
-check.dependsOn verifyGoogleJavaFormat
+check.dependsOn spotlessCheck
 
 test {
     useJUnitPlatform()
@@ -173,13 +173,15 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+check.dependsOn jacocoTestReport
 
-task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn test
+tasks.register('testReport', TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(test)
 }
 
-task integrationTestReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn integrationTest
+tasks.register('integrationTestReport', TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(integrationTest)
 }
+

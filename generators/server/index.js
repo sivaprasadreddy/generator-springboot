@@ -40,7 +40,7 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if(this.configOptions.formatCode !== false) {
-            this._formatCode(this.configOptions);
+            this._formatCode(this.configOptions, this.configOptions.appName);
         }
         this._printGenerationSummary(this.configOptions);
     }
@@ -82,7 +82,6 @@ module.exports = class extends BaseGenerator {
     }
 
     _generateMiscFiles(configOptions) {
-        this.fs.copyTpl(this.templatePath('app/.editorconfig'), this.destinationPath('.editorconfig'), configOptions);
         this.fs.copyTpl(this.templatePath('app/lombok.config'), this.destinationPath('lombok.config'), configOptions);
         this.fs.copyTpl(this.templatePath('app/sonar-project.properties'), this.destinationPath('sonar-project.properties'), configOptions);
         this.fs.copyTpl(this.templatePath('app/README.md'), this.destinationPath('README.md'), configOptions);
@@ -187,9 +186,9 @@ module.exports = class extends BaseGenerator {
             'config/SwaggerConfig.java',
             'config/ApplicationProperties.java',
             'config/Initializer.java',
+            'config/GlobalExceptionHandler.java',
             'config/logging/Loggable.java',
             'config/logging/LoggingAspect.java',
-            'exception/ErrorDetailProblemHandlingControllerAdvice.java',
             'utils/AppConstants.java'
         ];
         this.generateMainJavaCode(configOptions, mainJavaTemplates);
@@ -197,18 +196,18 @@ module.exports = class extends BaseGenerator {
         const mainResTemplates = [
             'application.properties',
             'application-local.properties',
-            'application-heroku.properties',
             'logback-spring.xml'
         ];
         this.generateMainResCode(configOptions, mainResTemplates);
 
         const testJavaTemplates = [
             'ApplicationIntegrationTest.java',
+            'SchemaValidationTest.java',
+            'common/ContainersConfig.java',
             'common/AbstractIntegrationTest.java',
-            'common/DBContainerInitializer.java'
+            'TestApplication.java'
         ];
         if(configOptions.features.includes("localstack")) {
-            testJavaTemplates.push('common/LocalStackConfig.java');
             testJavaTemplates.push('SqsListenerIntegrationTest.java');
         }
         this.generateTestJavaCode(configOptions, testJavaTemplates);
@@ -224,7 +223,6 @@ module.exports = class extends BaseGenerator {
         if(configOptions.dbMigrationTool === 'flywaydb') {
             let vendor = configOptions.databaseType;
             const resTemplates = [
-                {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/h2/V1__01_init.sql'},
                 {src: 'db/migration/flyway/V1__01_init.sql', dest: 'db/migration/'+ vendor +'/V1__01_init.sql'},
 
             ];
@@ -237,7 +235,7 @@ module.exports = class extends BaseGenerator {
         }
 
         if(configOptions.dbMigrationTool === 'liquibase') {
-            const dbFmt = configOptions.dbMigrationFormat;
+            const dbFmt = configOptions.dbMigrationFormat || 'xml';
             const resTemplates = [
                 {src: 'db/migration/liquibase/changelog/db.changelog-master.yaml', dest: 'db/changelog/db.changelog-master.yaml'},
                 {src: `db/migration/liquibase/changelog/01-init.${dbFmt}`, dest: `db/changelog/migration/01-init.${dbFmt}`},

@@ -53,7 +53,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -65,7 +64,7 @@ jobs:
         env:
           CI: true
 
-# Define separate jobs for each matrix combination
+  # Define separate jobs for each matrix combination
   build-windows:
     needs: []
     strategy:

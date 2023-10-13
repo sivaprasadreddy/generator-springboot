@@ -54,7 +54,7 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if(this.configOptions.formatCode !== false) {
-            this._formatCode(this.configOptions);
+            this._formatCode(this.configOptions, null);
         }
     }
 
@@ -93,11 +93,6 @@ module.exports = class extends BaseGenerator {
         const scriptTemplate = configOptions.doesNotSupportDatabaseSequences ?
             "V1__new_table_no_seq.sql" : "V1__new_table_with_seq.sql";
 
-        this.fs.copyTpl(
-            this.templatePath('app/src/main/resources/db/migration/flyway/V1__new_table_with_seq.sql'),
-            this.destinationPath('src/main/resources/db/migration/h2/V'+counter+'__create_'+configOptions.tableName+'_table.sql'),
-            configOptions
-        );
         this.fs.copyTpl(
             this.templatePath('app/src/main/resources/db/migration/flyway/'+scriptTemplate),
             this.destinationPath('src/main/resources/db/migration/'+vendor+
