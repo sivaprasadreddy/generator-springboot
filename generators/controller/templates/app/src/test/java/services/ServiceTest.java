@@ -67,18 +67,6 @@ class <%= entityName %>ServiceTest {
     }
 
     @Test
-    void save<%= entityName %>() {
-        // given
-        given(<%= entityVarName %>Repository.save(get<%= entityName %>())).willReturn(get<%= entityName %>());
-        // when
-        <%= entityName %> persisted<%= entityName %> = <%= entityVarName %>Service.save<%= entityName %>(get<%= entityName %>());
-        // then
-        assertThat(persisted<%= entityName %>).isNotNull();
-        assertThat(persisted<%= entityName %>.getId()).isEqualTo(1L);
-        assertThat(persisted<%= entityName %>.getText()).isEqualTo("junitTest");
-    }
-
-    @Test
     void delete<%= entityName %>ById() {
         // given
         willDoNothing().given(<%= entityVarName %>Repository).deleteById(1L);

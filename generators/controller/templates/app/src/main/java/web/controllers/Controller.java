@@ -2,6 +2,7 @@ package <%= packageName %>.web.controllers;
 
 import <%= packageName %>.entities.<%= entityName %>;
 import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
+import <%= packageName %>.model.request.<%= entityName %>Request;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.services.<%= entityName %>Service;
 import <%= packageName %>.utils.AppConstants;
@@ -71,8 +72,8 @@ public class <%= entityName %>Controller {
     }
 
     @PostMapping
-    public ResponseEntity<<%= entityName %>> create<%= entityName %>(@RequestBody @Validated <%= entityName %> <%= entityVarName %>) {
-        <%= entityName %> response = <%= entityVarName %>Service.save<%= entityName %>(<%= entityVarName %>);
+    public ResponseEntity<<%= entityName %>> create<%= entityName %>(@RequestBody @Validated <%= entityName %>Request <%= entityVarName %>Request) {
+        <%= entityName %> response = <%= entityVarName %>Service.save<%= entityName %>(<%= entityVarName %>Request);
         URI location =
                 ServletUriComponentsBuilder.fromCurrentRequest()
                         .path("<%= basePath %>/{id}")

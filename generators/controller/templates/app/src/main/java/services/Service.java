@@ -1,11 +1,14 @@
 package <%= packageName %>.services;
 
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.mapper.<%= entityName %>Mapper;
 import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
+import <%= packageName %>.model.request.<%= entityName %>Request;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.repositories.<%= entityName %>Repository;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,14 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class <%= entityName %>Service {
 
     private final <%= entityName %>Repository <%= entityVarName %>Repository;
-
-    @Autowired
-    public <%= entityName %>Service(<%= entityName %>Repository <%= entityVarName %>Repository) {
-        this.<%= entityVarName %>Repository = <%= entityVarName %>Repository;
-    }
+    private final <%= entityName %>Mapper <%= entityVarName %>Mapper;
 
     public PagedResult<<%= entityName %>> findAll<%= entityName %>s(
         Find<%= entityName %>sQuery find<%= entityName %>sQuery) {
@@ -50,7 +50,8 @@ public class <%= entityName %>Service {
         return <%= entityVarName %>Repository.findById(id);
     }
 
-    public <%= entityName %> save<%= entityName %>(<%= entityName %> <%= entityVarName %>) {
+    public <%= entityName %> save<%= entityName %>(<%= entityName %>Request <%= entityVarName %>Request) {
+        <%= entityName %> <%= entityVarName %> = <%= entityVarName %>Mapper.toEntity(<%= entityVarName %>Request);
         return <%= entityVarName %>Repository.save(<%= entityVarName %>);
     }
 
