@@ -60,7 +60,7 @@ class <%= entityName %>ControllerTest {
         Page<<%= entityName %>> page = new PageImpl<>(<%= entityVarName %>List);
         PagedResult<<%= entityName %>> <%= entityVarName %>PagedResult = new PagedResult<>(page);
         Find<%= entityName %>sQuery find<%= entityName %>sQuery = new Find<%= entityName %>sQuery(0, 10, "id", "desc");
-        given(customerService.findAll<%= entityName %>s(find<%= entityName %>sQuery)).willReturn(<%= entityVarName %>PagedResult);
+        given(<%= entityVarName %>Service.findAll<%= entityName %>s(find<%= entityName %>sQuery)).willReturn(<%= entityVarName %>PagedResult);
 
         this.mockMvc
                 .perform(get("<%= basePath %>"))
