@@ -153,6 +153,7 @@ Generating JPA entity, repository, service and controller
 EntityName: Customer, basePath: /api/customers
     force .yo-rc.json
    create src/main/java/com/sivalabs/blog/entities/Customer.java
+   create src/main/java/com/sivalabs/blog/model/query/FindOrdersQuery.java
    create src/main/java/com/sivalabs/blog/model/response/PagedResult.java
    create src/main/java/com/sivalabs/blog/repositories/CustomerRepository.java
    create src/main/java/com/sivalabs/blog/services/CustomerService.java
@@ -175,6 +176,7 @@ No change to package.json was detected. No package manager install will be execu
 [INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerIT.java
 [INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/services/CustomerServiceTest.java
 [INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/web/controllers/CustomerController.java
+[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/model/query/FindCustomersQuery.java
 [INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/model/response/PagedResult.java
 [INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/services/CustomerService.java
 [INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/entities/Customer.java
