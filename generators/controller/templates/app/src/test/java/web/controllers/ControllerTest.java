@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import <%= packageName %>.entities.<%= entityName %>;
 import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
+import <%= packageName %>.model.request.<%= entityName %>Request;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.services.<%= entityName %>Service;
 import java.util.ArrayList;
@@ -98,15 +100,17 @@ class <%= entityName %>ControllerTest {
 
     @Test
     void shouldCreateNew<%= entityName %>() throws Exception {
-        given(<%= entityVarName %>Service.save<%= entityName %>(any(<%= entityName %>.class)))
-                .willAnswer((invocation) -> invocation.getArgument(0));
 
         <%= entityName %> <%= entityVarName %> = new <%= entityName %>(1L, "some text");
+        <%= entityName %>Request <%= entityVarName %>Request = new <%= entityName %>Request("some text");
+        given(<%= entityVarName %>Service.save<%= entityName %>(any(<%= entityName %>Request.class)))
+                .willReturn(<%= entityVarName %>);
+
         this.mockMvc
                 .perform(
                         post("<%= basePath %>")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(jsonPath("$.id", notNullValue()))
@@ -115,13 +119,13 @@ class <%= entityName %>ControllerTest {
 
     @Test
     void shouldReturn400WhenCreateNew<%= entityName %>WithoutText() throws Exception {
-        <%= entityName %> <%= entityVarName %> = new <%= entityName %>(null, null);
+        <%= entityName %>Request <%= entityVarName %>Request = new <%= entityName %>Request(null);
 
         this.mockMvc
                 .perform(
                         post("<%= basePath %>")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
                 .andExpect(jsonPath("$.type", is("about:blank")))
@@ -139,16 +143,17 @@ class <%= entityName %>ControllerTest {
     void shouldUpdate<%= entityName %>() throws Exception {
         Long <%= entityVarName %>Id = 1L;
         <%= entityName %> <%= entityVarName %> = new <%= entityName %>(<%= entityVarName %>Id, "Updated text");
-        given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.of(<%= entityVarName %>));
-        given(<%= entityVarName %>Service.save<%= entityName %>(any(<%= entityName %>.class)))
-                .willAnswer((invocation) -> invocation.getArgument(0));
+        <%= entityName %>Request <%= entityVarName %>Request = new <%= entityName %>Request("Updated text");
+        given(<%= entityVarName %>Service.update<%= entityName %>(eq(<%= entityVarName %>Id), any(<%= entityName %>Request.class)))
+                .willReturn(<%= entityVarName %>);
 
         this.mockMvc
                 .perform(
-                        put("<%= basePath %>/{id}", <%= entityVarName %>.getId())
+                        put("<%= basePath %>/{id}", <%= entityVarName %>Id)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1L), Long.class))
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
     }
 

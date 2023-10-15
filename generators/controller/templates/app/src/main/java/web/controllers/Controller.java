@@ -86,7 +86,7 @@ public class <%= entityName %>Controller {
     @PutMapping("/{id}")
     public ResponseEntity<<%= entityName %>> update<%= entityName %>(
             @PathVariable Long id, @RequestBody @Valid <%= entityName %>Request <%= entityVarName %>Request) {
-        return ResponseEntity.ok(<%= entityVarName %>Service.updateCustomer(id, <%= entityVarName %>Request));
+        return ResponseEntity.ok(<%= entityVarName %>Service.update<%= entityName %>(id, <%= entityVarName %>Request));
     }
 
     @DeleteMapping("/{id}")
