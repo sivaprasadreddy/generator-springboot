@@ -1,6 +1,7 @@
 package <%= packageName %>.web.controllers;
 
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.exception.<%= entityName %>NotFoundException;
 import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.request.<%= entityName %>Request;
 import <%= packageName %>.model.response.PagedResult;
@@ -69,7 +70,7 @@ public class <%= entityName %>Controller {
         return <%= entityVarName %>Service
                 .find<%= entityName %>ById(id)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new <%= entityName %>NotFoundException(id));
     }
 
     @PostMapping
@@ -98,6 +99,6 @@ public class <%= entityName %>Controller {
                             <%= entityVarName %>Service.delete<%= entityName %>ById(id);
                             return ResponseEntity.ok(<%= entityVarName %>);
                         })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new <%= entityName %>NotFoundException(id));
     }
 }

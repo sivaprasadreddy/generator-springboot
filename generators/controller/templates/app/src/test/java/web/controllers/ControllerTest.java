@@ -96,7 +96,15 @@ class <%= entityName %>ControllerTest {
         Long <%= entityVarName %>Id = 1L;
         given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.empty());
 
-        this.mockMvc.perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id)).andExpect(status().isNotFound());
+        this.mockMvc.perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
+        .andExpect(status().isNotFound())
+        .andExpect(header().string("Content-Type", is(MediaType.APPLICATION_PROBLEM_JSON_VALUE)))
+        .andExpect(jsonPath("$.type", is("http://api.<%= entityVarName %>s.com/errors/not-found")))
+        .andExpect(jsonPath("$.title", is("<%= entityName %> Not Found")))
+        .andExpect(jsonPath("$.status", is(404)))
+        .andExpect(
+                jsonPath("$.detail")
+                        .value("<%= entityName %> with Id '%d' not found".formatted(<%= entityVarName %>Id)));
     }
 
     @Test
@@ -170,7 +178,14 @@ class <%= entityName %>ControllerTest {
                         put("<%= basePath %>/{id}", <%= entityVarName %>Id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
-                .andExpect(status().isNotFound());
+                                .andExpect(status().isNotFound())
+                                .andExpect(header().string("Content-Type", is(MediaType.APPLICATION_PROBLEM_JSON_VALUE)))
+                                .andExpect(jsonPath("$.type", is("http://api.<%= entityVarName %>s.com/errors/not-found")))
+                                .andExpect(jsonPath("$.title", is("<%= entityName %> Not Found")))
+                                .andExpect(jsonPath("$.status", is(404)))
+                                .andExpect(
+                                        jsonPath("$.detail")
+                                                .value("<%= entityName %> with Id '%d' not found".formatted(<%= entityVarName %>Id)));
     }
 
     @Test
@@ -193,6 +208,12 @@ class <%= entityName %>ControllerTest {
 
         this.mockMvc
                 .perform(delete("<%= basePath %>/{id}", <%= entityVarName %>Id))
-                .andExpect(status().isNotFound());
+                .andExpect(header().string("Content-Type", is(MediaType.APPLICATION_PROBLEM_JSON_VALUE)))
+        .andExpect(jsonPath("$.type", is("http://api.<%= entityVarName %>s.com/errors/not-found")))
+        .andExpect(jsonPath("$.title", is("<%= entityName %> Not Found")))
+        .andExpect(jsonPath("$.status", is(404)))
+        .andExpect(
+                jsonPath("$.detail")
+                        .value("<%= entityName %> with Id '%d' not found".formatted(<%= entityVarName %>Id)));
     }
 }

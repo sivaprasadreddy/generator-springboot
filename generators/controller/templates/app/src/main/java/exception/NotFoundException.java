@@ -16,7 +16,7 @@ public class <%= entityName %>NotFoundException extends ErrorResponseException {
     private static ProblemDetail asProblemDetail(Long id) {
         ProblemDetail problemDetail =
                 ProblemDetail.forStatusAndDetail(
-                        HttpStatus.NOT_FOUND, "<%= entityName %> with id " + id + " not found");
+                        HttpStatus.NOT_FOUND, "<%= entityName %> with Id '%d' not found".formatted(id));
         problemDetail.setTitle("<%= entityName %> Not Found");
         problemDetail.setType(URI.create("http://api.<%= entityVarName %>s.com/errors/not-found"));
         problemDetail.setProperty("errorCategory", "Generic");
