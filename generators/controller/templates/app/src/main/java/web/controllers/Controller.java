@@ -6,9 +6,9 @@ import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.services.<%= entityName %>Service;
 import <%= packageName %>.utils.AppConstants;
 import java.util.List;
+import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("<%= basePath %>")
@@ -71,9 +71,14 @@ public class <%= entityName %>Controller {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public <%= entityName %> create<%= entityName %>(@RequestBody @Validated <%= entityName %> <%= entityVarName %>) {
-        return <%= entityVarName %>Service.save<%= entityName %>(<%= entityVarName %>);
+    public ResponseEntity<<%= entityName %>> create<%= entityName %>(@RequestBody @Validated <%= entityName %> <%= entityVarName %>) {
+        <%= entityName %> response = <%= entityVarName %>Service.save<%= entityName %>(<%= entityVarName %>);
+        URI location =
+                ServletUriComponentsBuilder.fromCurrentRequest()
+                        .path("<%= basePath %>/{id}")
+                        .buildAndExpand(response.getId())
+                        .toUri();
+        return ResponseEntity.created(location).body(response);
     }
 
     @PutMapping("/{id}")
