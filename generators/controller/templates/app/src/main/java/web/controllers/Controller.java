@@ -1,6 +1,7 @@
 package <%= packageName %>.web.controllers;
 
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.services.<%= entityName %>Service;
 import <%= packageName %>.utils.AppConstants;
@@ -56,7 +57,9 @@ public class <%= entityName %>Controller {
                         required = false)
                 String sortDir
                 ) {
-        return <%= entityVarName %>Service.findAll<%= entityName %>s(pageNo, pageSize, sortBy, sortDir);
+        Find<%= entityName %>sQuery find<%= entityName %>sQuery =
+                new Find<%= entityName %>sQuery(pageNo, pageSize, sortBy, sortDir);
+        return <%= entityVarName %>Service.findAll<%= entityName %>s(find<%= entityName %>sQuery);
     }
 
     @GetMapping("/{id}")

@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.willDoNothing;
 
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.repositories.<%= entityName %>Repository;
 import java.util.List;
@@ -37,7 +38,8 @@ class <%= entityName %>ServiceTest {
         given(<%= entityVarName %>Repository.findAll(pageable)).willReturn(<%= entityVarName %>Page);
 
         // when
-        PagedResult<<%= entityName %>> pagedResult = <%= entityVarName %>Service.findAll<%= entityName %>s(0, 10, "id", "asc");
+        Find<%= entityName %>sQuery find<%= entityName %>sQuery = new Find<%= entityName %>sQuery(0, 10, "id", "asc");
+        PagedResult<<%= entityName %>> pagedResult = <%= entityVarName %>Service.findAll<%= entityName %>s(find<%= entityName %>sQuery);
 
         // then
         assertThat(pagedResult).isNotNull();

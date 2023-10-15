@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.services.<%= entityName %>Service;
 import java.util.ArrayList;
@@ -55,10 +56,11 @@ class <%= entityName %>ControllerTest {
 
     @Test
     void shouldFetchAll<%= entityName %>s() throws Exception {
+
         Page<<%= entityName %>> page = new PageImpl<>(<%= entityVarName %>List);
         PagedResult<<%= entityName %>> <%= entityVarName %>PagedResult = new PagedResult<>(page);
-        given(<%= entityVarName %>Service.findAll<%= entityName %>s(0, 10, "id", "asc"))
-                .willReturn(<%= entityVarName %>PagedResult);
+        Find<%= entityName %>sQuery find<%= entityName %>sQuery = new Find<%= entityName %>sQuery(0, 10, "id", "desc");
+        given(customerService.findAll<%= entityName %>s(find<%= entityName %>sQuery)).willReturn(<%= entityVarName %>PagedResult);
 
         this.mockMvc
                 .perform(get("<%= basePath %>"))

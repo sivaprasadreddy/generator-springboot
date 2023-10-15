@@ -1,6 +1,7 @@
 package <%= packageName %>.services;
 
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.repositories.<%= entityName %>Repository;
 import java.util.List;
@@ -25,17 +26,24 @@ public class <%= entityName %>Service {
     }
 
     public PagedResult<<%= entityName %>> findAll<%= entityName %>s(
-        int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort =
-        sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
+        Find<%= entityName %>sQuery find<%= entityName %>sQuery) {
 
         // create Pageable instance
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Pageable pageable = createPageable(find<%= entityName %>sQuery);
+
         Page<<%= entityName %>> <%= entityVarName %>sPage = <%= entityVarName %>Repository.findAll(pageable);
 
         return new PagedResult<>(<%= entityVarName %>sPage);
+    }
+    
+    private Pageable createPageable(Find<%= entityName %>sQuery find<%= entityName %>sQuery) {
+        int pageNo = Math.max(find<%= entityName %>sQuery.pageNo() - 1, 0);
+        Sort sort =
+                Sort.by(
+                        find<%= entityName %>sQuery.sortDir().equalsIgnoreCase(Sort.Direction.ASC.name())
+                                ? Sort.Order.asc(find<%= entityName %>sQuery.sortBy())
+                                : Sort.Order.desc(find<%= entityName %>sQuery.sortBy()));
+        return PageRequest.of(pageNo, find<%= entityName %>sQuery.pageSize(), sort);
     }
 
     public Optional<<%= entityName %>> find<%= entityName %>ById(Long id) {
