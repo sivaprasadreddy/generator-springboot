@@ -8,6 +8,7 @@ import <%= packageName %>.services.<%= entityName %>Service;
 import <%= packageName %>.utils.AppConstants;
 import java.util.List;
 import java.net.URI;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -84,15 +85,8 @@ public class <%= entityName %>Controller {
 
     @PutMapping("/{id}")
     public ResponseEntity<<%= entityName %>> update<%= entityName %>(
-            @PathVariable Long id, @RequestBody <%= entityName %> <%= entityVarName %>) {
-        return <%= entityVarName %>Service
-                .find<%= entityName %>ById(id)
-                .map(
-                        <%= entityVarName %>Obj -> {
-                            <%= entityVarName %>.setId(id);
-                            return ResponseEntity.ok(<%= entityVarName %>Service.save<%= entityName %>(<%= entityVarName %>));
-                        })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+            @PathVariable Long id, @RequestBody @Valid <%= entityName %>Request <%= entityVarName %>Request) {
+        return ResponseEntity.ok(<%= entityVarName %>Service.updateCustomer(id, <%= entityVarName %>Request));
     }
 
     @DeleteMapping("/{id}")

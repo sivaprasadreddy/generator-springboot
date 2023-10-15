@@ -1,6 +1,7 @@
 package <%= packageName %>.services;
 
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.exception.<%= entityName %>NotFoundException;
 import <%= packageName %>.mapper.<%= entityName %>Mapper;
 import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.request.<%= entityName %>Request;
@@ -53,6 +54,21 @@ public class <%= entityName %>Service {
     public <%= entityName %> save<%= entityName %>(<%= entityName %>Request <%= entityVarName %>Request) {
         <%= entityName %> <%= entityVarName %> = <%= entityVarName %>Mapper.toEntity(<%= entityVarName %>Request);
         return <%= entityVarName %>Repository.save(<%= entityVarName %>);
+    }
+
+    public <%= entityName %> update<%= entityName %>(Long id, <%= entityName %>Request <%= entityVarName %>Request) {
+        <%= entityName %> <%= entityVarName %> =
+        <%= entityVarName %>Repository
+                        .findById(id)
+                        .orElseThrow(() -> new <%= entityName %>NotFoundException(id));
+
+        // Update the <%= entityVarName %> object with data from <%= entityVarName %>Request
+        <%= entityVarName %>Mapper.map<%= entityName %>WithRequest(<%= entityVarName %>, <%= entityVarName %>Request);
+
+        // Save the updated <%= entityVarName %> object
+        <%= entityName %> updated<%= entityName %> = <%= entityVarName %>Repository.save(<%= entityVarName %>);
+
+        return updated<%= entityName %>;
     }
 
     public void delete<%= entityName %>ById(Long id) {

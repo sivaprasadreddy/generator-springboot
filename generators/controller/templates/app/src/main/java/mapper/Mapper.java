@@ -12,4 +12,8 @@ public class <%= entityName %>Mapper {
         <%= entityVarName %>.setText(<%= entityVarName %>Request.text());
         return <%= entityVarName %>;
     }
+
+    public void map<%= entityName %>WithRequest(<%= entityName %> <%= entityVarName %>, <%= entityName %>Request <%= entityVarName %>Request) {
+        <%= entityVarName %>.setText(<%= entityVarName %>Request.text());
+    }
 }

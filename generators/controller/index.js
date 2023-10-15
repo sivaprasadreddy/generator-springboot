@@ -61,6 +61,7 @@ module.exports = class extends BaseGenerator {
     _generateAppCode(configOptions) {
         const mainJavaTemplates = [
             {src: 'entities/Entity.java', dest: 'entities/'+configOptions.entityName+'.java'},
+            {src: 'exception/NotFoundException.java', dest: 'exception/'+configOptions.entityName+'NotFoundException.java'},
             {src: 'mapper/Mapper.java', dest: 'mapper/'+configOptions.entityName+'Mapper.java'},
             {src: 'model/query/FindQuery.java', dest: 'model/query/Find'+configOptions.entityName+'sQuery.java'},
             {src: 'model/response/PagedResult.java', dest: 'model/response/PagedResult.java'},
