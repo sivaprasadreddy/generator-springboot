@@ -154,7 +154,7 @@ class <%= entityName %>ControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1L), Long.class))
+                .andExpect(jsonPath("$.id", is(<%= entityVarName %>Id), Long.class))
                 .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
     }
 
