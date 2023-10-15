@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.exception.<%= entityName %>NotFoundException;
 import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.request.<%= entityName %>Request;
 import <%= packageName %>.model.response.PagedResult;
@@ -160,14 +161,15 @@ class <%= entityName %>ControllerTest {
     @Test
     void shouldReturn404WhenUpdatingNonExisting<%= entityName %>() throws Exception {
         Long <%= entityVarName %>Id = 1L;
-        given(<%= entityVarName %>Service.find<%= entityName %>ById(<%= entityVarName %>Id)).willReturn(Optional.empty());
-        <%= entityName %> <%= entityVarName %> = new <%= entityName %>(<%= entityVarName %>Id, "Updated text");
+        <%= entityName %>Request <%= entityVarName %>Request = new <%= entityName %>Request("Updated text");
+        given(<%= entityVarName %>Service.update<%= entityName %>(eq(<%= entityVarName %>Id), any(<%= entityName %>Request.class)))
+                .willThrow(new <%= entityName %>NotFoundException(<%= entityVarName %>Id));
 
         this.mockMvc
                 .perform(
                         put("<%= basePath %>/{id}", <%= entityVarName %>Id)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
                 .andExpect(status().isNotFound());
     }
 
