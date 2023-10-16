@@ -82,6 +82,7 @@ Generating SpringBoot Application
    create blog/src/main/java/com/sivalabs/blog/config/GlobalExceptionHandler.java
    create blog/src/main/java/com/sivalabs/blog/config/logging/Loggable.java
    create blog/src/main/java/com/sivalabs/blog/config/logging/LoggingAspect.java
+   create blog/src/main/java/com/sivalabs/blog/model/response/PagedResult.java
    create blog/src/main/java/com/sivalabs/blog/utils/AppConstants.java
    create blog/src/main/resources/application.properties
    create blog/src/main/resources/application-local.properties
@@ -106,6 +107,7 @@ No change to package.json was detected. No package manager install will be execu
 [INFO] --- spotless:2.39.0:apply (default-cli) @ blog ---
 [INFO] Index file does not exist. Fallback to an empty index
 [INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/TestApplication.java
+[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/model/response/PagedResult.java
 [INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/SqsListenerIntegrationTest.java
 [INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/SchemaValidationTest.java
 [INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/common/AbstractIntegrationTest.java
@@ -153,7 +155,6 @@ Generating JPA entity, repository, service and controller
 EntityName: Customer, basePath: /api/customers
     force .yo-rc.json
    create src/main/java/com/sivalabs/blog/entities/Customer.java
-   create src/main/java/com/sivalabs/blog/model/response/PagedResult.java
    create src/main/java/com/sivalabs/blog/repositories/CustomerRepository.java
    create src/main/java/com/sivalabs/blog/services/CustomerService.java
    create src/main/java/com/sivalabs/blog/web/controllers/CustomerController.java
@@ -175,7 +176,6 @@ No change to package.json was detected. No package manager install will be execu
 [INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerIT.java
 [INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/services/CustomerServiceTest.java
 [INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/web/controllers/CustomerController.java
-[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/model/response/PagedResult.java
 [INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/services/CustomerService.java
 [INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/entities/Customer.java
 [INFO] Spotless.Java is keeping 23 files clean - 7 were changed to be clean, 1 were already clean, 15 were skipped because caching determined they were already clean
