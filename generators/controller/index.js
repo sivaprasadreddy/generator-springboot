@@ -64,7 +64,6 @@ module.exports = class extends BaseGenerator {
             {src: 'exception/NotFoundException.java', dest: 'exception/'+configOptions.entityName+'NotFoundException.java'},
             {src: 'mapper/Mapper.java', dest: 'mapper/'+configOptions.entityName+'Mapper.java'},
             {src: 'model/query/FindQuery.java', dest: 'model/query/Find'+configOptions.entityName+'sQuery.java'},
-            {src: 'model/response/PagedResult.java', dest: 'model/response/PagedResult.java'},
             {src: 'model/request/Request.java', dest: 'model/request/'+configOptions.entityName+'Request.java'},
             {src: 'repositories/Repository.java', dest: 'repositories/'+configOptions.entityName+'Repository.java'},
             {src: 'services/Service.java', dest: 'services/'+configOptions.entityName+'Service.java'},
