@@ -99,8 +99,8 @@ class <%= entityName %>ControllerTest {
         this.mockMvc.perform(get("<%= basePath %>/{id}", <%= entityVarName %>Id))
         .andExpect(status().isNotFound())
         .andExpect(header().string("Content-Type", is(MediaType.APPLICATION_PROBLEM_JSON_VALUE)))
-        .andExpect(jsonPath("$.type", is("http://api.<%= entityVarName %>s.com/errors/not-found")))
-        .andExpect(jsonPath("$.title", is("<%= entityName %> Not Found")))
+        .andExpect(jsonPath("$.type", is("http://api.<%= appName %>.com/errors/not-found")))
+        .andExpect(jsonPath("$.title", is("Not Found")))
         .andExpect(jsonPath("$.status", is(404)))
         .andExpect(
                 jsonPath("$.detail")
@@ -180,8 +180,8 @@ class <%= entityName %>ControllerTest {
                                 .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
                                 .andExpect(status().isNotFound())
                                 .andExpect(header().string("Content-Type", is(MediaType.APPLICATION_PROBLEM_JSON_VALUE)))
-                                .andExpect(jsonPath("$.type", is("http://api.<%= entityVarName %>s.com/errors/not-found")))
-                                .andExpect(jsonPath("$.title", is("<%= entityName %> Not Found")))
+                                .andExpect(jsonPath("$.type", is("http://api.<%= appName %>.com/errors/not-found")))
+                                .andExpect(jsonPath("$.title", is("Not Found")))
                                 .andExpect(jsonPath("$.status", is(404)))
                                 .andExpect(
                                         jsonPath("$.detail")
@@ -209,8 +209,8 @@ class <%= entityName %>ControllerTest {
         this.mockMvc
                 .perform(delete("<%= basePath %>/{id}", <%= entityVarName %>Id))
                 .andExpect(header().string("Content-Type", is(MediaType.APPLICATION_PROBLEM_JSON_VALUE)))
-        .andExpect(jsonPath("$.type", is("http://api.<%= entityVarName %>s.com/errors/not-found")))
-        .andExpect(jsonPath("$.title", is("<%= entityName %> Not Found")))
+        .andExpect(jsonPath("$.type", is("http://api.<%= appName %>.com/errors/not-found")))
+        .andExpect(jsonPath("$.title", is("Not Found")))
         .andExpect(jsonPath("$.status", is(404)))
         .andExpect(
                 jsonPath("$.detail")
