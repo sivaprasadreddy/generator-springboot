@@ -4,6 +4,7 @@ import <%= packageName %>.entities.<%= entityName %>;
 import <%= packageName %>.exception.<%= entityName %>NotFoundException;
 import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.request.<%= entityName %>Request;
+import <%= packageName %>.model.response.<%= entityName %>Response;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.services.<%= entityName %>Service;
 import <%= packageName %>.utils.AppConstants;
@@ -66,7 +67,7 @@ public class <%= entityName %>Controller {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<<%= entityName %>> get<%= entityName %>ById(@PathVariable Long id) {
+    public ResponseEntity<<%= entityName %>Response> get<%= entityName %>ById(@PathVariable Long id) {
         return <%= entityVarName %>Service
                 .find<%= entityName %>ById(id)
                 .map(ResponseEntity::ok)
@@ -74,24 +75,24 @@ public class <%= entityName %>Controller {
     }
 
     @PostMapping
-    public ResponseEntity<<%= entityName %>> create<%= entityName %>(@RequestBody @Validated <%= entityName %>Request <%= entityVarName %>Request) {
-        <%= entityName %> response = <%= entityVarName %>Service.save<%= entityName %>(<%= entityVarName %>Request);
+    public ResponseEntity<<%= entityName %>Response> create<%= entityName %>(@RequestBody @Validated <%= entityName %>Request <%= entityVarName %>Request) {
+        <%= entityName %>Response response = <%= entityVarName %>Service.save<%= entityName %>(<%= entityVarName %>Request);
         URI location =
                 ServletUriComponentsBuilder.fromCurrentRequest()
                         .path("<%= basePath %>/{id}")
-                        .buildAndExpand(response.getId())
+                        .buildAndExpand(response.id())
                         .toUri();
         return ResponseEntity.created(location).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<<%= entityName %>> update<%= entityName %>(
+    public ResponseEntity<<%= entityName %>Response> update<%= entityName %>(
             @PathVariable Long id, @RequestBody @Valid <%= entityName %>Request <%= entityVarName %>Request) {
         return ResponseEntity.ok(<%= entityVarName %>Service.update<%= entityName %>(id, <%= entityVarName %>Request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<<%= entityName %>> delete<%= entityName %>(@PathVariable Long id) {
+    public ResponseEntity<<%= entityName %>Response> delete<%= entityName %>(@PathVariable Long id) {
         return <%= entityVarName %>Service
                 .find<%= entityName %>ById(id)
                 .map(

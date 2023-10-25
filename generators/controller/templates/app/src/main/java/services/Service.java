@@ -5,6 +5,7 @@ import <%= packageName %>.exception.<%= entityName %>NotFoundException;
 import <%= packageName %>.mapper.<%= entityName %>Mapper;
 import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.request.<%= entityName %>Request;
+import <%= packageName %>.model.response.<%= entityName %>Response;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.repositories.<%= entityName %>Repository;
 import java.util.List;
@@ -47,16 +48,17 @@ public class <%= entityName %>Service {
         return PageRequest.of(pageNo, find<%= entityName %>sQuery.pageSize(), sort);
     }
 
-    public Optional<<%= entityName %>> find<%= entityName %>ById(Long id) {
-        return <%= entityVarName %>Repository.findById(id);
+    public Optional<<%= entityName %>Response> find<%= entityName %>ById(Long id) {
+        return <%= entityVarName %>Repository.findById(id).map(<%= entityVarName %>Mapper::toResponse);
     }
 
-    public <%= entityName %> save<%= entityName %>(<%= entityName %>Request <%= entityVarName %>Request) {
+    public <%= entityName %>Response save<%= entityName %>(<%= entityName %>Request <%= entityVarName %>Request) {
         <%= entityName %> <%= entityVarName %> = <%= entityVarName %>Mapper.toEntity(<%= entityVarName %>Request);
-        return <%= entityVarName %>Repository.save(<%= entityVarName %>);
+        <%= entityName %> saved<%= entityName %> = <%= entityVarName %>Repository.save(<%= entityVarName %>);
+        return <%= entityVarName %>Mapper.toResponse(saved<%= entityName %>);
     }
 
-    public <%= entityName %> update<%= entityName %>(Long id, <%= entityName %>Request <%= entityVarName %>Request) {
+    public <%= entityName %>Response update<%= entityName %>(Long id, <%= entityName %>Request <%= entityVarName %>Request) {
         <%= entityName %> <%= entityVarName %> =
         <%= entityVarName %>Repository
                         .findById(id)
@@ -68,7 +70,7 @@ public class <%= entityName %>Service {
         // Save the updated <%= entityVarName %> object
         <%= entityName %> updated<%= entityName %> = <%= entityVarName %>Repository.save(<%= entityVarName %>);
 
-        return updated<%= entityName %>;
+        return <%= entityVarName %>Mapper.toResponse(updated<%= entityName %>);
     }
 
     public void delete<%= entityName %>ById(Long id) {
