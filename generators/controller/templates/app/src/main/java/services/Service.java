@@ -27,7 +27,7 @@ public class <%= entityName %>Service {
     private final <%= entityName %>Repository <%= entityVarName %>Repository;
     private final <%= entityName %>Mapper <%= entityVarName %>Mapper;
 
-    public PagedResult<<%= entityName %>> findAll<%= entityName %>s(
+    public PagedResult<<%= entityName %>Response> findAll<%= entityName %>s(
         Find<%= entityName %>sQuery find<%= entityName %>sQuery) {
 
         // create Pageable instance
@@ -35,7 +35,17 @@ public class <%= entityName %>Service {
 
         Page<<%= entityName %>> <%= entityVarName %>sPage = <%= entityVarName %>Repository.findAll(pageable);
 
-        return new PagedResult<>(<%= entityVarName %>sPage);
+        List<<%= entityName %>Response> <%= entityVarName %>Responses = <%= entityVarName %>Mapper.toResponseList(<%= entityVarName %>sPage.getContent());
+
+        return new PagedResult<>(
+                <%= entityVarName %>Responses,
+                <%= entityVarName %>sPage.getTotalElements(),
+                <%= entityVarName %>sPage.getNumber() + 1,
+                <%= entityVarName %>sPage.getTotalPages(),
+                <%= entityVarName %>sPage.isFirst(),
+                <%= entityVarName %>sPage.isLast(),
+                <%= entityVarName %>sPage.hasNext(),
+                <%= entityVarName %>sPage.hasPrevious());
     }
     
     private Pageable createPageable(Find<%= entityName %>sQuery find<%= entityName %>sQuery) {

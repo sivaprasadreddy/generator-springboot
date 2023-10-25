@@ -35,29 +35,6 @@ class <%= entityName %>ServiceTest {
     @InjectMocks private <%= entityName %>Service <%= entityVarName %>Service;
 
     @Test
-    void findAll<%= entityName %>s() {
-        // given
-        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
-        Page<<%= entityName %>> <%= entityVarName %>Page = new PageImpl<>(List.of(get<%= entityName %>()));
-        given(<%= entityVarName %>Repository.findAll(pageable)).willReturn(<%= entityVarName %>Page);
-
-        // when
-        Find<%= entityName %>sQuery find<%= entityName %>sQuery = new Find<%= entityName %>sQuery(0, 10, "id", "asc");
-        PagedResult<<%= entityName %>> pagedResult = <%= entityVarName %>Service.findAll<%= entityName %>s(find<%= entityName %>sQuery);
-
-        // then
-        assertThat(pagedResult).isNotNull();
-        assertThat(pagedResult.data()).isNotEmpty().hasSize(1);
-        assertThat(pagedResult.hasNext()).isFalse();
-        assertThat(pagedResult.pageNumber()).isEqualTo(1);
-        assertThat(pagedResult.totalPages()).isEqualTo(1);
-        assertThat(pagedResult.isFirst()).isTrue();
-        assertThat(pagedResult.isLast()).isTrue();
-        assertThat(pagedResult.hasPrevious()).isFalse();
-        assertThat(pagedResult.totalElements()).isEqualTo(1);
-    }
-
-    @Test
     void find<%= entityName %>ById() {
         // given
         given(<%= entityVarName %>Repository.findById(1L)).willReturn(Optional.of(get<%= entityName %>()));

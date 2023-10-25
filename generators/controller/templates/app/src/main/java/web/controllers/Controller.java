@@ -1,6 +1,5 @@
 package <%= packageName %>.web.controllers;
 
-import <%= packageName %>.entities.<%= entityName %>;
 import <%= packageName %>.exception.<%= entityName %>NotFoundException;
 import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
 import <%= packageName %>.model.request.<%= entityName %>Request;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.net.URI;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,17 +29,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @RequestMapping("<%= basePath %>")
 @Slf4j
+@RequiredArgsConstructor
 public class <%= entityName %>Controller {
 
     private final <%= entityName %>Service <%= entityVarName %>Service;
 
-    @Autowired
-    public <%= entityName %>Controller(<%= entityName %>Service <%= entityVarName %>Service) {
-        this.<%= entityVarName %>Service = <%= entityVarName %>Service;
-    }
-
     @GetMapping
-    public PagedResult<<%= entityName %>> getAll<%= entityName %>s(
+    public PagedResult<<%= entityName %>Response> getAll<%= entityName %>s(
             @RequestParam(
                 value = "pageNo",
                 defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,
