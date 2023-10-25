@@ -162,6 +162,7 @@ EntityName: Customer, basePath: /api/customers
    create src/main/java/com/sivalabs/blog/mapper/CustomerMapper.java
    create src/main/java/com/sivalabs/blog/model/query/FindCustomersQuery.java
    create src/main/java/com/sivalabs/blog/model/request/CustomerRequest.java
+   create src/main/java/com/sivalabs/blog/model/response/CustomerResponse.java
    create src/main/java/com/sivalabs/blog/repositories/CustomerRepository.java
    create src/main/java/com/sivalabs/blog/services/CustomerService.java
    create src/main/java/com/sivalabs/blog/web/controllers/CustomerController.java
