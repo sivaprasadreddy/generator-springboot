@@ -1,12 +1,16 @@
 package <%= packageName %>.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.willDoNothing;
 
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.mapper.<%= entityName %>Mapper;
+import <%= packageName %>.model.query.Find<%= entityName %>sQuery;
+import <%= packageName %>.model.response.<%= entityName %>Response;
 import <%= packageName %>.model.response.PagedResult;
 import <%= packageName %>.repositories.<%= entityName %>Repository;
 import java.util.List;
@@ -26,54 +30,22 @@ import org.springframework.data.domain.Sort;
 class <%= entityName %>ServiceTest {
 
     @Mock private <%= entityName %>Repository <%= entityVarName %>Repository;
+    @Mock private <%= entityName %>Mapper <%= entityVarName %>Mapper;
 
     @InjectMocks private <%= entityName %>Service <%= entityVarName %>Service;
-
-    @Test
-    void findAll<%= entityName %>s() {
-        // given
-        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
-        Page<<%= entityName %>> <%= entityVarName %>Page = new PageImpl<>(List.of(get<%= entityName %>()));
-        given(<%= entityVarName %>Repository.findAll(pageable)).willReturn(<%= entityVarName %>Page);
-
-        // when
-        PagedResult<<%= entityName %>> pagedResult = <%= entityVarName %>Service.findAll<%= entityName %>s(0, 10, "id", "asc");
-
-        // then
-        assertThat(pagedResult).isNotNull();
-        assertThat(pagedResult.data()).isNotEmpty().hasSize(1);
-        assertThat(pagedResult.hasNext()).isFalse();
-        assertThat(pagedResult.pageNumber()).isEqualTo(1);
-        assertThat(pagedResult.totalPages()).isEqualTo(1);
-        assertThat(pagedResult.isFirst()).isTrue();
-        assertThat(pagedResult.isLast()).isTrue();
-        assertThat(pagedResult.hasPrevious()).isFalse();
-        assertThat(pagedResult.totalElements()).isEqualTo(1);
-    }
 
     @Test
     void find<%= entityName %>ById() {
         // given
         given(<%= entityVarName %>Repository.findById(1L)).willReturn(Optional.of(get<%= entityName %>()));
+        given(<%= entityVarName %>Mapper.toResponse(any(<%= entityName %>.class))).willReturn(get<%= entityName %>Response());
         // when
-        Optional<<%= entityName %>> optional<%= entityName %> = <%= entityVarName %>Service.find<%= entityName %>ById(1L);
+        Optional<<%= entityName %>Response> optional<%= entityName %> = <%= entityVarName %>Service.find<%= entityName %>ById(1L);
         // then
         assertThat(optional<%= entityName %>).isPresent();
-        <%= entityName %> <%= entityVarName %> = optional<%= entityName %>.get();
-        assertThat(<%= entityVarName %>.getId()).isEqualTo(1L);
-        assertThat(<%= entityVarName %>.getText()).isEqualTo("junitTest");
-    }
-
-    @Test
-    void save<%= entityName %>() {
-        // given
-        given(<%= entityVarName %>Repository.save(get<%= entityName %>())).willReturn(get<%= entityName %>());
-        // when
-        <%= entityName %> persisted<%= entityName %> = <%= entityVarName %>Service.save<%= entityName %>(get<%= entityName %>());
-        // then
-        assertThat(persisted<%= entityName %>).isNotNull();
-        assertThat(persisted<%= entityName %>.getId()).isEqualTo(1L);
-        assertThat(persisted<%= entityName %>.getText()).isEqualTo("junitTest");
+        <%= entityName %>Response <%= entityVarName %> = optional<%= entityName %>.get();
+        assertThat(<%= entityVarName %>.id()).isEqualTo(1L);
+        assertThat(<%= entityVarName %>.text()).isEqualTo("junitTest");
     }
 
     @Test
@@ -91,5 +63,9 @@ class <%= entityName %>ServiceTest {
         <%= entityVarName %>.setId(1L);
         <%= entityVarName %>.setText("junitTest");
         return <%= entityVarName %>;
+    }
+
+    private <%= entityName %>Response get<%= entityName %>Response() {
+        return new <%= entityName %>Response(1L, "junitTest");
     }
 }

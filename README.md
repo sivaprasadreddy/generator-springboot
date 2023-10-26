@@ -82,6 +82,7 @@ Generating SpringBoot Application
    create blog/src/main/java/com/sivalabs/blog/config/GlobalExceptionHandler.java
    create blog/src/main/java/com/sivalabs/blog/config/logging/Loggable.java
    create blog/src/main/java/com/sivalabs/blog/config/logging/LoggingAspect.java
+   create blog/src/main/java/com/sivalabs/blog/exception/ResourceNotFoundException.java
    create blog/src/main/java/com/sivalabs/blog/model/response/PagedResult.java
    create blog/src/main/java/com/sivalabs/blog/utils/AppConstants.java
    create blog/src/main/resources/application.properties
@@ -97,30 +98,32 @@ Generating SpringBoot Application
    create blog/src/test/resources/logback-test.xml
 
 No change to package.json was detected. No package manager install will be executed.
+Picked up JAVA_TOOL_OPTIONS:  -Xmx3489m
 [INFO] Scanning for projects...
-[INFO]
+[INFO] 
 [INFO] -----------------------< com.sivalabs.blog:blog >-----------------------
 [INFO] Building blog 0.0.1-SNAPSHOT
 [INFO]   from pom.xml
 [INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
+[INFO] 
 [INFO] --- spotless:2.39.0:apply (default-cli) @ blog ---
 [INFO] Index file does not exist. Fallback to an empty index
-[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/TestApplication.java
-[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/model/response/PagedResult.java
-[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/SqsListenerIntegrationTest.java
-[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/SchemaValidationTest.java
-[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/common/AbstractIntegrationTest.java
-[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/common/ContainersConfig.java
-[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/config/GlobalExceptionHandler.java
-[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/config/SwaggerConfig.java
-[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/config/logging/LoggingAspect.java
-[INFO] Spotless.Java is keeping 15 files clean - 8 were changed to be clean, 7 were already clean, 0 were skipped because caching determined they were already clean
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/config/SwaggerConfig.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/config/GlobalExceptionHandler.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/config/logging/LoggingAspect.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/exception/ResourceNotFoundException.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/model/response/PagedResult.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/test/java/com/sivalabs/blog/common/ContainersConfig.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/test/java/com/sivalabs/blog/common/AbstractIntegrationTest.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/test/java/com/sivalabs/blog/SchemaValidationTest.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/test/java/com/sivalabs/blog/TestApplication.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/test/java/com/sivalabs/blog/SqsListenerIntegrationTest.java
+[INFO] Spotless.Java is keeping 17 files clean - 10 were changed to be clean, 7 were already clean, 0 were skipped because caching determined they were already clean
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.192 s
-[INFO] Finished at: 2023-08-30T11:30:00+05:30
+[INFO] Total time:  4.454 s
+[INFO] Finished at: 2023-10-25T16:57:22Z
 [INFO] ------------------------------------------------------------------------
 ==========================================
 Your application is generated successfully
@@ -155,6 +158,11 @@ Generating JPA entity, repository, service and controller
 EntityName: Customer, basePath: /api/customers
     force .yo-rc.json
    create src/main/java/com/sivalabs/blog/entities/Customer.java
+   create src/main/java/com/sivalabs/blog/exception/CustomerNotFoundException.java
+   create src/main/java/com/sivalabs/blog/mapper/CustomerMapper.java
+   create src/main/java/com/sivalabs/blog/model/query/FindCustomersQuery.java
+   create src/main/java/com/sivalabs/blog/model/request/CustomerRequest.java
+   create src/main/java/com/sivalabs/blog/model/response/CustomerResponse.java
    create src/main/java/com/sivalabs/blog/repositories/CustomerRepository.java
    create src/main/java/com/sivalabs/blog/services/CustomerService.java
    create src/main/java/com/sivalabs/blog/web/controllers/CustomerController.java
@@ -164,26 +172,31 @@ EntityName: Customer, basePath: /api/customers
    create src/main/resources/db/migration/postgresql/V2__create_customers_table.sql
 
 No change to package.json was detected. No package manager install will be executed.
+Picked up JAVA_TOOL_OPTIONS:  -Xmx3489m
 [INFO] Scanning for projects...
-[INFO]
+[INFO] 
 [INFO] -----------------------< com.sivalabs.blog:blog >-----------------------
 [INFO] Building blog 0.0.1-SNAPSHOT
 [INFO]   from pom.xml
 [INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
+[INFO] 
 [INFO] --- spotless:2.39.0:apply (default-cli) @ blog ---
-[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerTest.java
-[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerIT.java
-[INFO] Writing clean file: /Users/siva/blog/src/test/java/com/sivalabs/blog/services/CustomerServiceTest.java
-[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/web/controllers/CustomerController.java
-[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/services/CustomerService.java
-[INFO] Writing clean file: /Users/siva/blog/src/main/java/com/sivalabs/blog/entities/Customer.java
-[INFO] Spotless.Java is keeping 23 files clean - 7 were changed to be clean, 1 were already clean, 15 were skipped because caching determined they were already clean
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/exception/CustomerNotFoundException.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/model/query/FindCustomersQuery.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/model/request/CustomerRequest.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/entities/Customer.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/mapper/CustomerMapper.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/services/CustomerService.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/main/java/com/sivalabs/blog/web/controllers/CustomerController.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerIT.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/test/java/com/sivalabs/blog/web/controllers/CustomerControllerTest.java
+[INFO] Writing clean file: /workspace/generator-springboot/blog/src/test/java/com/sivalabs/blog/services/CustomerServiceTest.java
+[INFO] Spotless.Java is keeping 28 files clean - 10 were changed to be clean, 1 were already clean, 17 were skipped because caching determined they were already clean
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.190 s
-[INFO] Finished at: 2023-08-30T11:32:50+05:30
+[INFO] Total time:  2.246 s
+[INFO] Finished at: 2023-10-25T16:59:48Z
 [INFO] ------------------------------------------------------------------------
 ```
 

@@ -13,12 +13,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import <%= packageName %>.common.AbstractIntegrationTest;
 import <%= packageName %>.entities.<%= entityName %>;
+import <%= packageName %>.model.request.<%= entityName %>Request;
 import <%= packageName %>.repositories.<%= entityName %>Repository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
@@ -67,26 +69,27 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldCreateNew<%= entityName %>() throws Exception {
-        <%= entityName %> <%= entityVarName %> = new <%= entityName %>(null, "New <%= entityName %>");
+        <%= entityName %>Request <%= entityVarName %>Request = new <%= entityName %>Request("New <%= entityName %>");
         this.mockMvc
                 .perform(
                         post("<%= basePath %>")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
                 .andExpect(status().isCreated())
+                .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
+                .andExpect(jsonPath("$.text", is(<%= entityVarName %>Request.text())));
     }
 
     @Test
     void shouldReturn400WhenCreateNew<%= entityName %>WithoutText() throws Exception {
-        <%= entityName %> <%= entityVarName %> = new <%= entityName %>(null, null);
+        <%= entityName %>Request <%= entityVarName %>Request = new <%= entityName %>Request(null);
 
         this.mockMvc
                 .perform(
                         post("<%= basePath %>")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
                 .andExpect(jsonPath("$.type", is("about:blank")))
@@ -102,17 +105,17 @@ class <%= entityName %>ControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldUpdate<%= entityName %>() throws Exception {
-        <%= entityName %> <%= entityVarName %> = <%= entityVarName %>List.get(0);
-        <%= entityVarName %>.setText("Updated <%= entityName %>");
+        Long <%= entityVarName %>Id = <%= entityVarName %>List.get(0).getId();
+        <%= entityName %>Request <%= entityVarName %>Request = new <%= entityName %>Request("Updated <%= entityName %>");
 
         this.mockMvc
                 .perform(
-                        put("<%= basePath %>/{id}", <%= entityVarName %>.getId())
+                        put("<%= basePath %>/{id}", <%= entityVarName %>Id)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(<%= entityVarName %>)))
+                                .content(objectMapper.writeValueAsString(<%= entityVarName %>Request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(<%= entityVarName %>.getId()), Long.class))
-                .andExpect(jsonPath("$.text", is(<%= entityVarName %>.getText())));
+                .andExpect(jsonPath("$.id", is(<%= entityVarName %>Id), Long.class))
+                .andExpect(jsonPath("$.text", is(<%= entityVarName %>Request.text())));
     }
 
     @Test
