@@ -55,7 +55,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest]
-        node_version: [16.x, 18.x, 20.x]
+        node_version: [18.x, 20.x]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
@@ -77,7 +77,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest]
-        node_version: [16.x, 18.x, 20.x]
+        node_version: [18.x, 20.x]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
@@ -99,7 +99,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node_version: [16.x, 18.x, 20.x]
+        node_version: [18.x, 20.x]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
