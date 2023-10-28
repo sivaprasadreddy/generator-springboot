@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class <%= entityName %>Service {
 
@@ -62,12 +62,14 @@ public class <%= entityName %>Service {
         return <%= entityVarName %>Repository.findById(id).map(<%= entityVarName %>Mapper::toResponse);
     }
 
+    @Transactional
     public <%= entityName %>Response save<%= entityName %>(<%= entityName %>Request <%= entityVarName %>Request) {
         <%= entityName %> <%= entityVarName %> = <%= entityVarName %>Mapper.toEntity(<%= entityVarName %>Request);
         <%= entityName %> saved<%= entityName %> = <%= entityVarName %>Repository.save(<%= entityVarName %>);
         return <%= entityVarName %>Mapper.toResponse(saved<%= entityName %>);
     }
 
+    @Transactional
     public <%= entityName %>Response update<%= entityName %>(Long id, <%= entityName %>Request <%= entityVarName %>Request) {
         <%= entityName %> <%= entityVarName %> =
         <%= entityVarName %>Repository
@@ -83,6 +85,7 @@ public class <%= entityName %>Service {
         return <%= entityVarName %>Mapper.toResponse(updated<%= entityName %>);
     }
 
+    @Transactional
     public void delete<%= entityName %>ById(Long id) {
         <%= entityVarName %>Repository.deleteById(id);
     }
