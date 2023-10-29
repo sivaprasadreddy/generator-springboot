@@ -1,7 +1,7 @@
 const LOCALSTACK_IMAGE_VERSION = '2.3.2';
 const POSTGRESQL_IMAGE_VERSION = '16.0-alpine';
 const MARIADB_IMAGE_VERSION = '11.0.3';
-const MYSQL_IMAGE_VERSION = '8.1.0';
+const MYSQL_IMAGE_VERSION = '8.2.0';
 
 module.exports = {
     JAVA_VERSION: '17',
