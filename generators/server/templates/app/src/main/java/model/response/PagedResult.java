@@ -20,8 +20,8 @@ public record PagedResult<T>(
         @JsonProperty("hasPrevious")
         boolean hasPrevious
 ) {
-    public PagedResult(Page<T> page) {
-        this(page.getContent(),
+    public <R> PagedResult(Page<R> page, List<T> data) {
+        this(data,
                 page.getTotalElements(),
                 page.getNumber() + 1,
                 page.getTotalPages(),

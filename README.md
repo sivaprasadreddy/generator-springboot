@@ -2,7 +2,7 @@
 The Yeoman generator for generating Spring Boot microservices.
 
 ## Prerequisites
-* Node 16+
+* Node 18+
 * JDK 17+
 
 ## Installation

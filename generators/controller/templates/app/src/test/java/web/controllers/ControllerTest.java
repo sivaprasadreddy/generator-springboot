@@ -62,8 +62,8 @@ class <%= entityName %>ControllerTest {
     @Test
     void shouldFetchAll<%= entityName %>s() throws Exception {
 
-        Page<<%= entityName %>Response> page = new PageImpl<>(get<%= entityName %>ResponseList());
-        PagedResult<<%= entityName %>Response> <%= entityVarName %>PagedResult = new PagedResult<>(page);
+        Page<<%= entityName %>Response> page = new PageImpl<>(<%= entityVarName %>List);
+        PagedResult<<%= entityName %>Response> <%= entityVarName %>PagedResult = new PagedResult<>(page, get<%= entityName %>ResponseList());
         Find<%= entityName %>sQuery find<%= entityName %>sQuery = new Find<%= entityName %>sQuery(0, 10, "id", "asc");
         given(<%= entityVarName %>Service.findAll<%= entityName %>s(find<%= entityName %>sQuery)).willReturn(<%= entityVarName %>PagedResult);
 
