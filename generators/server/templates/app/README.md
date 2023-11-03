@@ -39,7 +39,7 @@ $ ./gradlew spotlessApply
 ### Run tests
 
 ```shell
-$ ./gradlew clean build`
+$ ./gradlew clean build
 ```
 
 ### Run locally
