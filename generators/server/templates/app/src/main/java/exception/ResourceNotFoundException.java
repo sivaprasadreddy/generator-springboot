@@ -1,5 +1,7 @@
 package <%= packageName %>.exception;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 public class ResourceNotFoundException extends RuntimeException {
 
