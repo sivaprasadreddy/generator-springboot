@@ -142,7 +142,7 @@ spotless {
     java {
         importOrder()
         removeUnusedImports()
-        palantirJavaFormat("2.30.0")
+        palantirJavaFormat("<%= PALANTIR_JAVA_FORMAT_VERSION %>")
         formatAnnotations()
     }
 }
