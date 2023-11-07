@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 0.1.5
+* Upgrade Spring Boot version to 3.1.5
+* Upgraded Maven and Gradle versions
+* Implemented best practices to not expose entity
+* Upgraded generator dependencies (chai, sinon, etc)
+* Supports running application with Java 21 and Spring Boot 3.2.0
+
 ## Version 0.1.4
 * Upgrade Spring Boot version to 3.1.3
 * Upgraded Maven and Gradle versions
