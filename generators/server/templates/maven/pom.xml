@@ -330,7 +330,7 @@
                 <configuration>
                     <java>
                         <palantirJavaFormat>
-                            <version>2.30.0</version>
+                            <version><%= PALANTIR_JAVA_FORMAT_VERSION %></version>
                         </palantirJavaFormat>
                         <importOrder />
                         <removeUnusedImports />
