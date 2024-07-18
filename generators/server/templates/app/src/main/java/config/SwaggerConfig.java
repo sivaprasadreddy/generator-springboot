@@ -9,4 +9,4 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(title = "<%= appName %>", version = "v1"),
         servers = @Server(url = "/"))
-public class SwaggerConfig {}
+class SwaggerConfig {}
