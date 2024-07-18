@@ -30,12 +30,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("<%= basePath %>")
 @Slf4j
 @RequiredArgsConstructor
-public class <%= entityName %>Controller {
+class <%= entityName %>Controller {
 
     private final <%= entityName %>Service <%= entityVarName %>Service;
 
     @GetMapping
-    public PagedResult<<%= entityName %>Response> getAll<%= entityName %>s(
+    PagedResult<<%= entityName %>Response> getAll<%= entityName %>s(
             @RequestParam(
                 value = "pageNo",
                 defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,
@@ -63,7 +63,7 @@ public class <%= entityName %>Controller {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<<%= entityName %>Response> get<%= entityName %>ById(@PathVariable Long id) {
+    ResponseEntity<<%= entityName %>Response> get<%= entityName %>ById(@PathVariable Long id) {
         return <%= entityVarName %>Service
                 .find<%= entityName %>ById(id)
                 .map(ResponseEntity::ok)
@@ -71,7 +71,7 @@ public class <%= entityName %>Controller {
     }
 
     @PostMapping
-    public ResponseEntity<<%= entityName %>Response> create<%= entityName %>(@RequestBody @Validated <%= entityName %>Request <%= entityVarName %>Request) {
+    ResponseEntity<<%= entityName %>Response> create<%= entityName %>(@RequestBody @Validated <%= entityName %>Request <%= entityVarName %>Request) {
         <%= entityName %>Response response = <%= entityVarName %>Service.save<%= entityName %>(<%= entityVarName %>Request);
         URI location =
                 ServletUriComponentsBuilder.fromCurrentRequest()
@@ -82,13 +82,13 @@ public class <%= entityName %>Controller {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<<%= entityName %>Response> update<%= entityName %>(
+    ResponseEntity<<%= entityName %>Response> update<%= entityName %>(
             @PathVariable Long id, @RequestBody @Valid <%= entityName %>Request <%= entityVarName %>Request) {
         return ResponseEntity.ok(<%= entityVarName %>Service.update<%= entityName %>(id, <%= entityVarName %>Request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<<%= entityName %>Response> delete<%= entityName %>(@PathVariable Long id) {
+    ResponseEntity<<%= entityName %>Response> delete<%= entityName %>(@PathVariable Long id) {
         return <%= entityVarName %>Service
                 .find<%= entityName %>ById(id)
                 .map(
