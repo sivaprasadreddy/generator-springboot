@@ -195,11 +195,8 @@ module.exports = class extends BaseGenerator {
         ];
         this.generateMainJavaCode(configOptions, mainJavaTemplates);
 
-        const mainResTemplates = [
-            'application.properties',
-            'application-local.properties',
-            'logback-spring.xml'
-        ];
+        const mainResTemplates = this._getResourceFileTemplates(configOptions)
+
         this.generateMainResCode(configOptions, mainResTemplates);
 
         const testJavaTemplates = [
@@ -219,6 +216,18 @@ module.exports = class extends BaseGenerator {
             'logback-test.xml'
         ];
         this.generateTestResCode(configOptions, testResTemplates);
+    }
+
+    _getResourceFileTemplates(configOptions) {
+        let mainResTemplates = []
+
+        if (configOptions.propFileFormat === 'yaml') {
+            mainResTemplates = ['application.yml', 'application-local.yml']
+        } else {
+            mainResTemplates = ['application.properties', 'application-local.properties']
+        }
+
+        return [...mainResTemplates, 'logback-spring.xml']
     }
 
     _generateDbMigrationConfig(configOptions) {

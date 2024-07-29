@@ -125,7 +125,7 @@ function prompting() {
             default: 'maven'
         },
         {
-            type: 'checkbox',
+            type: 'list',
             name: 'propFileFormat',
             message: 'which format do you want to use for configuration files?',
             choices: [
