@@ -211,11 +211,21 @@ module.exports = class extends BaseGenerator {
         }
         this.generateTestJavaCode(configOptions, testJavaTemplates);
 
-        const testResTemplates = [
-            'application-test.properties',
-            'logback-test.xml'
-        ];
+        const testResTemplates = this._getResourceFileTestTemplates(configOptions)
+
         this.generateTestResCode(configOptions, testResTemplates);
+    }
+
+    _getResourceFileTestTemplates(configOptions) {
+        let testResYamlTemplates = []
+
+        if (configOptions.propFileFormat === 'yaml') {
+            testResYamlTemplates = ['application-test.yml']
+        }
+        else {
+            testResYamlTemplates = ['application-test.properties']
+        }
+        return [...testResYamlTemplates, 'logback-test.xml']
     }
 
     _getResourceFileTemplates(configOptions) {
