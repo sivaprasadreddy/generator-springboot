@@ -123,6 +123,21 @@ function prompting() {
                 }
             ],
             default: 'maven'
+        },
+        {
+            type: 'list',
+            name: 'propFileFormat',
+            message: 'which format do you want to use for configuration files?',
+            choices: [
+                {
+                    value: 'props',
+                    name: 'Property File'
+                },
+                {
+                    value: 'yaml',
+                    name: 'YAML'
+                }
+            ]
         }
     ];
 

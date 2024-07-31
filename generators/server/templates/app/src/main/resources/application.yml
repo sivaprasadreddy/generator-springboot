@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: <%= appName %>
+  main:
+    allow-bean-definition-overriding: 'true'
+  jmx:
+    enabled: 'false'
+  mvc:
+    problemdetails:
+      enabled: 'true'
+server:
+  port: '8080'
+  shutdown: graceful
+
+################ Actuator #####################
+management:
+  endpoints:
+    web:
+      exposure:
+        include: configprops,env,health,info,logfile,loggers,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+################### Database ###################
+spring:
+  jpa:
+    open-in-view: 'false'
+    show-sql: 'false'
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+          batch_size: '25'
+          lob:
+            non_contextual_creation: 'true'
+        query:
+          fail_on_pagination_over_collection_fetch: 'true'
+          plan_cache_max_size: '4096'
+          in_clause_parameter_padding: 'true'
+        generate_statistics: 'false'
+        order_inserts: 'true'
+        connection:
+          provider_disables_autocommit: 'true'
+        order_updates: 'true'
+  datasource:
+    hikari:
+      data-source-properties:
+        ApplicationName: ${spring.application.name}
+      auto-commit: 'false'
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: deferred
+
+<%_ if (dbMigrationTool === 'flywaydb') { _%>
+  flyway:
+    locations: classpath:/db/migration/{vendor}     
+<%_ } _%>
+
+<%_ if (features.includes('elk')) { _%>
+application:
+  logstash-host: localhost
+<%_ } _%>

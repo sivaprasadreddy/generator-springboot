@@ -1,0 +1,11 @@
+<%_ if (features.includes('localstack')) { _%>
+spring:
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        secret-key: noop
+        access-key: noop
+      endpoint: http://localhost:4566
+<%_ } _%>
