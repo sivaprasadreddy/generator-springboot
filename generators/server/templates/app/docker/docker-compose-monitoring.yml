@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   grafana:
-    image: grafana/grafana:10.4.5
+    image: grafana/grafana:10.4.17
     extra_hosts: ['host.docker.internal:host-gateway']
     ports:
     - "3000:3000"
