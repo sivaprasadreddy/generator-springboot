@@ -175,11 +175,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
@@ -209,6 +204,11 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>localstack</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
         <%_ } _%>

@@ -13,7 +13,6 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.MariaDBContainer;
 <%_ } _%>
 <%_ if (features.includes('localstack')) { _%>
-import org.springframework.test.context.DynamicPropertyRegistry;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 <%_ } _%>
 import org.testcontainers.utility.DockerImageName;
@@ -41,14 +40,9 @@ public class ContainersConfig {
 
     <%_ if (features.includes('localstack')) { _%>
     @Bean
-    LocalStackContainer localstackContainer(DynamicPropertyRegistry registry) {
-        LocalStackContainer localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("<%= LOCALSTACK_IMAGE %>"));
-        registry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
-        registry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
-        registry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);
-        registry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
-        return localStackContainer;
+    @ServiceConnection
+    LocalStackContainer localStackContainer() {
+        return new LocalStackContainer(DockerImageName.parse("<%= LOCALSTACK_IMAGE %>"));
     }
     <%_ } _%>
 }
