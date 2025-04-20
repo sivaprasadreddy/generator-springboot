@@ -1,30 +1,23 @@
-
-module.exports = {
-    prompting
-};
-
-function prompting() {
-
-    const done = this.async();
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.prompting = prompting;
+async function prompting() {
     const prompts = [
         {
-            type: 'string',
+            type: 'input',
             name: 'appName',
-            validate: input =>
-                /^([a-z_][a-z0-9_\-]*)$/.test(input)
-                    ? true
-                    : 'The application name you have provided is not valid',
+            validate: (input) => /^([a-z_][a-z0-9_\-]*)$/.test(input)
+                ? true
+                : 'The application name you have provided is not valid',
             message: 'What is the application name?',
             default: 'myservice'
         },
         {
-            type: 'string',
+            type: 'input',
             name: 'packageName',
-            validate: input =>
-                /^([a-z_][a-z0-9_]*(\.[a-z_][a-z0-9_]*)*)$/.test(input)
-                    ? true
-                    : 'The package name you have provided is not a valid Java package name.',
+            validate: (input) => /^([a-z_][a-z0-9_]*(\.[a-z_][a-z0-9_]*)*)$/.test(input)
+                ? true
+                : 'The package name you have provided is not a valid Java package name.',
             message: 'What is the default package name?',
             default: 'com.mycompany.myservice'
         },
@@ -125,11 +118,8 @@ function prompting() {
             default: 'maven'
         }
     ];
-
-    this.prompt(prompts).then(answers => {
-        Object.assign(this.configOptions, answers);
-        this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
-        this.configOptions.features = this.configOptions.features || [];
-        done();
-    });
+    const answers = await this.prompt(prompts);
+    Object.assign(this.configOptions, answers);
+    this.configOptions.packageFolder = this.configOptions.packageName?.replace(/\./g, '/');
+    this.configOptions.features = this.configOptions.features || [];
 }

@@ -24,22 +24,34 @@
   ],
   "main": "generators/app/index.js",
   "scripts": {
-    "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
-    "test:unit": "mocha --timeout 120000 --slow 0 --reporter spec"
+    "test": "mocha --timeout 120000 --slow 0 --reporter spec test/**/*.spec.js test/*.spec.js --no-insight",
+    "build": "tsc",
+    "clean": "rimraf generators/**/*.js",
+    "full-clean": "rimraf generators",
+    "watch": "tsc -w",
+    "prepare": "npm run build",
+    "migrate": "npm run clean && npm run build && npm test",
+    "cleanup:js": "rimraf generators/constants.js generators/base-generator.js generators/common/constants.js generators/common/base-generator.js"
   },
   "dependencies": {
     "chalk": "4.1.2",
     "lodash": "4.17.21",
-    "shelljs": "0.9.2",
-    "yeoman-environment": "3.19.3",
-    "yeoman-generator": "5.10.0"
+    "shelljs": "0.8.5",
+    "yeoman-environment": "4.4.3",
+    "yeoman-generator": "7.5.1"
   },
   "devDependencies": {
-    "chai": "5.2.0",
-    "fs-extra": "11.3.0",
-    "mocha": "10.8.2",
+    "@types/lodash": "4.14.200",
+    "@types/node": "20.8.9",
+    "@types/shelljs": "0.8.12",
+    "@types/yeoman-generator": "5.2.14",
+    "chai": "5.1.1",
+    "fs-extra": "11.2.0",
+    "mocha": "10.7.0",
+    "rimraf": "6.0.1",
     "sinon": "17.0.1",
+    "typescript": "5.2.2",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "6.3.0"
+    "yeoman-test": "10.1.0"
   }
 }

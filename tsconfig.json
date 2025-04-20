@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    /* Language and Environment Configuration */
+    "target": "ES2020",  /* Set the JavaScript language version for emitted JavaScript */
+    "module": "commonjs", /* Specify module code generation */
+    
+    /* Emit Configuration */
+    "declaration": true, /* Generate .d.ts files for JavaScript files in the project */
+    "outDir": "./generators", /* Redirect output structure to the generators directory */
+    
+    /* Type Checking */
+    "strict": true, /* Enable all strict type-checking options */
+    
+    /* Module Resolution */
+    "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules */
+    "skipLibCheck": true, /* Skip type checking all .d.ts files */
+    "forceConsistentCasingInFileNames": true, /* Ensure case sensitivity is enforced in imports */
+    "resolveJsonModule": true /* Enable importing .json files */
+  },
+  /* TypeScript Source Files */
+  "include": [
+    "src/**/*" /* Include all files in the src directory */
+  ],
+  /* Files and Directories to Exclude */
+  "exclude": [
+    "node_modules",
+    "generators", /* Exclude the output directory to avoid circular references */
+    "test"
+  ]
+}

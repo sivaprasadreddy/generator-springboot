@@ -1,9 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Constants = void 0;
 const LOCALSTACK_IMAGE_VERSION = '4.2.0';
-const POSTGRESQL_IMAGE_VERSION = '17.4-alpine';
+const POSTGRESQL_IMAGE_VERSION = '17.2-alpine';
 const MARIADB_IMAGE_VERSION = '11.7';
 const MYSQL_IMAGE_VERSION = '9.2';
-
-module.exports = {
+/**
+ * Constants used throughout the generator
+ * All constants have been migrated from JavaScript to TypeScript
+ * The following files can be removed after testing the migration:
+ * - generators/common/constants.js
+ * - generators/constants.js
+ */
+exports.Constants = {
     JAVA_VERSION: '17',
     SPRING_BOOT_VERSION: '3.4.4',
     SPRING_CLOUD_VERSION: '2024.0.1',
@@ -44,4 +53,4 @@ module.exports = {
 
     MYSQL_IMAGE_VERSION: MYSQL_IMAGE_VERSION,
     MYSQL_IMAGE: 'mysql:' + MYSQL_IMAGE_VERSION,
-}
+};
