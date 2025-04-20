@@ -82,7 +82,6 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.boot:spring-boot-testcontainers"
     testImplementation "org.projectlombok:lombok"
-    testImplementation "org.awaitility:awaitility"
     testImplementation "org.testcontainers:junit-jupiter"
     <%_ if (databaseType === "mysql") { _%>
     testImplementation "org.testcontainers:mysql"
@@ -95,6 +94,7 @@ dependencies {
     <%_ } _%>
     <%_ if (features.includes("localstack")) { _%>
     testImplementation "org.testcontainers:localstack"
+    testImplementation "io.awspring.cloud:spring-cloud-aws-testcontainers"
     <%_ } _%>
     testAnnotationProcessor "org.projectlombok:lombok"
 }

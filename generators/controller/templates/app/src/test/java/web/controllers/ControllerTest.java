@@ -37,6 +37,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = <%= entityName %>Controller.class)
@@ -45,7 +46,7 @@ class <%= entityName %>ControllerTest {
 
     @Autowired private MockMvc mockMvc;
 
-    @MockBean private <%= entityName %>Service <%= entityVarName %>Service;
+    @MockitoBean private <%= entityName %>Service <%= entityVarName %>Service;
 
     @Autowired private ObjectMapper objectMapper;
 
