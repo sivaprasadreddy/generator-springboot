@@ -30,7 +30,7 @@
   "dependencies": {
     "chalk": "4.1.2",
     "lodash": "4.17.21",
-    "shelljs": "0.8.5",
+    "shelljs": "0.9.2",
     "yeoman-environment": "3.19.3",
     "yeoman-generator": "5.10.0"
   },
