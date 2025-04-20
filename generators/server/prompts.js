@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.prompting = prompting;
+exports.prompting = void 0;
 async function prompting() {
     const prompts = [
         {
@@ -123,3 +123,4 @@ async function prompting() {
     this.configOptions.packageFolder = this.configOptions.packageName?.replace(/\./g, '/');
     this.configOptions.features = this.configOptions.features || [];
 }
+exports.prompting = prompting;
