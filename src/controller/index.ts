@@ -62,9 +62,13 @@ export default class ControllerGenerator extends BaseGenerator {
   configuring() {
     this.configOptions = Object.assign({}, this.configOptions, this.config.getAll());
     this.configOptions.basePath = this.options['base-path'];
-    this.configOptions.entityName = this.options.entityName;
-    this.configOptions.entityVarName = _.camelCase(this.options.entityName as string);
-    this.configOptions.tableName = _.snakeCase(this.options.entityName as string) + 's';
+    
+    // Fix: Convert entity name to ensure proper Pascal case for Java class names
+    const rawEntityName = this.options.entityName as string;
+    this.configOptions.entityName = _.upperFirst(_.camelCase(rawEntityName));
+    
+    this.configOptions.entityVarName = _.camelCase(rawEntityName);
+    this.configOptions.tableName = _.snakeCase(rawEntityName) + 's';
     this.configOptions.doesNotSupportDatabaseSequences =
       this.configOptions.databaseType === 'mysql';
     this.configOptions.formatCode = this.options.formatCode !== false;

@@ -1,0 +1,32 @@
+import BaseGenerator, { ConfigOptions } from '../common/base-generator';
+import * as prompts from './prompts';
+export default class ServerGenerator extends BaseGenerator {
+    configOptions: ConfigOptions;
+    serverTemplatePath: string;
+    constructor(args: string | string[], opts: object);
+    templatePath(...paths: string[]): string;
+    initializing(): void;
+    get prompting(): typeof prompts.prompting;
+    configuring(): void;
+    writing(): void;
+    end(): void;
+    _printGenerationSummary(configOptions: ConfigOptions): void;
+    _generateBuildToolConfig(configOptions: ConfigOptions): void;
+    _generateDockerConfig(configOptions: ConfigOptions): void;
+    _generateJenkinsFile(configOptions: ConfigOptions): void;
+    _generateMiscFiles(configOptions: ConfigOptions): void;
+    _generateGithubActionsFiles(configOptions: ConfigOptions): void;
+    _generateMavenConfig(configOptions: ConfigOptions): void;
+    _generateGradleConfig(configOptions: ConfigOptions): void;
+    _copyMavenWrapper(configOptions: ConfigOptions): void;
+    _generateMavenPOMXml(configOptions: ConfigOptions): void;
+    _copyGradleWrapper(configOptions: ConfigOptions): void;
+    _generateGradleBuildScript(configOptions: ConfigOptions): void;
+    _generateAppCode(configOptions: ConfigOptions): void;
+    _generateDbMigrationConfig(configOptions: ConfigOptions): void;
+    _generateLocalstackConfig(configOptions: ConfigOptions): void;
+    _generateDockerComposeFiles(configOptions: ConfigOptions): void;
+    _generateAppDockerComposeFile(configOptions: ConfigOptions): void;
+    _generateELKConfig(configOptions: ConfigOptions): void;
+    _generateMonitoringConfig(configOptions: ConfigOptions): void;
+}

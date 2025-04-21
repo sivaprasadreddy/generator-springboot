@@ -19,12 +19,12 @@
   },
   /* TypeScript Source Files */
   "include": [
-    "src/**/*" /* Include all files in the src directory */
+    "src/**/*", /* Include all files in the src directory */
+    "test/**/*.ts" /* Include TypeScript test files */
   ],
   /* Files and Directories to Exclude */
   "exclude": [
     "node_modules",
-    "generators", /* Exclude the output directory to avoid circular references */
-    "test"
+    "generators" /* Exclude the output directory to avoid circular references */
   ]
 }

@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.1.6
+* Upgrade Spring Boot version to 3.4.4
+* Upgraded Maven and Gradle versions
+* Supports LocalStack `@ServiceConnection`
+* Supports running application with Java 21 and Spring Boot 3.4.x
+
 ## Version 0.1.5
 * Upgrade Spring Boot version to 3.1.5
 * Upgraded Maven and Gradle versions
