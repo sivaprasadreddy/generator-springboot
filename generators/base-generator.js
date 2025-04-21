@@ -15,6 +15,10 @@ module.exports = class extends Generator {
         log(chalk.bold.green(msg));
     }
 
+    logInfo(msg) {
+        log(chalk.blue(msg));
+    }
+
     logWarn(msg) {
         log(chalk.keyword('orange')(msg));
     }
@@ -70,6 +74,78 @@ module.exports = class extends Generator {
             this._formatCodeMaven(configOptions, baseDir);
         } else {
             this._formatCodeGradle(configOptions, baseDir);
+        }
+    }
+    
+    _verifyBuild(configOptions, baseDir) {
+        // Add a flag to indicate the method was called
+        this.buildVerified = true;
+        
+        this.logInfo('Verifying build...');
+        if (configOptions.buildTool === 'maven') {
+            this._verifyBuildMaven(configOptions, baseDir);
+        } else {
+            this._verifyBuildGradle(configOptions, baseDir);
+        }
+    }
+    
+    _verifyBuildMaven(configOptions, baseDir) {
+        const command = this._isWin() ? 'mvnw' : './mvnw';
+        const args = ['clean', 'verify'];
+        
+        try {
+            this.logInfo(`Running Maven build: ${command} ${args.join(' ')}`);
+            let result;
+            
+            if(baseDir) {
+                shell.cd(configOptions.appName);
+                result = this.spawnCommandSync(command, args, { stdio: 'pipe' });
+                shell.cd('..');
+            } else {
+                result = this.spawnCommandSync(command, args, { stdio: 'pipe' });
+            }
+            
+            if (!result || result.status !== 0) {
+                this.logError('Maven build failed. Please check the generated code for errors.');
+                this.log(result && (result.stderr || result.stdout) || 'No output captured');
+            } else {
+                this.logSuccess('Maven build successful! All tests passed.');
+            }
+        } catch (error) {
+            this.logError(`Maven build error: ${error.message}`);
+            if (error.stack) {
+                this.log(`Stack trace: ${error.stack}`);
+            }
+        }
+    }
+    
+    _verifyBuildGradle(configOptions, baseDir) {
+        const command = this._isWin() ? 'gradlew' : './gradlew';
+        const args = ['clean', 'build'];
+        
+        try {
+            this.logInfo(`Running Gradle build: ${command} ${args.join(' ')}`);
+            let result;
+            
+            if(baseDir) {
+                shell.cd(configOptions.appName);
+                result = this.spawnCommandSync(command, args, { stdio: 'pipe' });
+                shell.cd('..');
+            } else {
+                result = this.spawnCommandSync(command, args, { stdio: 'pipe' });
+            }
+            
+            if (!result || result.status !== 0) {
+                this.logError('Gradle build failed. Please check the generated code for errors.');
+                this.log(result && (result.stderr || result.stdout) || 'No output captured');
+            } else {
+                this.logSuccess('Gradle build successful! All tests passed.');
+            }
+        } catch (error) {
+            this.logError(`Gradle build error: ${error.message}`);
+            if (error.stack) {
+                this.log(`Stack trace: ${error.stack}`);
+            }
         }
     }
 

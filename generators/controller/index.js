@@ -19,6 +19,12 @@ module.exports = class extends BaseGenerator {
             type: String,
             desc: "Base URL path for REST Controller"
         })
+
+        this.option('skip-build', {
+            type: Boolean,
+            desc: "Skip verification build after generation",
+            default: true
+        })
     }
 
     get initializing() {
@@ -44,7 +50,21 @@ module.exports = class extends BaseGenerator {
         this.configOptions.tableName = _.snakeCase(this.options.entityName)+'s';
         this.configOptions.doesNotSupportDatabaseSequences =
             this.configOptions.databaseType === 'mysql';
-        this.configOptions.formatCode = this.options.formatCode !== false
+        this.configOptions.formatCode = this.options.formatCode !== false;
+        
+        // Ensure packageName, appName, and buildTool are available from options if provided
+        if (this.options.packageName) {
+            this.configOptions.packageName = this.options.packageName;
+        }
+        if (this.options.appName) {
+            this.configOptions.appName = this.options.appName;
+        } else {
+            // Default appName to a safe value if not provided
+            this.configOptions.appName = this.configOptions.appName || "myapp";
+        }
+        if (this.options.buildTool) {
+            this.configOptions.buildTool = this.options.buildTool;
+        }
     }
 
     writing() {
@@ -55,6 +75,10 @@ module.exports = class extends BaseGenerator {
     end() {
         if(this.configOptions.formatCode !== false) {
             this._formatCode(this.configOptions, null);
+        }
+        
+        if(!this.options['skip-build']) {
+            this._verifyBuild(this.configOptions, null);
         }
     }
 
