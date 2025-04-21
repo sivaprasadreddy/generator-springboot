@@ -97,7 +97,7 @@ module.exports = class extends BaseGenerator {
         const scriptTemplate = configOptions.doesNotSupportDatabaseSequences ?
             "V1__new_table_no_seq.sql" : "V1__new_table_with_seq.sql";
 
-        this.fs.copyTpl(
+        this.renderTemplate(
             this.templatePath('app/src/main/resources/db/migration/flyway/'+scriptTemplate),
             this.destinationPath('src/main/resources/db/migration/'+vendor+
                 '/V'+counter+'__create_'+configOptions.tableName+'_table.sql'),
@@ -114,7 +114,7 @@ module.exports = class extends BaseGenerator {
         const counter = configOptions[constants.KEY_LIQUIBASE_MIGRATION_COUNTER] + 1;
         const scriptTemplate = configOptions.doesNotSupportDatabaseSequences ?
             `01-new_table_no_seq.${dbFmt}` : `01-new_table_with_seq.${dbFmt}`;
-        this.fs.copyTpl(
+        this.renderTemplate(
             this.templatePath('app/src/main/resources/db/migration/liquibase/changelog/'+scriptTemplate),
             this.destinationPath('src/main/resources/db/changelog/migration/0'+counter+'-create_'+configOptions.tableName+'_table.'+dbFmt),
             configOptions
