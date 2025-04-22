@@ -6,7 +6,7 @@
   ],
   "forkProcessing": "enabled",
   "baseBranches": [
-    "v0.1.6"
+    "v0.2.0"
   ],
   "labels": [
     "dependencies"
