@@ -1,10 +1,14 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-      "config:base",
-      "schedule:earlyMondays"
-    ],
-    "includeForks": true,
-    "baseBranches": ["v0.1.6"],
-    "labels": ["dependencies"]
-  }
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "schedule:earlyMondays"
+  ],
+  "forkProcessing": "enabled",
+  "baseBranches": [
+    "v0.2.0"
+  ],
+  "labels": [
+    "dependencies"
+  ]
+}
