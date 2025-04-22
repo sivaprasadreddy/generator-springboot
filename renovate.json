@@ -5,6 +5,6 @@
       "schedule:earlyMondays"
     ],
     "includeForks": true,
-    "baseBranches": ["v0.1.6"],
+    "baseBranches": ["v0.2.0"],
     "labels": ["dependencies"]
   }
