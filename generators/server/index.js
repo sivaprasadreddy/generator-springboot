@@ -9,6 +9,7 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.configOptions = this.options.configOptions || {};
+        this.skipPrompts = this.options.skipPrompts || false;
     }
 
     initializing() {
@@ -16,6 +17,10 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
+        // Skip prompts if skipPrompts flag is set to true (when called from app generator)
+        if (this.skipPrompts) {
+            return {};
+        }
         return prompts.prompting;
     }
 
@@ -66,7 +71,7 @@ module.exports = class extends BaseGenerator {
     }
 
     _generateDockerConfig(configOptions) {
-        this.fs.copyTpl(
+        this.renderTemplate(
             this.templatePath('app/Dockerfile'),
             this.destinationPath('Dockerfile'),
             configOptions
@@ -74,7 +79,7 @@ module.exports = class extends BaseGenerator {
     }
 
     _generateJenkinsFile(configOptions) {
-        this.fs.copyTpl(
+        this.renderTemplate(
             this.templatePath('app/Jenkinsfile'),
             this.destinationPath('Jenkinsfile'),
             configOptions
@@ -82,15 +87,15 @@ module.exports = class extends BaseGenerator {
     }
 
     _generateMiscFiles(configOptions) {
-        this.fs.copyTpl(this.templatePath('app/lombok.config'), this.destinationPath('lombok.config'), configOptions);
-        this.fs.copyTpl(this.templatePath('app/sonar-project.properties'), this.destinationPath('sonar-project.properties'), configOptions);
-        this.fs.copyTpl(this.templatePath('app/README.md'), this.destinationPath('README.md'), configOptions);
+        this.renderTemplate(this.templatePath('app/lombok.config'), this.destinationPath('lombok.config'), configOptions);
+        this.renderTemplate(this.templatePath('app/sonar-project.properties'), this.destinationPath('sonar-project.properties'), configOptions);
+        this.renderTemplate(this.templatePath('app/README.md'), this.destinationPath('README.md'), configOptions);
     }
 
     _generateGithubActionsFiles(configOptions) {
         const ciFile = '.github/workflows/' + configOptions.buildTool + '.yml';
 
-        this.fs.copyTpl(
+        this.renderTemplate(
             this.templatePath('app/' + ciFile),
             this.destinationPath(ciFile),
             configOptions
@@ -111,13 +116,13 @@ module.exports = class extends BaseGenerator {
         const commonMavenConfigDir = '../../common/files/maven/';
 
         ['mvnw', 'mvnw.cmd'].forEach(tmpl => {
-            this.fs.copyTpl(
+            this.renderTemplate(
                 this.templatePath(commonMavenConfigDir + tmpl),
                 this.destinationPath(tmpl)
             );
         });
 
-        this.fs.copyTpl(
+        this.renderTemplate(
             this.templatePath(commonMavenConfigDir + 'gitignore'),
             this.destinationPath('.gitignore')
         );
@@ -126,12 +131,11 @@ module.exports = class extends BaseGenerator {
             this.templatePath(commonMavenConfigDir + '.mvn'),
             this.destinationPath('.mvn')
         );
-
     }
 
     _generateMavenPOMXml(configOptions) {
         const mavenConfigDir = 'maven/';
-        this.fs.copyTpl(
+        this.renderTemplate(
             this.templatePath(mavenConfigDir + 'pom.xml'),
             this.destinationPath('pom.xml'),
             configOptions
@@ -142,13 +146,13 @@ module.exports = class extends BaseGenerator {
         const commonGradleConfigDir = '../../common/files/gradle/';
 
         ['gradlew', 'gradlew.bat'].forEach(tmpl => {
-            this.fs.copyTpl(
+            this.renderTemplate(
                 this.templatePath(commonGradleConfigDir + tmpl),
                 this.destinationPath(tmpl)
             );
         });
 
-        this.fs.copyTpl(
+        this.renderTemplate(
             this.templatePath(commonGradleConfigDir + 'gitignore'),
             this.destinationPath('.gitignore')
         );
@@ -163,14 +167,14 @@ module.exports = class extends BaseGenerator {
         const gradleConfigDir = 'gradle/';
 
         ['build.gradle', 'settings.gradle', 'gradle.properties'].forEach(tmpl => {
-            this.fs.copyTpl(
+            this.renderTemplate(
                 this.templatePath(gradleConfigDir + tmpl),
                 this.destinationPath(tmpl),
                 configOptions
             );
         });
         ['code-quality.gradle', 'owasp.gradle'].forEach(tmpl => {
-            this.fs.copyTpl(
+            this.renderTemplate(
                 this.templatePath(gradleConfigDir + tmpl),
                 this.destinationPath('gradle/' + tmpl),
                 configOptions
@@ -179,7 +183,6 @@ module.exports = class extends BaseGenerator {
     }
 
     _generateAppCode(configOptions) {
-
         const mainJavaTemplates = [
             'Application.java',
             'config/WebMvcConfig.java',

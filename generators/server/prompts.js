@@ -1,12 +1,8 @@
-
 module.exports = {
     prompting
 };
 
-function prompting() {
-
-    const done = this.async();
-
+async function prompting() {
     const prompts = [
         {
             type: 'string',
@@ -126,10 +122,8 @@ function prompting() {
         }
     ];
 
-    this.prompt(prompts).then(answers => {
-        Object.assign(this.configOptions, answers);
-        this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
-        this.configOptions.features = this.configOptions.features || [];
-        done();
-    });
+    const answers = await this.prompt(prompts);
+    Object.assign(this.configOptions, answers);
+    this.configOptions.packageFolder = this.configOptions.packageName.replace(/\./g, '/');
+    this.configOptions.features = this.configOptions.features || [];
 }
