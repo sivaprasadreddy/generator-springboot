@@ -37,7 +37,7 @@
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
     "@types/lodash": "4.17.17",
-    "@types/mocha": "10.0.7",
+    "@types/mocha": "10.0.10",
     "@types/node": "20.8.9",
     "@types/shelljs": "0.8.12",
     "@types/yeoman-assert": "3.1.4",
