@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - '**'
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
 jobs:
   build:
     name: npm test
@@ -15,11 +20,82 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+        with:
+          fetch-depth: 0  # Fetch all history for checking version changes
+      
+      - name: Use Node.js ${{ matrix.node_version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
+      
       - run: npm install
+      
       - run: npm test
         env:
           CI: true
+  publish:
+    name: Publish to NPM
+    needs: build  # Wait for all build matrix jobs to complete successfully
+    # Only run when:
+    # 1. The code is on the main branch
+    # 2. It's either a direct push or a merged PR
+    # 3. All 6 matrix checks have passed (enforced by 'needs: build')
+    if: |
+      (github.ref == 'refs/heads/main') && 
+      (github.event_name == 'push' || 
+       (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for checking version changes
+      - name: Check for version change
+        id: check_version
+        run: |
+          # Get the version from the current commit's package.json
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          
+          # Determine previous commit on main branch
+          git fetch origin main
+          
+          # For pull requests, use the base commit
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            PREV_COMMIT="${{ github.event.pull_request.base.sha }}"
+          else
+            # For direct pushes, use the parent commit
+            PREV_COMMIT=$(git rev-parse HEAD^1)
+          fi
+          
+          # Get package.json from the previous commit
+          git show $PREV_COMMIT:package.json > prev_package.json || echo "No previous package.json found"
+          
+          # Extract previous version
+          PREV_VERSION=$(node -p "require('./prev_package.json').version" 2>/dev/null || echo "0.0.0")
+          
+          echo "Current version: $CURRENT_VERSION"
+          echo "Previous version: $PREV_VERSION"
+          
+          if [ "$CURRENT_VERSION" != "$PREV_VERSION" ]; then
+            echo "Version changed from $PREV_VERSION to $CURRENT_VERSION"
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version unchanged"
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Setup Node.js
+        if: steps.check_version.outputs.version_changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Install dependencies
+        if: steps.check_version.outputs.version_changed == 'true'
+        run: npm ci
+      
+      - name: Publish to NPM
+        if: steps.check_version.outputs.version_changed == 'true'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
