@@ -47,6 +47,6 @@
     "mocha": "11.1.0",
     "sinon": "20.0.0",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "10.1.0"
+    "yeoman-test": "10.1.1"
   }
 }
