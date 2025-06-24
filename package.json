@@ -44,7 +44,7 @@
     "@types/yeoman-generator": "5.2.14",
     "chai": "5.2.0",
     "fs-extra": "11.3.0",
-    "mocha": "11.1.0",
+    "mocha": "11.7.1",
     "sinon": "20.0.0",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "10.1.1"
