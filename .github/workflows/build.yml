@@ -3,10 +3,6 @@ on:
   push:
     branches:
       - '**'
-  pull_request:
-    types: [closed]
-    branches:
-      - main
 
 jobs:
   build:
@@ -31,4 +27,3 @@ jobs:
       - run: npm test
         env:
           CI: true
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
