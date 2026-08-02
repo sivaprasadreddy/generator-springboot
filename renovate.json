@@ -5,7 +5,7 @@
     "schedule:earlyMondays"
   ],
   "forkProcessing": "enabled",
-  "baseBranches": [
+  "baseBranchPatterns": [
     "v0.2.0"
   ],
   "labels": [
