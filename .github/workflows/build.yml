@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - '**'
+
 jobs:
   build:
     name: npm test
@@ -15,11 +16,14 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+      
+      - name: Use Node.js ${{ matrix.node_version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
+      
       - run: npm install
+      
       - run: npm test
         env:
           CI: true
