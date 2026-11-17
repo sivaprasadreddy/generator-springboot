@@ -1,6 +1,10 @@
 # generator-springboot
 The Yeoman generator for generating Spring Boot microservices.
 
+> [!IMPORTANT]
+> [progen](https://github.com/sivaprasadreddy/progen) is the successor of this generator.
+> Please use progen for the latest features and updates. This repository is no longer actively maintained.
+
 ## Prerequisites
 * Node 20+
 * JDK 17+
